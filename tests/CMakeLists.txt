@@ -1,0 +1,21 @@
+cmake_minimum_required(VERSION 3.10)
+
+project(vazel_tests VERSION 1.0)
+add_executable(${PROJECT_NAME} ./entity/test_entity.cpp)
+
+include_directories(
+    "${CMAKE_CURRENT_SOURCE_DIR}/../src/include/"
+)
+target_link_libraries(${PROJECT_NAME}
+    gtest_main
+    Vazel
+)
+
+add_test(NAME vazel_tests COMMAND ${PROJECT_NAME})
+
+add_custom_command(
+    TARGET ${PROJECT_NAME}
+    COMMENT "Run tests"
+    POST_BUILD
+    COMMAND ${PROJECT_NAME} --gtest_color=yes
+)

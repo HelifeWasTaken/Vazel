@@ -28,7 +28,7 @@ namespace vazel
          *
          * @return uint64_t The UUID
          */
-        uint64_t get() const { return _uuid; }
+        uint64_t getId() const { return _uuid; }
     };
 
 }

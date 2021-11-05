@@ -1,0 +1,19 @@
+name: Build
+
+on:
+    push:
+        branches:
+        - dev
+        - main
+        - master
+    pull_request:
+jobs:
+    build:
+        runs-on: ubuntu-20.04
+        container: docker://epitechcontent/epitest-docker
+        steps:
+        - uses: actions/checkout@v2
+        - name: Build
+          shell: bash
+          run: |
+            "cd build && cmake .. && make"
