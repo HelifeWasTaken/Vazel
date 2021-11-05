@@ -1,10 +1,17 @@
 cmake_minimum_required(VERSION 3.10)
 
 project(vazel_tests VERSION 1.0)
-add_executable(${PROJECT_NAME} ./entity/test_entity.cpp)
+
+set(SRCS
+    ./Entity/test_Entity.cpp
+    ./Components/test_ComponentsManager.cpp
+)
+
+
+add_executable(${PROJECT_NAME} ${SRCS})
 
 include_directories(
-    "${CMAKE_CURRENT_SOURCE_DIR}/../src/include/"
+    "${CMAKE_CURRENT_SOURCE_DIR}/../include/"
 )
 target_link_libraries(${PROJECT_NAME}
     gtest_main

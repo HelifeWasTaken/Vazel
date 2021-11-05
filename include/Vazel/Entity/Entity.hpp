@@ -9,26 +9,26 @@ namespace vazel
      */
     class Entity
     {
-    private:
-        uint64_t _uuid;
+        private:
+            uint64_t _uuid;
 
-    public:
-        Entity();
-        Entity(const Entity &uuid);
+        public:
+            Entity();
+            Entity(const Entity &uuid);
 
-        /**
-         * @brief Wrapper to get the UUID
-         *
-         * @return uint64_t The UUID
-         */
-        operator uint64_t() const { return _uuid; }
+            /**
+             * @brief Wrapper to get the UUID
+             *
+             * @return uint64_t The UUID
+             */
+            operator uint64_t() const { return _uuid; }
 
-        /**
-         * @brief Wrapper to get the UUID
-         *
-         * @return uint64_t The UUID
-         */
-        uint64_t getId() const { return _uuid; }
+            /**
+             * @brief Wrapper to get the UUID
+             *
+             * @return uint64_t The UUID
+             */
+            uint64_t getId() const { return _uuid; }
     };
 
 }

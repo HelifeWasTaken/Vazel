@@ -1,3 +1,5 @@
+project(VazelBuilder)
+
 cmake_minimum_required(VERSION 3.10)
 
 #project(VazelProject VERSION 1.0)
