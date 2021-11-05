@@ -10,10 +10,12 @@ on:
 jobs:
     build:
         runs-on: ubuntu-20.04
-        container: docker://epitechcontent/epitest-docker
         steps:
         - uses: actions/checkout@v2
         - name: Build
           shell: bash
           run: |
-            "cd build && cmake .. && make"
+            sudo apt install cmake make gcc g++ libgtest-dev
+            cd build
+            cmake ..
+            make
