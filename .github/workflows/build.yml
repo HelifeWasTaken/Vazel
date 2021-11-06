@@ -16,9 +16,8 @@ jobs:
           shell: bash
           run: |
             sudo apt install cmake make gcc g++ libgtest-dev lolcat
-            tree -FQ | lolcat -h 2 -v 2
             cd build && cmake .. && make
-            ls -lh src/libVazel | lolcat -h 2 -v 2
+            ls -lh src/libVazel.a | lolcat -h 2 -v 2
     unittests:
         runs-on: ubuntu-20.04
         steps:
@@ -28,4 +27,4 @@ jobs:
           run: |
             sudo apt install cmake make gcc g++ libgtest-dev
             cd build && cmake .. && make
-            ./tests/vazel_tests
+            ./tests/vazel_tests --gtest_color=yes
