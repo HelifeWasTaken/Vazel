@@ -4,7 +4,7 @@ namespace vazel
 {
     ComponentType ComponentManager::_getAviableComponentIndex()
     {
-        for (size_t i = 0; i != Component::MAX; i++)
+        for (ComponentType i = 0; i != Component::MAX; i++)
             if (_aviable_signatures.test(i) == false)
                 return i;
         throw ComponentManagerRegisterError("You registered already the maximum of Component");
@@ -26,7 +26,7 @@ namespace vazel
 
         os << "----- Components Begin -----" << std::endl;
         for (auto &it : map)
-            os << "Name: [" << it.first << "] Id : [" << it.second << "]" << std::endl;
+            os << "Name: [" << it.first << "] Id: [" << it.second << "]" << std::endl;
         os << "------ Components End ------" << std::endl;
         return os;
     }
