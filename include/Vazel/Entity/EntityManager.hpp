@@ -18,12 +18,12 @@ namespace vazel
 
         public:
 
-            EntityManagerException(char const *e)
+            EntityManagerException(std::string& e)
             {
                 _e += e;
             }
 
-            const char *what()
+            const char *what(void) const noexcept override
             {
                 return _e.c_str();
             }

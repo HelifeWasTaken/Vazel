@@ -36,16 +36,16 @@ namespace vazel
         std::cout << *this;
     }
 
-    ComponentManagerException::ComponentManagerException(const char *e)
+    ComponentManagerException::ComponentManagerException(const std::string& e)
     {
         _e += e;
     }
 
-    const char *ComponentManagerException::what(void)
+    const char *ComponentManagerException::what(void) const noexcept
     {
         return _e.c_str();
     }
 
-    ComponentManagerRegisterError::ComponentManagerRegisterError(const char *e)
+    ComponentManagerRegisterError::ComponentManagerRegisterError(const std::string& e)
         : ComponentManagerException(e) {}
 };

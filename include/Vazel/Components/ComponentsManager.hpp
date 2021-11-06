@@ -15,7 +15,7 @@ namespace vazel
      * @brief ComponentsManagerException class
      *      Exception class for ComponentsManager
      */
-    class ComponentManagerException : std::exception
+    class ComponentManagerException : public std::exception
     {
         private:
             std::string _e = "ComponentManagerException: ";
@@ -26,7 +26,7 @@ namespace vazel
              *
              * @param e Exception message
              */
-            ComponentManagerException(const char *e);
+            ComponentManagerException(const std::string& e);
 
         public:
             /**
@@ -34,7 +34,7 @@ namespace vazel
              *
              * @return const char*
              */
-            const char *what();
+            const char *what() const noexcept override;
     };
 
     /**
@@ -49,7 +49,7 @@ namespace vazel
              *
              * @param e Exception message
              */
-            ComponentManagerRegisterError(const char *e);
+            ComponentManagerRegisterError(const std::string& e);
     };
 
     /**
@@ -117,7 +117,7 @@ namespace vazel
                     if (_components_map.find(name) != _components_map.end()) {
                         std::string err = "You cannot Register the same component twice: ";
                         err += name;
-                        throw ComponentManagerRegisterError(err.c_str());
+                        throw ComponentManagerRegisterError(err);
                     }
                     _aviable_signatures.set(aviableIndex, true);
                     _components_map.emplace(name, aviableIndex);
@@ -138,7 +138,7 @@ namespace vazel
                     } catch (...) {
                         std::string err = "You cannot unregister a component that is not registered: ";
                         err += name;
-                        throw ComponentManagerRegisterError(err.c_str());
+                        throw ComponentManagerRegisterError(err);
                     }
                     _components_map.erase(name);
                 }
@@ -152,12 +152,14 @@ namespace vazel
             template <typename T>
                 ComponentType getComponentType(void)
                 {
+                    const char *name = typeid(T).name();
+
                     try {
-                        return _components_map.at(typeid(T).name());
+                        return _components_map.at(name);
                     } catch (...) {
                         std::string err = "You cannot get a component that is not registered: ";
-                        err += typeid(T).name();
-                        throw ComponentManagerRegisterError(err.c_str());
+                        err += name;
+                        throw ComponentManagerRegisterError(err);
                     }
                 }
 
@@ -169,8 +171,10 @@ namespace vazel
             template <typename T>
                 void attachComponent(Entity& e)
                 {
+                    const char *name = typeid(T).name();
+
                     try {
-                        const ComponentType componentType = _components_map.at(typeid(T).name());
+                        const ComponentType componentType = _components_map.at(name);
                         const auto it = _entity_to_components.find(e);
 
                         if (it == _entity_to_components.end())
@@ -180,8 +184,8 @@ namespace vazel
                         it->second[componentType].make<T>();
                     } catch (...) {
                         std::string err = "You cannot attach a component that is not registered: ";
-                        err += typeid(T).name();
-                        throw ComponentManagerRegisterError(err.c_str());
+                        err += name;
+                        throw ComponentManagerRegisterError(err);
                     }
                 }
 
