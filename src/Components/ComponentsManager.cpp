@@ -4,7 +4,7 @@ namespace vazel
 {
     ComponentType ComponentManager::_getAviableComponentIndex()
     {
-        for (ComponentType i = 0; i != Component::MAX; i++)
+        for (ComponentType i = 0; i != VAZEL_MAX_COMPONENTS; i++)
             if (_aviable_signatures.test(i) == false)
                 return i;
         throw ComponentManagerRegisterError("You registered already the maximum of Component");
@@ -45,9 +45,6 @@ namespace vazel
     {
         return _e.c_str();
     }
-
-    ComponentManagerFindComponentError::ComponentManagerFindComponentError(const char *e)
-        : ComponentManagerException(e) {}
 
     ComponentManagerRegisterError::ComponentManagerRegisterError(const char *e)
         : ComponentManagerException(e) {}

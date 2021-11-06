@@ -1,4 +1,8 @@
-#include <random>
+#pragma once
+
+#include <functional>
+
+#include "Vazel/UUID.hpp"
 
 namespace vazel
 {
@@ -10,7 +14,7 @@ namespace vazel
     class Entity
     {
         private:
-            uint64_t _uuid;
+            UUID _uuid;
 
         public:
             Entity();
@@ -19,16 +23,16 @@ namespace vazel
             /**
              * @brief Wrapper to get the UUID
              *
-             * @return uint64_t The UUID
+             * @return UUID The UUID
              */
-            operator uint64_t() const { return _uuid; }
+            operator UUID() const { return _uuid; }
 
             /**
              * @brief Wrapper to get the UUID
              *
-             * @return uint64_t The UUID
+             * @return UUID The UUID
              */
-            uint64_t getId() const { return _uuid; }
+            UUID getId() const { return _uuid; }
     };
 
 }
@@ -45,10 +49,10 @@ struct std::hash<vazel::Entity>
      * @brief Hashes the UUID of the entity
      *
      * @param uuid The entity
-     * @return uint64_t The result of the hash
+     * @return UUID The result of the hash
      */
-    uint64_t operator()(const vazel::Entity &uuid) const
+    vazel::UUID operator()(const vazel::Entity &uuid) const
     {
-        return std::hash<uint64_t>()((uint64_t)uuid);
+        return std::hash<vazel::UUID>()((vazel::UUID)uuid);
     }
 };

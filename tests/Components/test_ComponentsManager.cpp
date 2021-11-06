@@ -19,14 +19,14 @@ TEST(ComponentRegistering, TestOneComponentRegister)
 {
     vazel::ComponentManager cm;
 
-    cm.registerComponent<placeholder_component_1>();
+    cm.Register<placeholder_component_1>();
 }
 
 TEST(ComponentRegistering, TestGetComponentRegistered)
 {
     vazel::ComponentManager cm;
 
-    cm.registerComponent<placeholder_component_1>();
+    cm.Register<placeholder_component_1>();
     GTEST_ASSERT_EQ(cm.getComponentType<placeholder_component_1>(), 0);
 }
 
@@ -34,8 +34,8 @@ TEST(ComponentRegistering, TwoComponents)
 {
     vazel::ComponentManager cm;
 
-    cm.registerComponent<placeholder_component_1>();
-    cm.registerComponent<placeholder_component_2>();
+    cm.Register<placeholder_component_1>();
+    cm.Register<placeholder_component_2>();
     GTEST_ASSERT_EQ(cm.getComponentType<placeholder_component_1>(), 0);
     GTEST_ASSERT_EQ(cm.getComponentType<placeholder_component_2>(), 1);
 }
@@ -44,10 +44,10 @@ TEST(ComponentRegistering, RaiseExceptionWhenComponentRegisteredTwice)
 {
     vazel::ComponentManager cm;
 
-    cm.registerComponent<placeholder_component_1>();
+    cm.Register<placeholder_component_1>();
     try {
-        cm.registerComponent<placeholder_component_1>();
-    } catch (vazel::ComponentManagerRegisterError& e) {
+        cm.Register<placeholder_component_1>();
+    } catch (vazel::ComponentManagerException& e) {
         return;
     } catch (std::exception& e) {
         std::cout << "Invalid: Exception catched was not vazel::ComponentManagerRegisterError" << std::endl;
@@ -63,7 +63,7 @@ TEST(ComponentRegistering, RaiseExceptionWhenGettingNonExistingComponent)
 
     try {
         cm.getComponentType<placeholder_component_1>();
-    } catch (vazel::ComponentManagerFindComponentError& e) {
+    } catch (vazel::ComponentManagerException& e) {
         return;
     } catch (std::exception& e) {
         std::cout << "Invalid: Exception catched was not vazel::ComponentManagerFindComponentError" << std::endl;
@@ -77,12 +77,12 @@ TEST(ComponentRegistering, removeExistingSingleComponent)
 {
     vazel::ComponentManager cm;
 
-    cm.registerComponent<placeholder_component_1>();
+    cm.Register<placeholder_component_1>();
     GTEST_ASSERT_EQ(cm.getComponentType<placeholder_component_1>(), 0);
-    cm.removeComponent<placeholder_component_1>();
+    cm.unRegister<placeholder_component_1>();
     try {
         cm.getComponentType<placeholder_component_1>();
-    } catch (vazel::ComponentManagerFindComponentError& e) {
+    } catch (vazel::ComponentManagerRegisterError& e) {
         return;
     } catch (std::exception& e) {
         std::cout << "Invalid: Exception catched was not vazel::ComponentManagerFindComponentError" << std::endl;
@@ -96,9 +96,9 @@ TEST(ComponentRegistering, removeOneComponentAndAddAnotherOneToTakeSlotZero)
 {
     vazel::ComponentManager cm;
 
-    cm.registerComponent<placeholder_component_1>();
-    cm.removeComponent<placeholder_component_1>();
-    cm.registerComponent<placeholder_component_2>();
+    cm.Register<placeholder_component_1>();
+    cm.unRegister<placeholder_component_1>();
+    cm.Register<placeholder_component_2>();
     GTEST_ASSERT_EQ(cm.getComponentType<placeholder_component_2>(), 0);
 }
 
@@ -106,10 +106,10 @@ TEST(ComponentRegistering, removeComponentsAndAddSome)
 {
     vazel::ComponentManager cm;
 
-    cm.registerComponent<placeholder_component_1>();
-    cm.registerComponent<placeholder_component_2>();
-    cm.removeComponent<placeholder_component_1>();
-    cm.registerComponent<placeholder_component_3>();
+    cm.Register<placeholder_component_1>();
+    cm.Register<placeholder_component_2>();
+    cm.unRegister<placeholder_component_1>();
+    cm.Register<placeholder_component_3>();
     GTEST_ASSERT_EQ(cm.getComponentType<placeholder_component_2>(), 1);
     GTEST_ASSERT_EQ(cm.getComponentType<placeholder_component_3>(), 0);
 }
@@ -123,7 +123,7 @@ vazel::ComponentManager _testLogginBasicLaunch()
 {
     testing::internal::CaptureStdout();
     vazel::ComponentManager cm;
-    cm.registerComponent<placeholder_component_1>();
+    cm.Register<placeholder_component_1>();
 
     return cm;
 }
@@ -144,5 +144,3 @@ TEST(ComponentRegistering, TestLoggingBasicWithBinaryOperatorOstream)
     std::string res = testing::internal::GetCapturedStdout();
     GTEST_ASSERT_EQ(res, LOGEXPECT);
 }
-
-

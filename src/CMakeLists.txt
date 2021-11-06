@@ -7,6 +7,7 @@ include_directories(
 )
 
 set(SRCS
+    ./UUID.cpp
     ./Entity/Entity.cpp
     ./Components/Component.cpp
     ./Components/ComponentsManager.cpp

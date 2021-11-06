@@ -1,6 +1,9 @@
+#pragma once
+
 #include <unordered_map>
 #include <iostream>
 #include <string>
+#include <memory>
 #include <exception>
 
 #include "Vazel/Components/Component.hpp"
@@ -35,27 +38,18 @@ namespace vazel
     };
 
     /**
-     * @brief ComponentManagerFindComponentError class that
-     *        determines that a Component has been requested but not found
-     */
-
-    class ComponentManagerFindComponentError : public ComponentManagerException
-    {
-        public:
-            ComponentManagerFindComponentError(const char *e);
-    };
-
-    /**
      * @brief ComponentMap is unordered_map of Components
      *
      */
     using ComponentMap = std::unordered_map<const char *, ComponentType>;
+    using ComponentArray = std::array<Component, VAZEL_MAX_COMPONENTS>;
 
     class ComponentManager
     {
         private:
             ComponentMap _components_map;
             ComponentSignature _aviable_signatures;
+            std::unordered_map<Entity, ComponentArray> _entity_to_components;
 
             ComponentType _getAviableComponentIndex();
 
@@ -76,52 +70,38 @@ namespace vazel
              * @tparam T The componentType to register
              */
             template <typename T>
-                void registerComponent()
+                void Register()
                 {
                     const char *name = typeid(T).name();
                     const ComponentType aviableIndex = _getAviableComponentIndex();
 
                     if (_components_map.find(name) != _components_map.end()) {
-                        std::string e = "You cannot Register the same component twice: ";
-                        e += name;
-                        throw ComponentManagerRegisterError(e.c_str());
+                        std::string err = "You cannot Register the same component twice: ";
+                        err += name;
+                        throw ComponentManagerRegisterError(err.c_str());
                     }
                     _aviable_signatures.set(aviableIndex, true);
                     _components_map.emplace(name, aviableIndex);
                 }
 
             /**
-             * @brief Get the Component object
-             *
-             * @tparam T The componentType to get
-             * @return const ComponentMap::iterator The current position of the Component in the ComponentMap
-             */
-            template <typename T>
-                const ComponentMap::iterator getComponent()
-                {
-                    const char *name = typeid(T).name();
-                    const auto r = _components_map.find(name);
-
-                    if (r == _components_map.end()) {
-                        std::string s("You did not registered component of type -> ");
-                        s += name;
-                        throw ComponentManagerFindComponentError(s.c_str());
-                    }
-                    return r;
-                }
-
-            /**
-             * @brief removeComponent removes a Component from the ComponentManager
+             * @brief unregister removes a Component from the ComponentManager
              *
              * @tparam T The componentType to remove
              */
             template <typename T>
-                void removeComponent()
+                void unRegister()
                 {
-                    const auto it = getComponent<T>();
+                    const char *name = typeid(T).name();
 
-                    _aviable_signatures.set(it->second, false);
-                    _components_map.erase(it);
+                    try {
+                        _aviable_signatures.set(_components_map.at(name), false);
+                    } catch (...) {
+                        std::string err = "You cannot unregister a component that is not registered: ";
+                        err += name;
+                        throw ComponentManagerRegisterError(err.c_str());
+                    }
+                    _components_map.erase(name);
                 }
 
             /**
@@ -133,9 +113,58 @@ namespace vazel
             template <typename T>
                 ComponentType getComponentType()
                 {
-                    return getComponent<T>()->second;
+                    try {
+                        return _components_map.at(typeid(T).name());
+                    } catch (...) {
+                        std::string err = "You cannot get a component that is not registered: ";
+                        err += typeid(T).name();
+                        throw ComponentManagerRegisterError(err.c_str());
+                    }
                 }
 
+            /**
+             * @brief addComponent adds a Component to the ComponentManager
+             *       and attach it to the Entity
+             *
+             */
+            template <typename T>
+                void attachComponent(Entity& e)
+                {
+                    try {
+                        const ComponentType componentType = _components_map.at(typeid(T).name());
+                        auto it = _entity_to_components.find(e);
+                        if (it == _entity_to_components.end())
+                            _entity_to_components.emplace(e, ComponentArray());
+                        if (it->second[componentType].get<T>() != nullptr)
+                            throw ComponentManagerRegisterError("You cannot attach a component that is already attached");
+                        it->second[componentType].make<T>();
+                    } catch (...) {
+                        std::string err = "You cannot attach a component that is not registered: ";
+                        err += typeid(T).name();
+                        throw ComponentManagerRegisterError(err.c_str());
+                    }
+                }
+
+            /**
+             * @brief removeComponent removes a Component from the ComponentManager
+             *      and detach it from the Entity
+             */
+            template <typename T>
+                void detachComponent(Entity& e)
+                {
+                    const ComponentType type = getComponentType<T>();
+                    auto it = _entity_to_components.find(e);
+
+                    if (it == _entity_to_components.end()) {
+                        std::string err = "You cannot detach a component to an non attached Entity";
+                        err += typeid(T).name();
+                        throw ComponentManagerRegisterError(err.c_str());
+                    }
+                    it->second[type].remove();
+                    // maybe throw an exception if the component is not attached
+                    // Depends if it should work like a free
+                    // .remove on Component should check already if component is null
+                }
     };
 
     /**
