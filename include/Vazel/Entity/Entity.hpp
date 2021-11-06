@@ -17,7 +17,14 @@ namespace vazel
             UUID _uuid;
 
         public:
-            Entity();
+            /**
+             * @brief Construct a new Entity object
+             */
+            Entity(void);
+
+            /**
+             * @brief Destroy the Entity object
+             */
             Entity(const Entity &uuid);
 
             /**
@@ -25,14 +32,19 @@ namespace vazel
              *
              * @return UUID The UUID
              */
-            operator UUID() const { return _uuid; }
+            UUID getId(void) const;
+
 
             /**
              * @brief Wrapper to get the UUID
              *
              * @return UUID The UUID
              */
-            UUID getId() const { return _uuid; }
+            operator UUID() const
+            {
+                return getId();
+            }
+
     };
 
 }

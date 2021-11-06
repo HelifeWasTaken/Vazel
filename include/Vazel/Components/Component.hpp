@@ -5,7 +5,6 @@
 
 namespace vazel
 {
-
     /**
      * @brief Base class for all components.
      *
@@ -16,7 +15,7 @@ namespace vazel
      * @brief The maximum number of components.
      *
      */
-    #define VAZEL_MAX_COMPONENTS 300
+    #define VAZEL_MAX_COMPONENTS 30
 
     class Component
     {
@@ -26,8 +25,9 @@ namespace vazel
         public:
 
             /**
-             * @brief Construct a new Component object.
+             * @brief Construct a new T object
              *
+             * @tparam T The type of the component.
              */
             template<typename T>
             void make()
@@ -37,22 +37,27 @@ namespace vazel
                     throw std::bad_alloc();
             }
 
-            void remove()
-            {
-                if (_data != nullptr)
-                    free(_data);
-                _data = nullptr;
-            }
+            /**
+             * @brief Destroy the _data object but not the Component class.
+             */
+            void remove(void);
 
-            Component() = default;
+            /**
+             * @brief Construct a new Component object
+             *
+             */
+            Component(void) = default;
 
-            ~Component()
-            {
-                remove();
-            }
+            ~Component(void);
 
+            /**
+             * @brief Gets the data object casted to the given type.
+             *
+             * @tparam T The type to cast the data object to.
+             * @return T* The data object casted to the given type as a pointer.
+             */
             template<typename T>
-            T *get()
+            T *get(void)
             {
                 return static_cast<T *>(_data);
             }

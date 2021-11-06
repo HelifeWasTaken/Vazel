@@ -2,7 +2,7 @@
 
 namespace vazel
 {
-    ComponentType ComponentManager::_getAviableComponentIndex()
+    ComponentType ComponentManager::_getAviableComponentIndex(void)
     {
         for (ComponentType i = 0; i != VAZEL_MAX_COMPONENTS; i++)
             if (_aviable_signatures.test(i) == false)
@@ -10,12 +10,12 @@ namespace vazel
         throw ComponentManagerRegisterError("You registered already the maximum of Component");
     }
 
-    const ComponentMap &ComponentManager::getComponentMap() const
+    const ComponentMap &ComponentManager::getComponentMap(void) const
     {
         return _components_map;
     }
 
-    const ComponentSignature &ComponentManager::getComponentSignature() const
+    const ComponentSignature &ComponentManager::getComponentSignature(void) const
     {
         return _aviable_signatures;
     }
@@ -31,7 +31,7 @@ namespace vazel
         return os;
     }
 
-    void ComponentManager::showState() const
+    void ComponentManager::showState(void) const
     {
         std::cout << *this;
     }
@@ -41,7 +41,7 @@ namespace vazel
         _e += e;
     }
 
-    const char *ComponentManagerException::what()
+    const char *ComponentManagerException::what(void)
     {
         return _e.c_str();
     }

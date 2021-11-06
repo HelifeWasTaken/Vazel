@@ -21,9 +21,19 @@ namespace vazel
             std::string _e = "ComponentManagerException: ";
 
         public:
+            /**
+             * @brief Construct a new Component Manager Exception object
+             *
+             * @param e Exception message
+             */
             ComponentManagerException(const char *e);
 
         public:
+            /**
+             * @brief Get the Exception Message object
+             *
+             * @return const char*
+             */
             const char *what();
     };
 
@@ -34,16 +44,29 @@ namespace vazel
     class ComponentManagerRegisterError : public ComponentManagerException
     {
         public:
+            /**
+             * @brief Construct a new Component Manager Register Error object
+             *
+             * @param e Exception message
+             */
             ComponentManagerRegisterError(const char *e);
     };
 
     /**
-     * @brief ComponentMap is unordered_map of Components
+     * @brief ComponentMap is an unordered_map of Components based on their typename
      *
      */
     using ComponentMap = std::unordered_map<const char *, ComponentType>;
+
+    /**
+     * @brief ComponentArray is an array of Components of size VAZEL_MAX_COMPONENTS
+     */
     using ComponentArray = std::array<Component, VAZEL_MAX_COMPONENTS>;
 
+    /**
+     * @brief ComponentsManager class
+     *      Manages all components of an Entity
+     */
     class ComponentManager
     {
         private:
@@ -51,17 +74,33 @@ namespace vazel
             ComponentSignature _aviable_signatures;
             std::unordered_map<Entity, ComponentArray> _entity_to_components;
 
-            ComponentType _getAviableComponentIndex();
+            /**
+             * @brief get the component type from the component name
+             *
+             * @return ComponentType the component type
+             */
+            ComponentType _getAviableComponentIndex(void);
 
         public:
-            const ComponentMap &getComponentMap() const;
-            const ComponentSignature &getComponentSignature() const;
+
+            /**
+             * @brief Construct a new Component Manager object
+             */
+            ComponentManager(void) = default;
+
+            /**
+             * @brief Destroy the Component Manager object
+             */
+            ~ComponentManager(void) = default;
+
+            const ComponentMap &getComponentMap(void) const;
+            const ComponentSignature &getComponentSignature(void) const;
 
             /**
              * @brief shows the current state of the ComponentManager
              *
              */
-            void showState() const;
+            void showState(void) const;
 
             /**
              * @brief registerComponent registers a Component in the ComponentManager with the typeid
@@ -70,7 +109,7 @@ namespace vazel
              * @tparam T The componentType to register
              */
             template <typename T>
-                void Register()
+                void Register(void)
                 {
                     const char *name = typeid(T).name();
                     const ComponentType aviableIndex = _getAviableComponentIndex();
@@ -90,7 +129,7 @@ namespace vazel
              * @tparam T The componentType to remove
              */
             template <typename T>
-                void unRegister()
+                void unRegister(void)
                 {
                     const char *name = typeid(T).name();
 
@@ -111,7 +150,7 @@ namespace vazel
              * @return ComponentType an index in the ComponentSignature (bitset) where the Component is stored
              */
             template <typename T>
-                ComponentType getComponentType()
+                ComponentType getComponentType(void)
                 {
                     try {
                         return _components_map.at(typeid(T).name());
