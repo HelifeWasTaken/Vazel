@@ -132,7 +132,8 @@ namespace vazel
                 {
                     try {
                         const ComponentType componentType = _components_map.at(typeid(T).name());
-                        auto it = _entity_to_components.find(e);
+                        const auto it = _entity_to_components.find(e);
+
                         if (it == _entity_to_components.end())
                             _entity_to_components.emplace(e, ComponentArray());
                         if (it->second[componentType].get<T>() != nullptr)
@@ -153,7 +154,7 @@ namespace vazel
                 void detachComponent(Entity& e)
                 {
                     const ComponentType type = getComponentType<T>();
-                    auto it = _entity_to_components.find(e);
+                    const auto it = _entity_to_components.find(e);
 
                     if (it == _entity_to_components.end()) {
                         std::string err = "You cannot detach a component to an non attached Entity";
