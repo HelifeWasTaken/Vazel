@@ -165,6 +165,40 @@ namespace vazel
                 }
 
             /**
+             * @brief Should always be called to register the entity
+             *
+             */
+            void onEntityCreate(const Entity& e)
+            {
+                if (_entity_to_components.find(e) != _entity_to_components.end()) {
+                    char buf[200] = {0};
+                    std::snprintf(buf, sizeof(buf) - 1,
+                            "Entity(%lu) is already registered"
+                            " in the _entity_to_components map", e.getId());
+                    throw ComponentManagerException(std::string(buf));
+                }
+                _entity_to_components.emplace(e, ComponentArray());
+            }
+
+            /**
+             * @brief Should always be called to unregister an entity
+             *
+             */
+            void onEntityDestroy(const Entity& e)
+            {
+                const auto& it = _entity_to_components.find(e);
+
+                if (it == _entity_to_components.end()) {
+                    char buf[200] = {0};
+                    std::snprintf(buf, sizeof(buf) - 1,
+                            "Entity(%lu) is not registered in "
+                            "the _entity_to_components map", e.getId());
+                    throw ComponentManagerException(std::string(buf));
+                }
+                _entity_to_components.erase(it->first);
+            }
+
+            /**
              * @brief addComponent adds a Component to the ComponentManager
              *       and attach it to the Entity
              *
@@ -179,12 +213,13 @@ namespace vazel
                         auto it = _entity_to_components.find(e);
 
                         if (it == _entity_to_components.end()) {
-                            _entity_to_components.emplace(e, ComponentArray());
-                            attachComponent<T>(e);
-                            return;
+                            std::string err = "You cannot attach a component to a non registered Entity(";
+                            err += e.getId();
+                            err += ")";
+                            throw ComponentManagerException(err);
                         }
                         if (it->second[componentType].get_ptr<T>() != nullptr)
-                            throw ComponentManagerRegisterError("You cannot attach a component that is already attached");
+                            throw ComponentManagerException("You cannot attach a component that is already attached");
                         it->second[componentType].make<T>();
                     } catch (...) {
                         std::string err = "You cannot attach a component that is not registered: ";
@@ -230,12 +265,12 @@ namespace vazel
                         if (it == _entity_to_components.end())
                             throw std::runtime_error("");
                         return it->second[componentType].get<T>();
-                    } catch (std::exception& e) {
+                    } catch (std::exception& err) {
                         char buf[200] = {0};
                         std::snprintf(buf, sizeof(buf) - 1,
-                                "Entity(%lld) is not registered"
+                                "Entity(%lu) is not registered"
                                 " with a component or Component(%s) was not found",
-                                e,
+                                e.getId(),
                                 name
                         );
                         throw ComponentManagerException(std::string(buf));
