@@ -229,8 +229,6 @@ TEST(ComponentUsage, registerTwoDifferentComponents)
     entity_offsetx_offsety off = { 4, 3 };
     GTEST_ASSERT_EQ(cm.getComponent<entity_offsetx_offsety>(e).ofx, off.ofx);
     GTEST_ASSERT_EQ(cm.getComponent<entity_offsetx_offsety>(e).ofy, off.ofy);
-    auto& s = cm.getComponent<std::string>(e);
-    s.~basic_string();
 }
 
 TEST(ComponentUsage, getComponentWithoutRegisteredEntity)

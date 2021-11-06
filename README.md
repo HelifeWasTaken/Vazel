@@ -82,11 +82,6 @@ int main(void)
     std::cout << "StrComponent: " << cm.getComponent<stringComponent>(e).s
             << "PosComponent: " << cm.getComponent<positionComponent>(e)
             << std::endl;
-    // Note that if the component has something that handles memory itself you will need to call the destructor manually
-    // For example with std::string
-    std::string& s = cm.getComponent<stringComponent>(e).s;
-    s.~basic_string();
-    // This is an anti pattern and I think I should try to correct it asap
 }
 ```
 

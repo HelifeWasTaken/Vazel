@@ -19,6 +19,7 @@
 
 #include <bitset>
 #include <stdlib.h>
+#include <any>
 
 /**
  * @brief The maximum number of components.
@@ -47,7 +48,7 @@ namespace vazel
     class Component
     {
         private:
-            void *_data = nullptr;
+            std::any _data;
 
         public:
 
@@ -59,11 +60,9 @@ namespace vazel
             template<typename T>
                 void make()
                 {
-                    if (_data != nullptr)
+                    if (_data.has_value())
                         throw ComponentExistsException("Component is not null and you are trying to make a new one.");
-                    _data = calloc(sizeof(T), 1);
-                    if (_data == nullptr)
-                        throw std::bad_alloc();
+                    _data = T();
                 }
 
             /**
@@ -75,10 +74,10 @@ namespace vazel
             template<typename T>
                 void make(T data)
                 {
-                    make<T>();
-                    memcpy(_data, &data, sizeof(T));
+                    if (_data.has_value())
+                        throw ComponentExistsException("Component is not null and you are trying to make a new one.");
+                    _data = data;
                 }
-
             /**
              * @brief Destroy the _data object but not the Component class.
              */
@@ -96,30 +95,6 @@ namespace vazel
             ~Component(void);
 
             /**
-             * @brief Gets the data object casted to the given type.
-             *
-             * @tparam T The type to cast the data object to.
-             * @return T* The data object casted to the given type as a pointer.
-             */
-            template<typename T>
-                T *get_ptr(void)
-                {
-                    return static_cast<T *>(_data);
-                }
-
-            /**
-             * @brief Gets the data object casted to the given type.
-             *
-             * @tparam T The type to cast the data object to.
-             * @return T& A reference to the data object casted to the given type.
-             */
-            template<typename T>
-                T& get_ref(void)
-                {
-                    return *reinterpret_cast<T*>(_data);
-                }
-
-            /**
              * @brief Wrapper around get_ref
              * @tparam Type to use around get_ref
              * @return T& A reference by the object return by get_reg
@@ -127,8 +102,10 @@ namespace vazel
             template<typename T>
                 T& get(void)
                 {
-                    return *reinterpret_cast<T*>(_data);
+                    return std::any_cast<T&>(_data);
                 }
+
+            bool hasValue(void) { return _data.has_value(); }
     };
 
     /**

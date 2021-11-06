@@ -235,7 +235,7 @@ namespace vazel
                             err += ")";
                             throw ComponentManagerException(err);
                         }
-                        if (it->second[componentType].get_ptr<T>() != nullptr)
+                        if (it->second[componentType].hasValue())
                             throw ComponentManagerException("You cannot attach a component that is already attached");
                         it->second[componentType].make<T>();
                     } catch (...) {
