@@ -21,9 +21,10 @@ namespace vazel
 {
     void Component::remove(void)
     {
-        if (_data != nullptr)
+        if (_data != nullptr) {
             free(_data);
-        _data = nullptr;
+            _data = nullptr;
+        }
     }
 
     Component::~Component(void)

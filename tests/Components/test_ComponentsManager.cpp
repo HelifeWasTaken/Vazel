@@ -212,26 +212,25 @@ TEST(ComponentUsage, registerPositionMultiplesEntities)
     }
 }
 
-struct placeholder_string_component {
-    std::string s;
-};
 TEST(ComponentUsage, registerTwoDifferentComponents)
 {
     vazel::ComponentManager cm;
 
     cm.Register<entity_offsetx_offsety>();
-    cm.Register<placeholder_string_component>();
+    cm.Register<std::string>();
     vazel::Entity e;
     cm.onEntityCreate(e);
-    cm.attachComponent<placeholder_string_component>(e);
+    cm.attachComponent<std::string>(e);
     cm.attachComponent<entity_offsetx_offsety>(e);
-    cm.getComponent<placeholder_string_component>(e).s += "lol";
+    cm.getComponent<std::string>(e) = "lol";
     cm.getComponent<entity_offsetx_offsety>(e).ofx = 4;
     cm.getComponent<entity_offsetx_offsety>(e).ofy = 3;
-    GTEST_ASSERT_EQ(cm.getComponent<placeholder_string_component>(e).s, std::string("lol"));
+    GTEST_ASSERT_EQ(cm.getComponent<std::string>(e), std::string("lol"));
     entity_offsetx_offsety off = { 4, 3 };
     GTEST_ASSERT_EQ(cm.getComponent<entity_offsetx_offsety>(e).ofx, off.ofx);
     GTEST_ASSERT_EQ(cm.getComponent<entity_offsetx_offsety>(e).ofy, off.ofy);
+    auto& s = cm.getComponent<std::string>(e);
+    s.~basic_string();
 }
 
 TEST(ComponentUsage, getComponentWithoutRegisteredEntity)
