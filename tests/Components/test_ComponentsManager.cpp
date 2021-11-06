@@ -1,5 +1,6 @@
 #include <gtest/gtest.h>
 #include "Vazel/Components/ComponentsManager.hpp"
+#include "Vazel/UUID.hpp"
 
 struct placeholder_component_1 {};
 
@@ -143,4 +144,72 @@ TEST(ComponentRegistering, TestLoggingBasicWithBinaryOperatorOstream)
     std::cout << cm;
     std::string res = testing::internal::GetCapturedStdout();
     GTEST_ASSERT_EQ(res, LOGEXPECT);
+}
+
+struct placeholder_position_component {
+    float x;
+    float y;
+};
+TEST(ComponentUsage, registerPositionComponentAndChangeIt)
+{
+    vazel::ComponentManager cm;
+    vazel::Entity e;
+
+    cm.Register<placeholder_position_component>();
+    cm.attachComponent<placeholder_position_component>(e);
+    auto& p = cm.getComponent<placeholder_position_component>(e);
+    p.x = 6;
+
+    GTEST_ASSERT_EQ(cm.getComponent<placeholder_position_component>(e).x, 6);
+    GTEST_ASSERT_EQ(cm.getComponent<placeholder_position_component>(e).y, 0);
+}
+
+struct entity_offsetx_offsety {
+    float ofx;
+    float ofy;
+};
+TEST(ComponentUsage, registerPositionMultiplesEntities)
+{
+    std::map<vazel::Entity, entity_offsetx_offsety> s;
+    vazel::ComponentManager cm;
+
+    cm.Register<entity_offsetx_offsety>();
+    for (size_t i = 0; i != 10000; i++) {
+        auto id = vazel::makeUUID();
+        entity_offsetx_offsety tmp;
+        vazel::Entity e;
+        tmp.ofx = id;
+        tmp.ofy = id;
+        cm.attachComponent<entity_offsetx_offsety>(e);
+        auto& comp = cm.getComponent<entity_offsetx_offsety>(e);
+        comp.ofx = id + 3;
+        comp.ofy = id + 2;
+        s.emplace(e, tmp);
+    }
+    for (auto it : s) {
+        auto& comp = cm.getComponent<entity_offsetx_offsety>(it.first);
+        GTEST_ASSERT_EQ(it.second.ofx, comp.ofx - 3);
+        GTEST_ASSERT_EQ(it.second.ofy, comp.ofy - 2);
+    }
+}
+
+struct placeholder_string_component {
+    std::string s;
+};
+TEST(ComponentUsage, registerTwoDifferentComponents)
+{
+    vazel::ComponentManager cm;
+
+    cm.Register<entity_offsetx_offsety>();
+    cm.Register<placeholder_string_component>();
+    vazel::Entity e;
+    cm.attachComponent<placeholder_string_component>(e);
+    cm.attachComponent<entity_offsetx_offsety>(e);
+    cm.getComponent<placeholder_string_component>(e).s += "lol";
+    cm.getComponent<entity_offsetx_offsety>(e).ofx = 4;
+    cm.getComponent<entity_offsetx_offsety>(e).ofy = 3;
+    GTEST_ASSERT_EQ(cm.getComponent<placeholder_string_component>(e).s, std::string("lol"));
+    entity_offsetx_offsety off = { 4, 3 };
+    GTEST_ASSERT_EQ(cm.getComponent<entity_offsetx_offsety>(e).ofx, off.ofx);
+    GTEST_ASSERT_EQ(cm.getComponent<entity_offsetx_offsety>(e).ofy, off.ofy);
 }

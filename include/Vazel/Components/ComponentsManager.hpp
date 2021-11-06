@@ -5,6 +5,7 @@
 #include <string>
 #include <memory>
 #include <exception>
+#include <cstdio>
 
 #include "Vazel/Components/Component.hpp"
 #include "Vazel/Entity/Entity.hpp"
@@ -169,17 +170,20 @@ namespace vazel
              *
              */
             template <typename T>
-                void attachComponent(Entity& e)
+                void attachComponent(const Entity& e)
                 {
                     const char *name = typeid(T).name();
 
                     try {
                         const ComponentType componentType = _components_map.at(name);
-                        const auto it = _entity_to_components.find(e);
+                        auto it = _entity_to_components.find(e);
 
-                        if (it == _entity_to_components.end())
+                        if (it == _entity_to_components.end()) {
                             _entity_to_components.emplace(e, ComponentArray());
-                        if (it->second[componentType].get<T>() != nullptr)
+                            attachComponent<T>(e);
+                            return;
+                        }
+                        if (it->second[componentType].get_ptr<T>() != nullptr)
                             throw ComponentManagerRegisterError("You cannot attach a component that is already attached");
                         it->second[componentType].make<T>();
                     } catch (...) {
@@ -194,7 +198,7 @@ namespace vazel
              *      and detach it from the Entity
              */
             template <typename T>
-                void detachComponent(Entity& e)
+                void detachComponent(const Entity& e)
                 {
                     const ComponentType type = getComponentType<T>();
                     const auto it = _entity_to_components.find(e);
@@ -208,6 +212,34 @@ namespace vazel
                     // maybe throw an exception if the component is not attached
                     // Depends if it should work like a free
                     // .remove on Component should check already if component is null
+                }
+
+            /**
+             * @brief getComponent gets the Component of a specifically attached Entity
+             *
+             */
+            template <typename T>
+                T& getComponent(const Entity& e)
+                {
+                    const char *name = typeid(T).name();
+
+                    try {
+                        const ComponentType componentType = _components_map.at(name);
+                        const auto it = _entity_to_components.find(e);
+
+                        if (it == _entity_to_components.end())
+                            throw std::runtime_error("");
+                        return it->second[componentType].get<T>();
+                    } catch (std::exception& e) {
+                        char buf[200] = {0};
+                        std::snprintf(buf, sizeof(buf) - 1,
+                                "Entity(%lld) is not registered"
+                                " with a component or Component(%s) was not found",
+                                e,
+                                name
+                        );
+                        throw ComponentManagerException(std::string(buf));
+                    }
                 }
     };
 

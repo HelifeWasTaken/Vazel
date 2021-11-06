@@ -85,7 +85,7 @@ namespace vazel
              * @return T* The data object casted to the given type as a pointer.
              */
             template<typename T>
-                T *get(void)
+                T *get_ptr(void)
                 {
                     return static_cast<T *>(_data);
                 }
@@ -96,7 +96,18 @@ namespace vazel
              * @tparam T The type to cast the data object to.
              * @return T& A reference to the data object casted to the given type.
              */
-            template <typename T>
+            template<typename T>
+                T& get_ref(void)
+                {
+                    return *reinterpret_cast<T*>(_data);
+                }
+
+            /**
+             * @brief Wrapper around get_ref
+             * @tparam Type to use around get_ref
+             * @return T& A reference by the object return by get_reg
+             */
+            template<typename T>
                 T& get(void)
                 {
                     return *reinterpret_cast<T*>(_data);

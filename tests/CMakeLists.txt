@@ -19,10 +19,3 @@ target_link_libraries(${PROJECT_NAME}
 )
 
 add_test(NAME vazel_tests COMMAND ${PROJECT_NAME})
-
-add_custom_command(
-    TARGET ${PROJECT_NAME}
-    COMMENT "Run tests"
-    POST_BUILD
-    COMMAND ${PROJECT_NAME} --gtest_color=yes
-)
