@@ -3,6 +3,12 @@
 #include <bitset>
 #include <stdlib.h>
 
+/**
+ * @brief The maximum number of components.
+ *
+ */
+#define VAZEL_MAX_COMPONENTS 30
+
 namespace vazel
 {
     /**
@@ -10,12 +16,6 @@ namespace vazel
      *
      */
     using ComponentType = uint16_t;
-
-    /**
-     * @brief The maximum number of components.
-     *
-     */
-    #define VAZEL_MAX_COMPONENTS 30
 
     class Component
     {
@@ -30,12 +30,12 @@ namespace vazel
              * @tparam T The type of the component.
              */
             template<typename T>
-            void make()
-            {
-                _data = calloc(sizeof(T), 1);
-                if (_data == NULL)
-                    throw std::bad_alloc();
-            }
+                void make()
+                {
+                    _data = calloc(sizeof(T), 1);
+                    if (_data == NULL)
+                        throw std::bad_alloc();
+                }
 
             /**
              * @brief Destroy the _data object but not the Component class.
@@ -57,10 +57,10 @@ namespace vazel
              * @return T* The data object casted to the given type as a pointer.
              */
             template<typename T>
-            T *get(void)
-            {
-                return static_cast<T *>(_data);
-            }
+                T *get(void)
+                {
+                    return static_cast<T *>(_data);
+                }
     };
 
     /**
