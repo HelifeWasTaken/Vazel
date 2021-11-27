@@ -30,38 +30,36 @@ namespace vazel
      */
     class Entity
     {
-        private:
-            UUID _uuid;
+    private:
+        UUID _uuid;
 
-        public:
-            /**
-             * @brief Construct a new Entity object
-             */
-            Entity(void);
+    public:
+        /**
+         * @brief Construct a new Entity object
+         */
+        Entity(void);
 
-            /**
-             * @brief Destroy the Entity object
-             */
-            Entity(const Entity &uuid);
+        /**
+         * @brief Destroy the Entity object
+         */
+        Entity(const Entity &uuid);
 
-            /**
-             * @brief Wrapper to get the UUID
-             *
-             * @return UUID The UUID
-             */
-            UUID getId(void) const;
+        /**
+         * @brief Wrapper to get the UUID
+         *
+         * @return UUID The UUID
+         */
+        UUID getId(void) const;
 
-
-            /**
-             * @brief Wrapper to get the UUID
-             *
-             * @return UUID The UUID
-             */
-            operator UUID() const
-            {
-                return getId();
-            }
-
+        /**
+         * @brief Wrapper to get the UUID
+         *
+         * @return UUID The UUID
+         */
+        operator UUID() const
+        {
+            return getId();
+        }
     };
 
 }

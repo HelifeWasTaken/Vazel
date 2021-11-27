@@ -27,61 +27,88 @@
 
 namespace vazel
 {
+    /**
+     * @brief EntityManagerException is the base class for all exceptions thrown by EntityManager.
+     *
+     */
     class EntityManagerException : public std::exception
     {
 
-        private:
-            std::string _e = "EntityManagerError: ";
+    private:
+        std::string _e = "EntityManagerError: ";
 
-        public:
+    public:
+        /**
+         * @brief Construct a new Entity Manager Exception object
+         *
+         * @param e The error message.
+         */
+        EntityManagerException(std::string &e);
 
-            EntityManagerException(std::string& e)
-            {
-                _e += e;
-            }
-
-            const char *what(void) const noexcept override
-            {
-                return _e.c_str();
-            }
+        /**
+         * @brief Get the what object.
+         *
+         * @return const char* The error message.
+         */
+        const char *what(void) const noexcept override;
     };
 
+    /**
+     * @brief EntityManagerExceptionFindEntityError is thrown when an entity is not found.
+     *
+     */
     class EntityManagerExceptionFindEntityError : public EntityManagerException
     {
-        public:
-            EntityManagerExceptionFindEntityError(const char *e)
-                : EntityManagerException(e) {}
+    public:
+        /**
+         * @brief Construct a new Entity Manager Exception Find Entity Error object
+         *
+         * @param e The error message.
+         */
+        EntityManagerExceptionFindEntityError(const char *e);
     };
 
+    /**
+     * @brief EntityMap is a map of entities and their components.
+     *
+     */
     using EntityMap = std::unordered_map<const Entity, ComponentSignature>;
 
     class EntityManager
     {
-        private:
-            EntityMap _entity_map;
+    private:
+        EntityMap _entity_map;
 
-        public:
-            const Entity createEntity(void)
-            {
-                Entity e;
+    public:
+        /**
+         * @brief Create a Entity object
+         *
+         * @return const Entity
+         */
+        const Entity createEntity(void);
 
-                _entity_map[e] = ComponentSignature();
-                return e;
-            }
+        /**
+         * @brief Set the Signature object
+         *
+         * @param e The entity.
+         * @param signature The signature.
+         * @return EntityManager& A reference to the class itself.
+         */
+        EntityManager &setSignature(const Entity &e, const ComponentSignature &signature);
 
-            void setSignature(const Entity& e, const ComponentSignature& signature)
-            {
-                _entity_map[e] = signature;
-            }
+        /**
+         * @brief Get the Signature object
+         *
+         * @param e The entity.
+         * @return const ComponentSignature& The signature.
+         */
+        const ComponentSignature &getSignature(const Entity &e) const;
 
-            const ComponentSignature& getSignature(const Entity& e) const
-            {
-                return _entity_map[e];
-            }
-
-            const EntityMap& getMap(void) const
-            {
-                return _entity_map;
-            }
+        /**
+         * @brief Get the Map object
+         *
+         * @return const EntityMap& The map (unordered).
+         */
+        const EntityMap &getMap(void) const;
     };
 }

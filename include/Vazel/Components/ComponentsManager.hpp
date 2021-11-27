@@ -35,24 +35,24 @@ namespace vazel
      */
     class ComponentManagerException : public std::exception
     {
-        private:
-            std::string _e = "ComponentManagerException: ";
+    private:
+        std::string _e = "ComponentManagerException: ";
 
-        public:
-            /**
-             * @brief Construct a new Component Manager Exception object
-             *
-             * @param e Exception message
-             */
-            ComponentManagerException(const std::string& e);
+    public:
+        /**
+         * @brief Construct a new Component Manager Exception object
+         *
+         * @param e Exception message
+         */
+        ComponentManagerException(const std::string &e);
 
-        public:
-            /**
-             * @brief Get the Exception Message object
-             *
-             * @return const char*
-             */
-            const char *what() const noexcept override;
+    public:
+        /**
+         * @brief Get the Exception Message object
+         *
+         * @return const char*
+         */
+        const char *what() const noexcept override;
     };
 
     /**
@@ -61,13 +61,13 @@ namespace vazel
      */
     class ComponentManagerRegisterError : public ComponentManagerException
     {
-        public:
-            /**
-             * @brief Construct a new Component Manager Register Error object
-             *
-             * @param e Exception message
-             */
-            ComponentManagerRegisterError(const std::string& e);
+    public:
+        /**
+         * @brief Construct a new Component Manager Register Error object
+         *
+         * @param e Exception message
+         */
+        ComponentManagerRegisterError(const std::string &e);
     };
 
     /**
@@ -87,212 +87,235 @@ namespace vazel
      */
     class ComponentManager
     {
-        private:
-            ComponentMap _components_map;
-            ComponentSignature _aviable_signatures;
-            std::unordered_map<Entity, ComponentArray> _entity_to_components;
+    private:
+        ComponentMap _components_map;
+        ComponentSignature _aviable_signatures;
+        std::unordered_map<Entity, ComponentArray> _entity_to_components;
 
-            /**
-             * @brief get the component type from the component name
-             *
-             * @return ComponentType the component type
-             */
-            ComponentType _getAviableComponentIndex(void);
+        /**
+         * @brief get the component type from the component name
+         *
+         * @return ComponentType the component type
+         */
+        ComponentType _getAviableComponentIndex(void);
 
-        public:
+    public:
+        /**
+         * @brief Construct a new Component Manager object
+         */
+        ComponentManager(void) = default;
 
-            /**
-             * @brief Construct a new Component Manager object
-             */
-            ComponentManager(void) = default;
+        /**
+         * @brief Destroy the Component Manager object
+         */
+        ~ComponentManager(void) = default;
 
-            /**
-             * @brief Destroy the Component Manager object
-             */
-            ~ComponentManager(void) = default;
+        const ComponentMap &getComponentMap(void) const;
+        const ComponentSignature &getComponentSignature(void) const;
 
-            const ComponentMap &getComponentMap(void) const;
-            const ComponentSignature &getComponentSignature(void) const;
+        /**
+         * @brief shows the current state of the ComponentManager
+         *
+         */
+        void showState(void) const;
 
-            /**
-             * @brief shows the current state of the ComponentManager
-             *
-             */
-            void showState(void) const;
+        /**
+         * @brief registerComponent registers a Component in the ComponentManager with the typeid
+         *        as key and the ComponentType as value
+         *
+         * @tparam T The componentType to register
+         * @param data The default value of the Component
+         * @return ComponentManager& The class itself
+         */
+        template <typename T>
+        ComponentManager &registerComponent(T data)
+        {
+            const char *name = typeid(T).name();
+            const ComponentType aviableIndex = _getAviableComponentIndex();
 
-            /**
-             * @brief registerComponent registers a Component in the ComponentManager with the typeid
-             *        as key and the ComponentType as value
-             *
-             * @tparam T The componentType to register
-             */
-            template <typename T>
-                void registerComponent(void)
-                {
-                    const char *name = typeid(T).name();
-                    const ComponentType aviableIndex = _getAviableComponentIndex();
-
-                    if (_components_map.find(name) != _components_map.end()) {
-                        std::string err = "You cannot Register the same component twice: ";
-                        err += name;
-                        throw ComponentManagerRegisterError(err);
-                    }
-                    _aviable_signatures.set(aviableIndex, true);
-                    _components_map.emplace(name, aviableIndex);
-                }
-
-            /**
-             * @brief unregister removes a Component from the ComponentManager
-             *
-             * @tparam T The componentType to remove
-             */
-            template <typename T>
-                void unregisterComponent(void)
-                {
-                    const char *name = typeid(T).name();
-
-                    try {
-                        _aviable_signatures.set(_components_map.at(name), false);
-                    } catch (...) {
-                        std::string err = "You cannot unregister a component that is not registered: ";
-                        err += name;
-                        throw ComponentManagerRegisterError(err);
-                    }
-                    _components_map.erase(name);
-                }
-
-            /**
-             * @brief Get the Component Type object
-             *
-             * @tparam T The componentType to get
-             * @return ComponentType an index in the ComponentSignature (bitset) where the Component is stored
-             */
-            template <typename T>
-                const ComponentType& getComponentType(void) const
-                {
-                    const char *name = typeid(T).name();
-
-                    try {
-                        return _components_map.at(name);
-                    } catch (...) {
-                        std::string err = "You cannot get a component that is not registered: ";
-                        err += name;
-                        throw ComponentManagerRegisterError(err);
-                    }
-                }
-
-            /**
-             * @brief Should always be called to register the entity
-             *
-             */
-            void onEntityCreate(const Entity& e)
+            if (_components_map.find(name) != _components_map.end())
             {
-                if (_entity_to_components.find(e) != _entity_to_components.end()) {
-                    char buf[200] = {0};
-                    std::snprintf(buf, sizeof(buf) - 1,
-                            "Entity(%lu) is already registered"
-                            " in the _entity_to_components map", e.getId());
-                    throw ComponentManagerException(std::string(buf));
-                }
-                _entity_to_components.emplace(e, ComponentArray());
+                std::string err = "ComponentManager::registerComponent<T>: You cannot Register the same component twice: ";
+                err += name;
+                throw ComponentManagerRegisterError(err);
             }
+            _aviable_signatures.set(aviableIndex, true);
+            _components_map.emplace(name, aviableIndex);
+            return *this;
+        }
 
-            /**
-             * @brief Should always be called to unregister an entity
-             *
-             */
-            void onEntityDestroy(const Entity& e)
+        /**
+         * @brief registerComponent registers a Component in the ComponentManager with the typeid
+         *        as key and the ComponentType as value
+         *        genereates A T type component with the default values
+         *
+         * @tparam T The componentType to register
+         * @return ComponentManager& The class itself
+         */
+        template <typename T>
+        ComponentManager &registerComponent(void)
+        {
+            return registerComponent<T>(T());
+        }
+
+        /**
+         * @brief unregister removes a Component from the ComponentManager
+         *
+         * @tparam T The componentType to remove
+         * @return ComponentManager& The class itself
+         */
+        template <typename T>
+        ComponentManager &unregisterComponent(void)
+        {
+            const char *name = typeid(T).name();
+
+            try
             {
-                const auto& it = _entity_to_components.find(e);
-
-                if (it == _entity_to_components.end()) {
-                    char buf[200] = {0};
-                    std::snprintf(buf, sizeof(buf) - 1,
-                            "Entity(%lu) is not registered in "
-                            "the _entity_to_components map", e.getId());
-                    throw ComponentManagerException(std::string(buf));
-                }
-                _entity_to_components.erase(it->first);
+                _aviable_signatures.set(_components_map.at(name), false);
             }
+            catch (...)
+            {
+                std::string err = "ComponentManager::unregisterComponent<T>: You cannot unregister a component that is not registered: ";
+                err += name;
+                throw ComponentManagerRegisterError(err);
+            }
+            _components_map.erase(name);
+            return *this;
+        }
 
-            /**
-             * @brief addComponent adds a Component to the ComponentManager
-             *       and attach it to the Entity
-             *
-             */
-            template <typename T>
-                void attachComponent(const Entity& e)
+        /**
+         * @brief Get the Component Type object
+         *
+         * @tparam T The componentType to get
+         * @return ComponentType an index in the ComponentSignature (bitset) where the Component is stored
+         */
+        template <typename T>
+        const ComponentType &getComponentType(void) const
+        {
+            const char *name = typeid(T).name();
+
+            try
+            {
+                return _components_map.at(name);
+            }
+            catch (...)
+            {
+                std::string err = "ComponentManager::getComponentType<T>: You cannot get a component that is not registered: ";
+                err += name;
+                throw ComponentManagerRegisterError(err);
+            }
+        }
+
+        /**
+         * @brief Should always be called to register the entity
+         * @return ComponentManager& The class itself
+         *
+         */
+        ComponentManager &onEntityCreate(const Entity &e);
+
+        /**
+         * @brief Should always be called to unregister an entity
+         * @return ComponentManager& The class itself
+         *
+         */
+        ComponentManager &onEntityDestroy(const Entity &e);
+
+        /**
+         * @brief addComponent adds a Component to the ComponentManager
+         *       and attach it to the Entity
+         * @return ComponentManager& The class itself
+         *
+         */
+        template <typename T>
+        ComponentManager &attachComponent(const Entity &e)
+        {
+            const char *name = typeid(T).name();
+
+            try
+            {
+                const ComponentType componentType = _components_map.at(name);
+                auto it = _entity_to_components.find(e);
+
+                if (it == _entity_to_components.end())
                 {
-                    const char *name = typeid(T).name();
-
-                    try {
-                        const ComponentType componentType = _components_map.at(name);
-                        auto it = _entity_to_components.find(e);
-
-                        if (it == _entity_to_components.end()) {
-                            std::string err = "You cannot attach a component to a non registered Entity(";
-                            err += e.getId();
-                            err += ")";
-                            throw ComponentManagerException(err);
-                        }
-                        if (it->second[componentType].hasValue())
-                            throw ComponentManagerException("You cannot attach a component that is already attached");
-                        it->second[componentType].make<T>();
-                    } catch (...) {
-                        std::string err = "You cannot attach a component that is not registered: ";
-                        err += name;
-                        throw ComponentManagerRegisterError(err);
-                    }
+                    std::string err = "ComponentManager::attachComponent<T>: You cannot attach a component to a non registered Entity(";
+                    err += e.getId();
+                    err += ")";
+                    throw ComponentManagerException(err);
                 }
-
-            /**
-             * @brief removeComponent removes a Component from the ComponentManager
-             *      and detach it from the Entity
-             */
-            template <typename T>
-                void detachComponent(const Entity& e)
+                if (it->second[componentType].hasValue())
                 {
-                    const ComponentType type = getComponentType<T>();
-                    const auto it = _entity_to_components.find(e);
-
-                    if (it == _entity_to_components.end()) {
-                        std::string err = "You cannot detach a component to an non attached Entity";
-                        err += typeid(T).name();
-                        throw ComponentManagerRegisterError(err.c_str());
-                    }
-                    it->second[type].remove();
-                    // maybe throw an exception if the component is not attached
-                    // Depends if it should work like a free
-                    // .remove on Component should check already if component is null
+                    throw ComponentManagerException("ComponentManager::attachComponent<T>: You cannot attach a component that is already attached");
                 }
+                it->second[componentType].make<T>();
+            }
+            catch (std::exception &e)
+            {
+                std::string err = e.what() + " -> ";
+                err = "ComponentManager::attachComponent<T>: You cannot attach a component that is not registered: " + name;
+                throw ComponentManagerRegisterError(err);
+            }
+            return *this;
+        }
 
-            /**
-             * @brief getComponent gets the Component of a specifically attached Entity
-             *
-             */
-            template <typename T>
-                T& getComponent(const Entity& e)
+        /**
+         * @brief removeComponent removes a Component from the ComponentManager
+         *      and detach it from the Entity
+         * @return ComponentManager& The class itself
+         */
+        template <typename T>
+        ComponentManager &detachComponent(const Entity &e)
+        {
+            const ComponentType type = getComponentType<T>();
+            const auto it = _entity_to_components.find(e);
+
+            if (it == _entity_to_components.end())
+            {
+                std::string err = "ComponentManager::detachComponent<T>: You cannot detach a component to an non attached Entity";
+                err += typeid(T).name();
+                throw ComponentManagerRegisterError(err.c_str());
+            }
+            it->second[type].remove();
+            return *this;
+            // maybe throw an exception if the component is not attached
+            // Depends if it should work like a free
+            // .remove on Component should check already if component is null
+        }
+
+        /**
+         * @brief getComponent gets the Component of a specifically attached Entity
+         *
+         * @tparam T The componentType to get
+         * @param e The Entity to get the Component from
+         * @return T& The Component
+         */
+        template <typename T>
+        T &getComponent(const Entity &e)
+        {
+            const char *name = typeid(T).name();
+
+            try
+            {
+                const ComponentType componentType = _components_map.at(name);
+                const auto it = _entity_to_components.find(e);
+
+                if (it == _entity_to_components.end())
                 {
-                    const char *name = typeid(T).name();
-
-                    try {
-                        const ComponentType componentType = _components_map.at(name);
-                        const auto it = _entity_to_components.find(e);
-
-                        if (it == _entity_to_components.end())
-                            throw std::runtime_error("");
-                        return it->second[componentType].get<T>();
-                    } catch (std::exception& err) {
-                        char buf[200] = {0};
-                        std::snprintf(buf, sizeof(buf) - 1,
-                                "Entity(%lu) is not registered"
-                                " with a component or Component(%s) was not found",
-                                e.getId(),
-                                name
-                        );
-                        throw ComponentManagerException(std::string(buf));
-                    }
+                    throw std::runtime_error("");
                 }
+                return it->second[componentType].get<T>();
+            }
+            catch (...)
+            {
+                char buf[BUFSIZ] = {0};
+                std::snprintf(buf, sizeof(buf) - 1,
+                              "ComponentManager::getComponent: Entity(%lu) is not registered"
+                              " with a component or Component(%s) was not found",
+                              e.getId(),
+                              name);
+                throw ComponentManagerException(std::string(buf));
+            }
+        }
     };
 
     /**
