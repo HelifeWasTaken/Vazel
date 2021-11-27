@@ -29,10 +29,10 @@ namespace vazel
         remove();
     }
 
-    ComponentExistsException::ComponentExistsException(const std::string& e)
+    ComponentExistsException::ComponentExistsException(const std::string &e)
         : _e(e) {}
 
-    const char* ComponentExistsException::what(void) const noexcept
+    const char *ComponentExistsException::what(void) const noexcept
     {
         return _e.c_str();
     }
