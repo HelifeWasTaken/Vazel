@@ -52,7 +52,7 @@ void modifyStuff(const vazel::Entity& e, vazel::ComponentManager& cm)
     // );
 
     // Get the differents components
-    // It is a ref to a void * allocated with calloc
+    // It is a ref to a std::any value
     auto& componentStr = cm.getComponent<stringComponent>(e);
     auto& comPos = cm.getComponent<positionComponent>(e)
 
