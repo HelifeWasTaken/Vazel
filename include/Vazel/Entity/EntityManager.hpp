@@ -53,7 +53,7 @@ namespace vazel
                 : EntityManagerException(e) {}
     };
 
-    using EntityMap = std::unordered_map<Entity, ComponentSignature>;
+    using EntityMap = std::unordered_map<const Entity, ComponentSignature>;
 
     class EntityManager
     {
@@ -61,7 +61,7 @@ namespace vazel
             EntityMap _entity_map;
 
         public:
-            Entity createEntity(void)
+            const Entity createEntity(void)
             {
                 Entity e;
 
@@ -69,12 +69,12 @@ namespace vazel
                 return e;
             }
 
-            void setSignature(Entity& e, const ComponentSignature& signature)
+            void setSignature(const Entity& e, const ComponentSignature& signature)
             {
                 _entity_map[e] = signature;
             }
 
-            ComponentSignature& getSignature(Entity& e)
+            const ComponentSignature& getSignature(const Entity& e) const
             {
                 return _entity_map[e];
             }

@@ -127,7 +127,7 @@ namespace vazel
              * @tparam T The componentType to register
              */
             template <typename T>
-                void Register(void)
+                void registerComponent(void)
                 {
                     const char *name = typeid(T).name();
                     const ComponentType aviableIndex = _getAviableComponentIndex();
@@ -147,7 +147,7 @@ namespace vazel
              * @tparam T The componentType to remove
              */
             template <typename T>
-                void unRegister(void)
+                void unregisterComponent(void)
                 {
                     const char *name = typeid(T).name();
 
@@ -168,7 +168,7 @@ namespace vazel
              * @return ComponentType an index in the ComponentSignature (bitset) where the Component is stored
              */
             template <typename T>
-                ComponentType getComponentType(void)
+                const ComponentType& getComponentType(void) const
                 {
                     const char *name = typeid(T).name();
 

@@ -105,7 +105,7 @@ namespace vazel
                     return std::any_cast<T&>(_data);
                 }
 
-            bool hasValue(void) { return _data.has_value(); }
+            bool hasValue(void) const { return _data.has_value(); }
     };
 
     /**
