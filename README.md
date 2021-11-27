@@ -43,7 +43,7 @@ void modifyStuff(const vazel::Entity& e, vazel::ComponentManager& cm)
     // Attach the differents components to the current Entity
     cm.attachComponent<stringComponent>(e);
     cm.attachComponent<positionComponent>(e);
-    // It will be soon possible to give also a base value like so:
+    // It is also possible to give a base value like so:
     // cm.attachComponent<positionComponent>(e,
     //    PositionComponent {
     //      .x = 30,
