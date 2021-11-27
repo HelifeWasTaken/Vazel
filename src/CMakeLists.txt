@@ -9,8 +9,10 @@ include_directories(
 set(SRCS
     ./UUID.cpp
     ./Entity/Entity.cpp
+    ./Entity/EntityManager.cpp
     ./Components/Component.cpp
     ./Components/ComponentsManager.cpp
+    ./System/System.cpp
 )
 
 add_library(${PROJECT_NAME} ${SRCS})

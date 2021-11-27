@@ -32,8 +32,8 @@ std::ostream& operator<<(std::ostream& os, const positionComponent& pos)
 void modifyStuff(const vazel::Entity& e, vazel::ComponentManager& cm)
 {
     // Register the differents components that the entities can use
-    cm.Register<positionComponent>();
-    cm.Register<stringComponent>();
+    cm.registerComponent<positionComponent>();
+    cm.registerComponent<stringComponent>();
 
     // Register the current entity
     // (it should not be done by hand but there is no vazel::system implentation
