@@ -263,7 +263,7 @@ namespace vazel
         template <typename T>
         ComponentManager &attachComponent(const Entity& e)
         {
-            T data;
+            T data = T();
             return attachComponent<T>(e, data);
         }
 
