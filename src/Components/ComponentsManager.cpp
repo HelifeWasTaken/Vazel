@@ -22,9 +22,13 @@ namespace vazel
     ComponentType ComponentManager::_getAviableComponentIndex(void)
     {
         for (ComponentType i = 0; i != VAZEL_MAX_COMPONENTS; i++)
+        {
             if (_aviable_signatures.test(i) == false)
+            {
                 return i;
-        throw ComponentManagerRegisterError("You registered already the maximum of Component");
+            }
+        }
+        throw ComponentManagerRegisterError("ComponentManager::_getAviableComponentIndex: You registered already the maximum of Component");
     }
 
     const ComponentMap &ComponentManager::getComponentMap(void) const
@@ -43,7 +47,9 @@ namespace vazel
 
         os << "----- Components Begin -----" << std::endl;
         for (auto &it : map)
+        {
             os << "Name: [" << it.first << "] Id: [" << it.second << "]" << std::endl;
+        }
         os << "------ Components End ------" << std::endl;
         return os;
     }
@@ -53,7 +59,7 @@ namespace vazel
         std::cout << *this;
     }
 
-    ComponentManagerException::ComponentManagerException(const std::string& e)
+    ComponentManagerException::ComponentManagerException(const std::string &e)
     {
         _e += e;
     }
@@ -63,6 +69,41 @@ namespace vazel
         return _e.c_str();
     }
 
-    ComponentManagerRegisterError::ComponentManagerRegisterError(const std::string& e)
+    ComponentManagerRegisterError::ComponentManagerRegisterError(const std::string &e)
         : ComponentManagerException(e) {}
+
+    ComponentManager &ComponentManager::onEntityCreate(const Entity &e)
+    {
+        if (_entity_to_components.find(e) != _entity_to_components.end())
+        {
+            char buf[BUFSIZ] = {0};
+            std::snprintf(buf, sizeof(buf) - 1,
+                          "ComponenentManager::onEntityCreate: "
+                          "Entity(%lu) is already registered"
+                          " in the _entity_to_components map",
+                          e.getId());
+            throw ComponentManagerException(std::string(buf));
+        }
+        _entity_to_components.emplace(e, ComponentArray());
+        return *this;
+    }
+
+    ComponentManager &ComponentManager::onEntityDestroy(const Entity &e)
+    {
+        const auto &it = _entity_to_components.find(e);
+
+        if (it == _entity_to_components.end())
+        {
+            char buf[BUFSIZ] = {0};
+            std::snprintf(buf, sizeof(buf) - 1,
+                          "ComponenentManager::onEntityCreate: "
+                          "Entity(%lu) is not registered in "
+                          "the _entity_to_components map",
+                          e.getId());
+            throw ComponentManagerException(std::string(buf));
+        }
+        _entity_to_components.erase(it->first);
+        return *this;
+    }
+
 };
