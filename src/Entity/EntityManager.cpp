@@ -19,7 +19,7 @@
 
 namespace vazel
 {
-    EntityManagerException::EntityManagerException(std::string &e)
+    EntityManagerException::EntityManagerException(const std::string &e)
     {
         _e += e;
     }
@@ -29,7 +29,7 @@ namespace vazel
         return _e.c_str();
     }
 
-    EntityManagerExceptionFindEntityError::EntityManagerExceptionFindEntityError(const char *e)
+    EntityManagerExceptionFindEntityError::EntityManagerExceptionFindEntityError(const std::string &e)
         : EntityManagerException::EntityManagerException(e) {}
 
     const Entity EntityManager::createEntity(void)
@@ -55,7 +55,7 @@ namespace vazel
         }
     }
 
-    const ComponentSignature &EntityManager::getSignature(const Entity &e) const
+    const ComponentSignature &EntityManager::getSignature(const Entity &e)
     {
         try
         {

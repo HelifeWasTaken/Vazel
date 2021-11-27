@@ -124,11 +124,10 @@ namespace vazel
          *        as key and the ComponentType as value
          *
          * @tparam T The componentType to register
-         * @param data The default value of the Component
          * @return ComponentManager& The class itself
          */
         template <typename T>
-        ComponentManager &registerComponent(T data)
+        ComponentManager &registerComponent(void)
         {
             const char *name = typeid(T).name();
             const ComponentType aviableIndex = _getAviableComponentIndex();
@@ -142,20 +141,6 @@ namespace vazel
             _aviable_signatures.set(aviableIndex, true);
             _components_map.emplace(name, aviableIndex);
             return *this;
-        }
-
-        /**
-         * @brief registerComponent registers a Component in the ComponentManager with the typeid
-         *        as key and the ComponentType as value
-         *        genereates A T type component with the default values
-         *
-         * @tparam T The componentType to register
-         * @return ComponentManager& The class itself
-         */
-        template <typename T>
-        ComponentManager &registerComponent(void)
-        {
-            return registerComponent<T>(T());
         }
 
         /**
@@ -223,11 +208,15 @@ namespace vazel
         /**
          * @brief addComponent adds a Component to the ComponentManager
          *       and attach it to the Entity
+         *
+         * @tparam T The componentType to add
+         * @param const Entity &e the Entity to attach the component
+         * @param T &data the data to add
          * @return ComponentManager& The class itself
          *
          */
         template <typename T>
-        ComponentManager &attachComponent(const Entity &e)
+        ComponentManager &attachComponent(const Entity &e, T &data)
         {
             const char *name = typeid(T).name();
 
@@ -247,15 +236,35 @@ namespace vazel
                 {
                     throw ComponentManagerException("ComponentManager::attachComponent<T>: You cannot attach a component that is already attached");
                 }
-                it->second[componentType].make<T>();
+                it->second[componentType].make<T>(data);
             }
             catch (std::exception &e)
             {
-                std::string err = e.what() + " -> ";
-                err = "ComponentManager::attachComponent<T>: You cannot attach a component that is not registered: " + name;
+                std::string err = e.what();
+                err += " -> ";
+                err += "ComponentManager::attachComponent<T>: "
+                        "You cannot attach a component that is not "
+                        "registered: ";
+                err += name;
                 throw ComponentManagerRegisterError(err);
             }
             return *this;
+        }
+
+        /**
+         * @brief attachComponent attach a Component in the ComponentManager with the typeid
+         *        as key and the ComponentType as value to the Entity &e
+         *        genereates A T type component with the default values
+         *
+         * @tparam T The componentType to add
+         * @param const Entity &e the Entity to attach the (default) component
+         * @return ComponentManager& The class itself
+         */
+        template <typename T>
+        ComponentManager &attachComponent(const Entity& e)
+        {
+            T data;
+            return attachComponent<T>(e, data);
         }
 
         /**

@@ -43,7 +43,7 @@ namespace vazel
          *
          * @param e The error message.
          */
-        EntityManagerException(std::string &e);
+        EntityManagerException(const std::string &e);
 
         /**
          * @brief Get the what object.
@@ -65,14 +65,14 @@ namespace vazel
          *
          * @param e The error message.
          */
-        EntityManagerExceptionFindEntityError(const char *e);
+        EntityManagerExceptionFindEntityError(const std::string& e);
     };
 
     /**
      * @brief EntityMap is a map of entities and their components.
      *
      */
-    using EntityMap = std::unordered_map<const Entity, ComponentSignature>;
+    using EntityMap = std::unordered_map<Entity, ComponentSignature>;
 
     class EntityManager
     {
@@ -102,7 +102,7 @@ namespace vazel
          * @param e The entity.
          * @return const ComponentSignature& The signature.
          */
-        const ComponentSignature &getSignature(const Entity &e) const;
+        const ComponentSignature &getSignature(const Entity &e);
 
         /**
          * @brief Get the Map object

@@ -45,7 +45,7 @@ namespace vazel
          *
          * @param emanager EntityManager
          */
-        void __updateCurrentEntities(const EntityManager &emanager);
+        void __updateCurrentEntities(EntityManager &emanager);
 
         /**
          * @brief Add an entity to the system
@@ -111,7 +111,7 @@ namespace vazel
          * @return System& Reference to the class itself
          */
         template <typename T>
-        System &addDependency(const ComponentManager &cmanager)
+        System &addDependency(EntityManager& emanager, const ComponentManager &cmanager)
         {
             _signature.set(cmanager.getComponentType<T>());
             __updateCurrentEntities(emanager);
@@ -128,7 +128,7 @@ namespace vazel
          * @return System& Reference to the class itself
          */
         template <typename T>
-        System &removeDependency(const EntityManager &emanager, const ComponentManager &cmanager)
+        System &removeDependency(EntityManager &emanager, const ComponentManager &cmanager)
         {
             _signature.set(cmanager.getComponentType<T>(), 0);
             addEntities(emanager);

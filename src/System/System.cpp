@@ -25,10 +25,22 @@ namespace vazel
         (void)cm;
     }
 
-    void System::__updateCurrentEntities(const EntityManager &emanager)
+    void System::__updateCurrentEntities(EntityManager &emanager)
     {
-        std::remove_if(_entities.begin(), _entities.end(), [&emanager](auto &t)
-                       { return isValidSignature(emanager.getSignature(t.first)); });
+        auto it = _entities.begin();
+
+        while (it != _entities.end())
+        {
+           if (isValidSignature(emanager.getSignature(it->first), _signature))
+           {
+                it = _entities.erase(it);
+           }
+           else
+           {
+                ++it;
+
+           }
+        }
     }
 
     void System::__addEntity(const Entity &entity, const ComponentSignature &signature)
@@ -42,7 +54,7 @@ namespace vazel
     System::System(std::string tag, systemUpdate updater = unimplementedOnUpdateSystem)
         : _tag(std::move(tag)), _updater(updater) {}
 
-    System::System &System::addEntities(const EntityManager &emanager)
+    System &System::addEntities(const EntityManager &emanager)
     {
         for (const auto &t : emanager.getMap())
         {
@@ -54,7 +66,7 @@ namespace vazel
         return *this;
     }
 
-    System::System &System::setOnUpdate(const systemUpdate updater)
+    System &System::setOnUpdate(const systemUpdate updater)
     {
         _updater = updater;
         return *this;

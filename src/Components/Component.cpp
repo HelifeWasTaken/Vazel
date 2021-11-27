@@ -36,4 +36,11 @@ namespace vazel
     {
         return _e.c_str();
     }
+
+    bool isValidSignature(const ComponentSignature &signature, const ComponentSignature &to_match)
+    {
+        return (signature & to_match) == to_match;
+    }
+
 }
+

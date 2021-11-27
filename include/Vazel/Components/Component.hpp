@@ -126,9 +126,6 @@ namespace vazel
      * @return true If the signature is valid.
      * @return false If the signature is not valid.
      */
-    bool isValidSignature(const ComponentSignature signature, const ComponentSignature &to_match)
-    {
-        return (signature & to_match) == to_match;
-    }
+    bool isValidSignature(const ComponentSignature &signature, const ComponentSignature &to_match);
 
 }
