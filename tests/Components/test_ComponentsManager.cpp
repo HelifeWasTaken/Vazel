@@ -15,6 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include <gtest/gtest.h>
+
 #include "Vazel/Components/ComponentsManager.hpp"
 #include "Vazel/UUID.hpp"
 

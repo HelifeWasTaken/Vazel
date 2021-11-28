@@ -80,6 +80,6 @@ struct std::hash<vazel::Entity>
      */
     vazel::UUID operator()(const vazel::Entity &uuid) const
     {
-        return std::hash<vazel::UUID>()((vazel::UUID)uuid);
+        return uuid.getId();
     }
 };

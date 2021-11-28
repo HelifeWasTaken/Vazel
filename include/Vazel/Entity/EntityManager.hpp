@@ -83,9 +83,21 @@ namespace vazel
         /**
          * @brief Create a Entity object
          *
-         * @return const Entity
+         * @return Entity
          */
-        const Entity createEntity(void);
+        Entity createEntity(void);
+
+
+        /**
+         * @brief Destroy an entity.
+         * 
+         * @param e The entity to destroy.
+         * @return EntityManager& A reference to the class itself.
+         * @throws EntityManagerExceptionFindEntityError if the entity is not found.
+         * @throws EntityManagerException if the entity is already destroyed.
+         */
+
+        EntityManager &destroyEntity(Entity e);
 
         /**
          * @brief Set the Signature object
@@ -100,9 +112,9 @@ namespace vazel
          * @brief Get the Signature object
          *
          * @param e The entity.
-         * @return const ComponentSignature& The signature.
+         * @return ComponentSignature& The signature.
          */
-        const ComponentSignature &getSignature(const Entity &e);
+        ComponentSignature &getSignature(const Entity &e);
 
         /**
          * @brief Get the Map object

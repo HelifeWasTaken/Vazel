@@ -4,6 +4,7 @@ project(vazel_tests VERSION 1.0)
 
 set(SRCS
     ./Entity/test_Entity.cpp
+    ./Entity/test_EntityManager.cpp
     ./Components/test_ComponentsManager.cpp
 )
 

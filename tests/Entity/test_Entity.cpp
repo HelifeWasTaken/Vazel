@@ -16,8 +16,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include <gtest/gtest.h>
-#include <Vazel/Entity/Entity.hpp>
 #include <unordered_set>
+
+#include "Vazel/Entity/Entity.hpp"
+#include "Vazel/Entity/EntityManager.hpp"
 
 TEST(EntitiesGeneration, GenerateOneEntity)
 {
@@ -26,13 +28,13 @@ TEST(EntitiesGeneration, GenerateOneEntity)
 
 TEST(EntitiesGeneration, MakeSureThereIsNoCollisions)
 {
-    std::unordered_set<vazel::UUID> _set;
+    vazel::EntityMap entities;
+    vazel::Entity e;
 
-    for (size_t i = 0; i != 1000; i++)
+    for (size_t i = 0; i != 100000; i++)
     {
-        vazel::Entity e;
-        vazel::UUID res = std::hash<vazel::Entity>()(e);
-        GTEST_ASSERT_EQ(_set.find(res), _set.end());
-        _set.emplace(res);
+        e = vazel::Entity();
+        GTEST_ASSERT_EQ(entities.find(e), entities.end());
+        entities.insert(std::make_pair(e, vazel::ComponentSignature()));
     }
 }

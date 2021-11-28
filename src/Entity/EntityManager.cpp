@@ -32,12 +32,24 @@ namespace vazel
     EntityManagerExceptionFindEntityError::EntityManagerExceptionFindEntityError(const std::string &e)
         : EntityManagerException::EntityManagerException(e) {}
 
-    const Entity EntityManager::createEntity(void)
+    Entity EntityManager::createEntity(void)
     {
-        Entity e;
+        Entity e = Entity();
 
         _entity_map[e] = ComponentSignature();
         return e;
+    }
+
+    EntityManager &EntityManager::destroyEntity(Entity e)
+    {
+        if (_entity_map.find(e) == _entity_map.end())
+        {
+            char buf[BUFSIZ] = {0};
+            snprintf(buf, sizeof(buf) - 1, "EntityManager::destroyEntity: Entity %lu does not exist", e.getId());
+            throw EntityManagerExceptionFindEntityError(buf);
+        }
+        _entity_map.erase(e);
+        return *this;
     }
 
     EntityManager &EntityManager::setSignature(const Entity &e, const ComponentSignature &signature)
@@ -55,7 +67,7 @@ namespace vazel
         }
     }
 
-    const ComponentSignature &EntityManager::getSignature(const Entity &e)
+    ComponentSignature &EntityManager::getSignature(const Entity &e)
     {
         try
         {
