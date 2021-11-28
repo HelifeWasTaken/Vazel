@@ -19,33 +19,7 @@
 #include "Vazel/Components/ComponentsManager.hpp"
 #include "Vazel/UUID.hpp"
 
-struct placeholder_component_1
-{
-};
-
-struct placeholder_component_2
-{
-};
-
-struct placeholder_component_3
-{
-};
-
-struct placeholder_component_4
-{
-};
-
-struct placeholder_component_5
-{
-};
-
-struct placeholder_component_6
-{
-};
-
-struct placeholder_component_7
-{
-};
+#include "../tests_components.hpp"
 
 TEST(ComponentRegistering, TestOneComponentRegister)
 {
@@ -192,11 +166,6 @@ TEST(ComponentRegistering, TestLoggingBasicWithBinaryOperatorOstream)
     GTEST_ASSERT_EQ(res, LOGEXPECT);
 }
 
-struct placeholder_position_component
-{
-    float x;
-    float y;
-};
 TEST(ComponentUsage, registerPositionComponentAndChangeIt)
 {
     vazel::ComponentManager cm;
@@ -212,11 +181,6 @@ TEST(ComponentUsage, registerPositionComponentAndChangeIt)
     GTEST_ASSERT_EQ(cm.getComponent<placeholder_position_component>(e).y, 0);
 }
 
-struct entity_offsetx_offsety
-{
-    float ofx;
-    float ofy;
-};
 TEST(ComponentUsage, registerPositionMultiplesEntities)
 {
     std::map<vazel::Entity, entity_offsetx_offsety> s;

@@ -41,11 +41,11 @@ namespace vazel
         EntityMap _entities;
 
         /**
-         * @brief Update all entities of the system
-         *
+         * @brief Remove all the entities of the system that does not match the signature
+         * 
          * @param emanager EntityManager
          */
-        void __updateCurrentEntities(EntityManager &emanager);
+        void __removeInvalidEntities(EntityManager &emanager);
 
         /**
          * @brief Add an entity to the system
@@ -61,9 +61,15 @@ namespace vazel
          * @brief Construct a new System object
          *
          * @param tag System tag
-         * @param updater System update function
          */
-        System(std::string tag, systemUpdate updater);
+        System(const std::string &tag);
+
+        /**
+         * @brief Construct a new System object
+         *
+         * @param tag System tag
+         */
+        System(const char *tag);
 
         /**
          * @brief Destroy the System object
@@ -77,7 +83,7 @@ namespace vazel
          * @param emanager EntityManager
          * @return System& Reference to the class itself
          */
-        System &addEntities(const EntityManager &emanager);
+        System &updateValidEntities(EntityManager &emanager);
 
         /**
          * @brief Set the system update function
@@ -114,7 +120,7 @@ namespace vazel
         System &addDependency(EntityManager& emanager, const ComponentManager &cmanager)
         {
             _signature.set(cmanager.getComponentType<T>());
-            __updateCurrentEntities(emanager);
+            __removeInvalidEntities(emanager);
             return *this;
         }
 
@@ -131,7 +137,7 @@ namespace vazel
         System &removeDependency(EntityManager &emanager, const ComponentManager &cmanager)
         {
             _signature.set(cmanager.getComponentType<T>(), 0);
-            addEntities(emanager);
+            updateValidEntities(emanager);
             return *this;
         }
 
