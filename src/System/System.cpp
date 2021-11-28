@@ -25,28 +25,11 @@ namespace vazel
         (void)cm;
     }
 
-    void System::__removeInvalidEntities(EntityManager &emanager)
-    {
-        auto it = _entities.begin();
-
-        while (it != _entities.end())
-        {
-           if (isValidSignature(emanager.getSignature(it->first), _signature) == false)
-           {
-                it = _entities.erase(it);
-           }
-           else
-           {
-                ++it;
-           }
-        }
-    }
-
     void System::__addEntity(const Entity &entity, const ComponentSignature &signature)
     {
         if (isValidSignature(signature, _signature))
         {
-            _entities[entity] = signature;
+            _entities.emplace(entity);
         }
     }
 
@@ -61,11 +44,11 @@ namespace vazel
         for (const auto &t : emanager.getMap())
         {
             auto it = _entities.find(t.first);
-            if (it != _entities.end())
+            if (it == _entities.end())
             {
                 __addEntity(t.first, t.second);
             }
-            else if (isValidSignature(emanager.getSignature(it->first), _signature))
+            else if (isValidSignature(t.second, _signature) == false)
             {
                 _entities.erase(it);
             }
@@ -91,9 +74,9 @@ namespace vazel
 
     void System::update(ComponentManager &cm)
     {
-        for (auto &t : _entities)
+        for (auto it : _entities)
         {
-            _updater(cm, t.first);
+            _updater(cm, it);
         }
     }
 };

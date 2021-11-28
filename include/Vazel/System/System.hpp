@@ -22,6 +22,15 @@
 #include <functional>
 #include <list>
 #include <algorithm>
+#include <unordered_set>
+
+/**
+ * @brief VAZEL_SYSTEM_UPDATE_LAMBDA is a macro to define a lambda function to update a system
+ *        The lambda functions can take paramters for [] [&] [=] etc...
+ *        It provides you directly the components manager and the associated Entity
+ */
+#define VAZEL_SYSTEM_UPDATE_LAMBDA(...) \
+    [__VA_ARGS__](vazel::ComponentManager& cm, const vazel::Entity& e)
 
 namespace vazel
 {
@@ -38,14 +47,7 @@ namespace vazel
         ComponentSignature _signature;
         std::string _tag;
         systemUpdate _updater;
-        EntityMap _entities;
-
-        /**
-         * @brief Remove all the entities of the system that does not match the signature
-         * 
-         * @param emanager EntityManager
-         */
-        void __removeInvalidEntities(EntityManager &emanager);
+        std::unordered_set<Entity> _entities;
 
         /**
          * @brief Add an entity to the system
@@ -119,8 +121,8 @@ namespace vazel
         template <typename T>
         System &addDependency(EntityManager& emanager, const ComponentManager &cmanager)
         {
-            _signature.set(cmanager.getComponentType<T>());
-            __removeInvalidEntities(emanager);
+            _signature.set(cmanager.getComponentType<T>(), true);
+            updateValidEntities(emanager);
             return *this;
         }
 

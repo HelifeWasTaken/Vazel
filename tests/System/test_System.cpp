@@ -66,22 +66,26 @@ TEST(System, addEntities)
     cm.registerComponent<placeholder_component_1>();
     cm.registerComponent<placeholder_component_2>();
 
-    system.setOnUpdate([](vazel::ComponentManager& cm, const vazel::Entity& em) {
-        std::cout << "Here is an entity!" << std::endl;
-    });
+    system.setOnUpdate(
+        VAZEL_SYSTEM_UPDATE_LAMBDA() {
+            std::cout << "Here is an entity!";
+        });
 
     vazel::Entity entity = em.createEntity();
     vazel::Entity entity2 = em.createEntity();
-    cm.attachComponent<placeholder_component_1>(entity);
+
+    cm.onEntityCreate(entity).attachComponent<placeholder_component_1>(entity).onEntityCreate(entity2);
+    em.getSignature(entity).set(cm.getComponentType<placeholder_component_1>(), true);
 
     system.addDependency<placeholder_component_1>(em, cm);
-
     system.update(cm);
+
     cm.attachComponent<placeholder_component_1>(entity2);
+    em.getSignature(entity2).set(cm.getComponentType<placeholder_component_1>(), true);
     system.updateValidEntities(em);
     system.update(cm);
 
     system.addDependency<placeholder_component_2>(em, cm);
     system.update(cm);
-    ASSERT_EQ(testing::internal::GetCapturedStdout(), "Here is an entity!\nHere is an entity!\nHere is an entity!\n");
+    ASSERT_EQ(testing::internal::GetCapturedStdout(), "Here is an entity!Here is an entity!Here is an entity!");
 }
