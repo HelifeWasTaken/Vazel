@@ -91,7 +91,7 @@ namespace vazel
          * @param updater System update function
          * @return System& Reference to the class itself
          */
-        System &setOnUpdate(const systemUpdate updater);
+        System &setOnUpdate(systemUpdate updater);
 
         /**
          * @brief Get the system signature
@@ -146,7 +146,7 @@ namespace vazel
          *
          * @param cm ComponentManager to get the entities com from
          */
-        void update(ComponentManager &cm) const;
+        void update(ComponentManager &cm);
     };
 
 }

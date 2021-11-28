@@ -73,7 +73,7 @@ namespace vazel
         return *this;
     }
 
-    System &System::setOnUpdate(const systemUpdate updater)
+    System &System::setOnUpdate(systemUpdate updater)
     {
         _updater = updater;
         return *this;
@@ -89,9 +89,9 @@ namespace vazel
         return _tag;
     }
 
-    void System::update(ComponentManager &cm) const
+    void System::update(ComponentManager &cm)
     {
-        for (const auto &t : _entities)
+        for (auto &t : _entities)
         {
             _updater(cm, t.first);
         }
