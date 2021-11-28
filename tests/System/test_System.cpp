@@ -1,5 +1,5 @@
 /**
- * ../tests/System/test_System.cpp
+ * tests/System/test_System.cpp
  * Copyright (c) 2021 Mattis Dalleau <mattis.dalleau@epitech.eu>
  *
  * This program is free software: you can redistribute it and/or modify
