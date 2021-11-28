@@ -30,7 +30,7 @@
  *        It provides you directly the components manager and the associated Entity
  */
 #define VAZEL_SYSTEM_UPDATE_LAMBDA(...) \
-    [__VA_ARGS__](vazel::ComponentManager& cm, const vazel::Entity& e)
+    [__VA_ARGS__](vazel::ComponentManager & cm, const vazel::Entity &e)
 
 namespace vazel
 {
@@ -58,7 +58,6 @@ namespace vazel
         void __addEntity(const Entity &entity, const ComponentSignature &signature);
 
     public:
-
         /**
          * @brief Construct a new System object
          *
@@ -119,7 +118,7 @@ namespace vazel
          * @return System& Reference to the class itself
          */
         template <typename T>
-        System &addDependency(EntityManager& emanager, const ComponentManager &cmanager)
+        System &addDependency(EntityManager &emanager, const ComponentManager &cmanager)
         {
             _signature.set(cmanager.getComponentType<T>(), true);
             updateValidEntities(emanager);

@@ -65,7 +65,7 @@ namespace vazel
          *
          * @param e The error message.
          */
-        EntityManagerExceptionFindEntityError(const std::string& e);
+        EntityManagerExceptionFindEntityError(const std::string &e);
     };
 
     /**
@@ -86,7 +86,6 @@ namespace vazel
          * @return Entity
          */
         Entity createEntity(void);
-
 
         /**
          * @brief Destroy an entity.

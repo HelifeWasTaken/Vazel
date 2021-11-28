@@ -243,8 +243,8 @@ namespace vazel
                 std::string err = e.what();
                 err += " -> ";
                 err += "ComponentManager::attachComponent<T>: "
-                        "You cannot attach a component that is not "
-                        "registered: ";
+                       "You cannot attach a component that is not "
+                       "registered: ";
                 err += name;
                 throw ComponentManagerRegisterError(err);
             }
@@ -261,7 +261,7 @@ namespace vazel
          * @return ComponentManager& The class itself
          */
         template <typename T>
-        ComponentManager &attachComponent(const Entity& e)
+        ComponentManager &attachComponent(const Entity &e)
         {
             T data = T();
             return attachComponent<T>(e, data);
