@@ -76,8 +76,7 @@ namespace vazel
         template <typename T>
         void make(T &data)
         {
-            if (_data.has_value())
-            {
+            if (_data.has_value()) {
                 throw ComponentExistsException(
                     "Component::make<T>: Component is not null and you are "
                     "trying to make a new one.");

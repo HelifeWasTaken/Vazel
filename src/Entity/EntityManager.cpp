@@ -45,8 +45,7 @@ namespace vazel
 
     EntityManager &EntityManager::destroyEntity(Entity e)
     {
-        if (_entity_map.find(e) == _entity_map.end())
-        {
+        if (_entity_map.find(e) == _entity_map.end()) {
             char buf[BUFSIZ] = { 0 };
             snprintf(buf, sizeof(buf) - 1,
                      "EntityManager::destroyEntity: Entity %lu does not exist",
@@ -60,13 +59,10 @@ namespace vazel
     EntityManager &EntityManager::setSignature(
         const Entity &e, const ComponentSignature &signature)
     {
-        try
-        {
+        try {
             _entity_map[e] = signature;
             return *this;
-        }
-        catch (...)
-        {
+        } catch (...) {
             char buf[BUFSIZ] = { 0 };
             snprintf(buf, sizeof(buf) - 1,
                      "EntityManager::setSignature: %lu does not exist",
@@ -77,12 +73,9 @@ namespace vazel
 
     ComponentSignature &EntityManager::getSignature(const Entity &e)
     {
-        try
-        {
+        try {
             return _entity_map[e];
-        }
-        catch (...)
-        {
+        } catch (...) {
             char buf[BUFSIZ] = { 0 };
             snprintf(buf, sizeof(buf) - 1,
                      "EntityManager::getSignature: %lu does not exist",

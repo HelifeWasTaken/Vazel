@@ -31,8 +31,7 @@ TEST(EntitiesGeneration, MakeSureThereIsNoCollisions)
     vazel::EntityMap entities;
     vazel::Entity e;
 
-    for (size_t i = 0; i != 100000; i++)
-    {
+    for (size_t i = 0; i != 100000; i++) {
         e = vazel::Entity();
         GTEST_ASSERT_EQ(entities.find(e), entities.end());
         entities.insert(std::make_pair(e, vazel::ComponentSignature()));

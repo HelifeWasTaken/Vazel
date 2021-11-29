@@ -51,16 +51,11 @@ TEST(ComponentRegistering, RaiseExceptionWhenComponentRegisteredTwice)
     vazel::ComponentManager cm;
 
     cm.registerComponent<placeholder_component_1>();
-    try
-    {
+    try {
         cm.registerComponent<placeholder_component_1>();
-    }
-    catch (vazel::ComponentManagerException &e)
-    {
+    } catch (vazel::ComponentManagerException &e) {
         return;
-    }
-    catch (std::exception &e)
-    {
+    } catch (std::exception &e) {
         std::cerr << "Invalid: Exception catched was not "
                      "vazel::ComponentManagerRegisterError"
                   << std::endl;
@@ -74,16 +69,11 @@ TEST(ComponentRegistering, RaiseExceptionWhenGettingNonExistingComponent)
 {
     vazel::ComponentManager cm;
 
-    try
-    {
+    try {
         cm.getComponentType<placeholder_component_1>();
-    }
-    catch (vazel::ComponentManagerException &e)
-    {
+    } catch (vazel::ComponentManagerException &e) {
         return;
-    }
-    catch (std::exception &e)
-    {
+    } catch (std::exception &e) {
         std::cerr << "Invalid: Exception catched was not "
                      "vazel::ComponentManagerFindComponentError"
                   << std::endl;
@@ -100,16 +90,11 @@ TEST(ComponentRegistering, removeExistingSingleComponent)
     cm.registerComponent<placeholder_component_1>();
     GTEST_ASSERT_EQ(cm.getComponentType<placeholder_component_1>(), 0);
     cm.unregisterComponent<placeholder_component_1>();
-    try
-    {
+    try {
         cm.getComponentType<placeholder_component_1>();
-    }
-    catch (vazel::ComponentManagerRegisterError &e)
-    {
+    } catch (vazel::ComponentManagerRegisterError &e) {
         return;
-    }
-    catch (std::exception &e)
-    {
+    } catch (std::exception &e) {
         std::cerr << "Invalid: Exception catched was not "
                      "vazel::ComponentManagerFindComponentError"
                   << std::endl;
@@ -193,8 +178,7 @@ TEST(ComponentUsage, registerPositionMultiplesEntities)
     vazel::ComponentManager cm;
 
     cm.registerComponent<entity_offsetx_offsety>();
-    for (size_t i = 0; i != 10000; i++)
-    {
+    for (size_t i = 0; i != 10000; i++) {
         auto id = vazel::makeUUID();
         entity_offsetx_offsety tmp;
         vazel::Entity e;
@@ -207,8 +191,7 @@ TEST(ComponentUsage, registerPositionMultiplesEntities)
         comp.ofy   = id + 2;
         s.emplace(e, tmp);
     }
-    for (auto it : s)
-    {
+    for (auto it : s) {
         auto &comp = cm.getComponent<entity_offsetx_offsety>(it.first);
         GTEST_ASSERT_EQ(it.second.ofx, comp.ofx - 3);
         GTEST_ASSERT_EQ(it.second.ofy, comp.ofy - 2);
@@ -240,16 +223,11 @@ TEST(ComponentUsage, getComponentWithoutRegisteredEntity)
     vazel::Entity unregisteredEntity;
 
     cm.registerComponent<placeholder_component_1>();
-    try
-    {
+    try {
         cm.getComponent<placeholder_component_1>(unregisteredEntity);
-    }
-    catch (vazel::ComponentManagerException &e)
-    {
+    } catch (vazel::ComponentManagerException &e) {
         return;
-    }
-    catch (...)
-    {
+    } catch (...) {
         std::cerr << "Error: Got Invalid type of exception" << std::endl;
         GTEST_FAIL();
     }

@@ -21,10 +21,8 @@ namespace vazel
 {
     ComponentType ComponentManager::_getAviableComponentIndex(void)
     {
-        for (ComponentType i = 0; i != VAZEL_MAX_COMPONENTS; i++)
-        {
-            if (_aviable_signatures.test(i) == false)
-            {
+        for (ComponentType i = 0; i != VAZEL_MAX_COMPONENTS; i++) {
+            if (_aviable_signatures.test(i) == false) {
                 return i;
             }
         }
@@ -49,8 +47,7 @@ namespace vazel
         const auto &map = cManager.getComponentMap();
 
         os << "----- Components Begin -----" << std::endl;
-        for (auto &it : map)
-        {
+        for (auto &it : map) {
             os << "Name: [" << it.first << "] Id: [" << it.second << "]"
                << std::endl;
         }
@@ -81,8 +78,7 @@ namespace vazel
 
     ComponentManager &ComponentManager::onEntityCreate(const Entity &e)
     {
-        if (_entity_to_components.find(e) != _entity_to_components.end())
-        {
+        if (_entity_to_components.find(e) != _entity_to_components.end()) {
             char buf[BUFSIZ] = { 0 };
             std::snprintf(buf, sizeof(buf) - 1,
                           "ComponenentManager::onEntityCreate: "
@@ -99,8 +95,7 @@ namespace vazel
     {
         const auto &it = _entity_to_components.find(e);
 
-        if (it == _entity_to_components.end())
-        {
+        if (it == _entity_to_components.end()) {
             char buf[BUFSIZ] = { 0 };
             std::snprintf(buf, sizeof(buf) - 1,
                           "ComponenentManager::onEntityCreate: "

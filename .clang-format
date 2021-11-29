@@ -1,9 +1,9 @@
 ---
 Language:        Cpp
-# BasedOnStyle:  Microsoft
 AccessModifierOffset: -2
 AlignAfterOpenBracket: Align
 #AlignArrayOfStructures: Left clang-13
+#ReferenceAlignmentStyle: Right clang-14
 AlignConsecutiveMacros: Consecutive
 AlignConsecutiveAssignments: Consecutive
 AlignConsecutiveBitFields: None
@@ -32,7 +32,7 @@ BinPackParameters: true
 BraceWrapping:
   AfterCaseLabel:  false
   AfterClass:      true
-  AfterControlStatement: Always
+  AfterControlStatement: Never
   AfterEnum:       true
   AfterFunction:   true
   AfterNamespace:  true
@@ -40,8 +40,8 @@ BraceWrapping:
   AfterStruct:     true
   AfterUnion:      true
   AfterExternBlock: true
-  BeforeCatch:     true
-  BeforeElse:      true
+  BeforeCatch:     false
+  BeforeElse:      false
   BeforeLambdaBody: false
   BeforeWhile:     false
   IndentBraces:    false
@@ -126,7 +126,6 @@ PenaltyExcessCharacter: 1000000
 PenaltyReturnTypeOnItsOwnLine: 1000
 PenaltyIndentedWhitespace: 0
 PointerAlignment: Right
-#ReferenceAlignmentStyle: Right clang-14
 ReflowComments:  true
 SortIncludes:    true
 SortJavaStaticImport: Before

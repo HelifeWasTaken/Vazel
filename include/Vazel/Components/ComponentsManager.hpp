@@ -136,8 +136,7 @@ namespace vazel
             const char *name                 = typeid(T).name();
             const ComponentType aviableIndex = _getAviableComponentIndex();
 
-            if (_components_map.find(name) != _components_map.end())
-            {
+            if (_components_map.find(name) != _components_map.end()) {
                 std::string err = "ComponentManager::registerComponent<T>: You "
                                   "cannot Register the same component twice: ";
                 err += name;
@@ -159,12 +158,9 @@ namespace vazel
         {
             const char *name = typeid(T).name();
 
-            try
-            {
+            try {
                 _aviable_signatures.set(_components_map.at(name), false);
-            }
-            catch (...)
-            {
+            } catch (...) {
                 std::string err =
                     "ComponentManager::unregisterComponent<T>: You cannot "
                     "unregister a component that is not registered: ";
@@ -187,12 +183,9 @@ namespace vazel
         {
             const char *name = typeid(T).name();
 
-            try
-            {
+            try {
                 return _components_map.at(name);
-            }
-            catch (...)
-            {
+            } catch (...) {
                 std::string err =
                     "ComponentManager::getComponentType<T>: You cannot get a "
                     "component that is not registered: ";
@@ -230,30 +223,24 @@ namespace vazel
         {
             const char *name = typeid(T).name();
 
-            try
-            {
+            try {
                 const ComponentType componentType = _components_map.at(name);
                 auto it = _entity_to_components.find(e);
 
-                if (it == _entity_to_components.end())
-                {
+                if (it == _entity_to_components.end()) {
                     std::string err =
                         "ComponentManager::attachComponent<T>: You cannot "
                         "attach a component to a non registered Entity(";
                     err += e.getId();
                     err += ")";
                     throw ComponentManagerException(err);
-                }
-                if (it->second[componentType].hasValue())
-                {
+                } else if (it->second[componentType].hasValue()) {
                     throw ComponentManagerException(
                         "ComponentManager::attachComponent<T>: You cannot "
                         "attach a component that is already attached");
                 }
                 it->second[componentType].make<T>(data);
-            }
-            catch (std::exception &e)
-            {
+            } catch (std::exception &e) {
                 std::string err = e.what();
                 err += " -> ";
                 err += "ComponentManager::attachComponent<T>: "
@@ -292,8 +279,7 @@ namespace vazel
             const ComponentType type = getComponentType<T>();
             const auto it            = _entity_to_components.find(e);
 
-            if (it == _entity_to_components.end())
-            {
+            if (it == _entity_to_components.end()) {
                 std::string err =
                     "ComponentManager::detachComponent<T>: You cannot detach a "
                     "component to an non attached Entity";
@@ -320,19 +306,15 @@ namespace vazel
         {
             const char *name = typeid(T).name();
 
-            try
-            {
+            try {
                 const ComponentType componentType = _components_map.at(name);
                 const auto it = _entity_to_components.find(e);
 
-                if (it == _entity_to_components.end())
-                {
+                if (it == _entity_to_components.end()) {
                     throw std::runtime_error("");
                 }
                 return it->second[componentType].get<T>();
-            }
-            catch (...)
-            {
+            } catch (...) {
                 char buf[BUFSIZ] = { 0 };
                 std::snprintf(
                     buf, sizeof(buf) - 1,
