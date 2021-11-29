@@ -30,16 +30,19 @@ namespace vazel
     }
 
     ComponentExistsException::ComponentExistsException(const std::string &e)
-        : _e(e) {}
+        : _e(e)
+    {
+    }
 
     const char *ComponentExistsException::what(void) const noexcept
     {
         return _e.c_str();
     }
 
-    bool isValidSignature(const ComponentSignature &signature, const ComponentSignature &to_match)
+    bool isValidSignature(const ComponentSignature &signature,
+                          const ComponentSignature &to_match)
     {
         return (signature & to_match) == to_match;
     }
 
-}
+} // namespace vazel

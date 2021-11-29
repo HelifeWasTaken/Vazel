@@ -17,9 +17,9 @@
  */
 #pragma once
 
+#include <any>
 #include <bitset>
 #include <stdlib.h>
-#include <any>
 
 /**
  * @brief The maximum number of components.
@@ -36,15 +36,16 @@ namespace vazel
     using ComponentType = uint16_t;
 
     /**
-     * @brief CompoenentExistsException is thrown when a component is already added to an entity.
+     * @brief CompoenentExistsException is thrown when a component is already
+     * added to an entity.
      *
      */
     class ComponentExistsException : public std::exception
     {
-    private:
+      private:
         std::string _e;
 
-    public:
+      public:
         /**
          * @brief Construct a new Component Exists Exception object
          *
@@ -62,10 +63,10 @@ namespace vazel
 
     class Component
     {
-    private:
+      private:
         std::any _data;
 
-    public:
+      public:
         /**
          * @brief Construct a new T object with an initial value.
          *
@@ -77,7 +78,9 @@ namespace vazel
         {
             if (_data.has_value())
             {
-                throw ComponentExistsException("Component::make<T>: Component is not null and you are trying to make a new one.");
+                throw ComponentExistsException(
+                    "Component::make<T>: Component is not null and you are "
+                    "trying to make a new one.");
             }
             _data = data;
         }
@@ -108,7 +111,10 @@ namespace vazel
             return std::any_cast<T &>(_data);
         }
 
-        bool hasValue(void) const { return _data.has_value(); }
+        bool hasValue(void) const
+        {
+            return _data.has_value();
+        }
     };
 
     /**
@@ -119,13 +125,15 @@ namespace vazel
     using ComponentSignature = std::bitset<VAZEL_MAX_COMPONENTS>;
 
     /**
-     * @brief isValidSignature is a function that checks if a signature is valid.
+     * @brief isValidSignature is a function that checks if a signature is
+     * valid.
      *
      * @param signature The signature to check.
      * @param to_match The signature to match.
      * @return true If the signature is valid.
      * @return false If the signature is not valid.
      */
-    bool isValidSignature(const ComponentSignature &signature, const ComponentSignature &to_match);
+    bool isValidSignature(const ComponentSignature &signature,
+                          const ComponentSignature &to_match);
 
-}
+} // namespace vazel

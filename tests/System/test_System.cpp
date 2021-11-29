@@ -15,10 +15,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include <gtest/gtest.h>
-
-#include "Vazel/System/System.hpp"
 #include "../tests_components.hpp"
+#include "Vazel/System/System.hpp"
+
+#include <gtest/gtest.h>
 
 TEST(System, CreateSystem)
 {
@@ -84,25 +84,28 @@ TEST(System, addEntities)
     cm.registerComponent<placeholder_component_2>();
 
     system.setOnUpdate(
-        VAZEL_SYSTEM_UPDATE_LAMBDA() {
-            std::cout << "Here is an entity!";
-        });
+        VAZEL_SYSTEM_UPDATE_LAMBDA() { std::cout << "Here is an entity!"; });
 
-    vazel::Entity entity = em.createEntity();
+    vazel::Entity entity  = em.createEntity();
     vazel::Entity entity2 = em.createEntity();
 
-    cm.onEntityCreate(entity).attachComponent<placeholder_component_1>(entity).onEntityCreate(entity2);
-    em.getSignature(entity).set(cm.getComponentType<placeholder_component_1>(), true);
+    cm.onEntityCreate(entity)
+        .attachComponent<placeholder_component_1>(entity)
+        .onEntityCreate(entity2);
+    em.getSignature(entity).set(cm.getComponentType<placeholder_component_1>(),
+                                true);
 
     system.addDependency<placeholder_component_1>(em, cm);
     system.update(cm);
 
     cm.attachComponent<placeholder_component_1>(entity2);
-    em.getSignature(entity2).set(cm.getComponentType<placeholder_component_1>(), true);
+    em.getSignature(entity2).set(cm.getComponentType<placeholder_component_1>(),
+                                 true);
     system.updateValidEntities(em);
     system.update(cm);
 
     system.addDependency<placeholder_component_2>(em, cm);
     system.update(cm);
-    ASSERT_EQ(testing::internal::GetCapturedStdout(), "Here is an entity!Here is an entity!Here is an entity!");
+    ASSERT_EQ(testing::internal::GetCapturedStdout(),
+              "Here is an entity!Here is an entity!Here is an entity!");
 }

@@ -15,9 +15,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include <gtest/gtest.h>
-
 #include "Vazel/Entity/EntityManager.hpp"
+
+#include <gtest/gtest.h>
 
 TEST(EntityManager, createEntity_check_if_crashes)
 {
@@ -54,7 +54,7 @@ TEST(EntityManager, checkDestroyEntity_check_if_destroy_invalid_entity_throw)
 TEST(EntityManager, checkDefaultSignature)
 {
     vazel::EntityManager manager;
-    vazel::Entity entity = manager.createEntity();
+    vazel::Entity entity                 = manager.createEntity();
     vazel::ComponentSignature &signature = manager.getSignature(entity);
     GTEST_ASSERT_EQ(signature, vazel::ComponentSignature());
     vazel::ComponentSignature signature2 = vazel::ComponentSignature();
@@ -69,7 +69,7 @@ TEST(EntityManager, checkDefaultSignature)
 TEST(EntityManager, testSetSignatureByRef)
 {
     vazel::EntityManager manager;
-    vazel::Entity entity = manager.createEntity();
+    vazel::Entity entity                 = manager.createEntity();
     vazel::ComponentSignature &signature = manager.getSignature(entity);
     signature.set(0, true);
     GTEST_ASSERT_EQ(signature, manager.getSignature(entity));
@@ -78,7 +78,7 @@ TEST(EntityManager, testSetSignatureByRef)
 TEST(EntityManager, testSetSignatureByValue)
 {
     vazel::EntityManager manager;
-    vazel::Entity entity = manager.createEntity();
+    vazel::Entity entity                = manager.createEntity();
     vazel::ComponentSignature signature = vazel::ComponentSignature();
     signature.set(0, true);
     manager.setSignature(entity, signature);
@@ -93,12 +93,14 @@ TEST(EntityManager, createEntity_check_if_multiple_entities_are_created_crashes)
     for (uint64_t i = 0; i < 10000; i++)
     {
         vazel::Entity e = manager.createEntity();
-        GTEST_ASSERT_EQ(std::find(entities.begin(), entities.end(), e), entities.end());
+        GTEST_ASSERT_EQ(std::find(entities.begin(), entities.end(), e),
+                        entities.end());
         entities.push_back(e);
     }
 }
 
-TEST(EntityManager, createEntity_check_if_multiple_entities_are_created_and_destroyed_crashes)
+TEST(EntityManager,
+     createEntity_check_if_multiple_entities_are_created_and_destroyed_crashes)
 {
     std::vector<vazel::Entity> entities;
     vazel::EntityManager manager;

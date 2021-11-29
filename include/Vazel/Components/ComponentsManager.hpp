@@ -17,15 +17,15 @@
  */
 #pragma once
 
-#include <unordered_map>
-#include <iostream>
-#include <string>
-#include <memory>
-#include <exception>
-#include <cstdio>
-
 #include "Vazel/Components/Component.hpp"
 #include "Vazel/Entity/Entity.hpp"
+
+#include <cstdio>
+#include <exception>
+#include <iostream>
+#include <memory>
+#include <string>
+#include <unordered_map>
 
 namespace vazel
 {
@@ -35,10 +35,10 @@ namespace vazel
      */
     class ComponentManagerException : public std::exception
     {
-    private:
+      private:
         std::string _e = "ComponentManagerException: ";
 
-    public:
+      public:
         /**
          * @brief Construct a new Component Manager Exception object
          *
@@ -46,7 +46,7 @@ namespace vazel
          */
         ComponentManagerException(const std::string &e);
 
-    public:
+      public:
         /**
          * @brief Get the Exception Message object
          *
@@ -56,12 +56,13 @@ namespace vazel
     };
 
     /**
-     * @brief ComponentManagerRegisterError class determines if a component is already registered
-     *        or the number of components is already at Vazel::Component::MAX
+     * @brief ComponentManagerRegisterError class determines if a component is
+     * already registered or the number of components is already at
+     * Vazel::Component::MAX
      */
     class ComponentManagerRegisterError : public ComponentManagerException
     {
-    public:
+      public:
         /**
          * @brief Construct a new Component Manager Register Error object
          *
@@ -71,13 +72,15 @@ namespace vazel
     };
 
     /**
-     * @brief ComponentMap is an unordered_map of Components based on their typename
+     * @brief ComponentMap is an unordered_map of Components based on their
+     * typename
      *
      */
     using ComponentMap = std::unordered_map<const char *, ComponentType>;
 
     /**
-     * @brief ComponentArray is an array of Components of size VAZEL_MAX_COMPONENTS
+     * @brief ComponentArray is an array of Components of size
+     * VAZEL_MAX_COMPONENTS
      */
     using ComponentArray = std::array<Component, VAZEL_MAX_COMPONENTS>;
 
@@ -87,7 +90,7 @@ namespace vazel
      */
     class ComponentManager
     {
-    private:
+      private:
         ComponentMap _components_map;
         ComponentSignature _aviable_signatures;
         std::unordered_map<Entity, ComponentArray> _entity_to_components;
@@ -99,7 +102,7 @@ namespace vazel
          */
         ComponentType _getAviableComponentIndex(void);
 
-    public:
+      public:
         /**
          * @brief Construct a new Component Manager object
          */
@@ -120,8 +123,9 @@ namespace vazel
         void showState(void) const;
 
         /**
-         * @brief registerComponent registers a Component in the ComponentManager with the typeid
-         *        as key and the ComponentType as value
+         * @brief registerComponent registers a Component in the
+         * ComponentManager with the typeid as key and the ComponentType as
+         * value
          *
          * @tparam T The componentType to register
          * @return ComponentManager& The class itself
@@ -129,12 +133,13 @@ namespace vazel
         template <typename T>
         ComponentManager &registerComponent(void)
         {
-            const char *name = typeid(T).name();
+            const char *name                 = typeid(T).name();
             const ComponentType aviableIndex = _getAviableComponentIndex();
 
             if (_components_map.find(name) != _components_map.end())
             {
-                std::string err = "ComponentManager::registerComponent<T>: You cannot Register the same component twice: ";
+                std::string err = "ComponentManager::registerComponent<T>: You "
+                                  "cannot Register the same component twice: ";
                 err += name;
                 throw ComponentManagerRegisterError(err);
             }
@@ -160,7 +165,9 @@ namespace vazel
             }
             catch (...)
             {
-                std::string err = "ComponentManager::unregisterComponent<T>: You cannot unregister a component that is not registered: ";
+                std::string err =
+                    "ComponentManager::unregisterComponent<T>: You cannot "
+                    "unregister a component that is not registered: ";
                 err += name;
                 throw ComponentManagerRegisterError(err);
             }
@@ -172,7 +179,8 @@ namespace vazel
          * @brief Get the Component Type object
          *
          * @tparam T The componentType to get
-         * @return ComponentType an index in the ComponentSignature (bitset) where the Component is stored
+         * @return ComponentType an index in the ComponentSignature (bitset)
+         * where the Component is stored
          */
         template <typename T>
         const ComponentType &getComponentType(void) const
@@ -185,7 +193,9 @@ namespace vazel
             }
             catch (...)
             {
-                std::string err = "ComponentManager::getComponentType<T>: You cannot get a component that is not registered: ";
+                std::string err =
+                    "ComponentManager::getComponentType<T>: You cannot get a "
+                    "component that is not registered: ";
                 err += name;
                 throw ComponentManagerRegisterError(err);
             }
@@ -227,14 +237,18 @@ namespace vazel
 
                 if (it == _entity_to_components.end())
                 {
-                    std::string err = "ComponentManager::attachComponent<T>: You cannot attach a component to a non registered Entity(";
+                    std::string err =
+                        "ComponentManager::attachComponent<T>: You cannot "
+                        "attach a component to a non registered Entity(";
                     err += e.getId();
                     err += ")";
                     throw ComponentManagerException(err);
                 }
                 if (it->second[componentType].hasValue())
                 {
-                    throw ComponentManagerException("ComponentManager::attachComponent<T>: You cannot attach a component that is already attached");
+                    throw ComponentManagerException(
+                        "ComponentManager::attachComponent<T>: You cannot "
+                        "attach a component that is already attached");
                 }
                 it->second[componentType].make<T>(data);
             }
@@ -252,9 +266,9 @@ namespace vazel
         }
 
         /**
-         * @brief attachComponent attach a Component in the ComponentManager with the typeid
-         *        as key and the ComponentType as value to the Entity &e
-         *        genereates A T type component with the default values
+         * @brief attachComponent attach a Component in the ComponentManager
+         * with the typeid as key and the ComponentType as value to the Entity
+         * &e genereates A T type component with the default values
          *
          * @tparam T The componentType to add
          * @param const Entity &e the Entity to attach the (default) component
@@ -276,11 +290,13 @@ namespace vazel
         ComponentManager &detachComponent(const Entity &e)
         {
             const ComponentType type = getComponentType<T>();
-            const auto it = _entity_to_components.find(e);
+            const auto it            = _entity_to_components.find(e);
 
             if (it == _entity_to_components.end())
             {
-                std::string err = "ComponentManager::detachComponent<T>: You cannot detach a component to an non attached Entity";
+                std::string err =
+                    "ComponentManager::detachComponent<T>: You cannot detach a "
+                    "component to an non attached Entity";
                 err += typeid(T).name();
                 throw ComponentManagerRegisterError(err.c_str());
             }
@@ -292,7 +308,8 @@ namespace vazel
         }
 
         /**
-         * @brief getComponent gets the Component of a specifically attached Entity
+         * @brief getComponent gets the Component of a specifically attached
+         * Entity
          *
          * @tparam T The componentType to get
          * @param e The Entity to get the Component from
@@ -316,12 +333,13 @@ namespace vazel
             }
             catch (...)
             {
-                char buf[BUFSIZ] = {0};
-                std::snprintf(buf, sizeof(buf) - 1,
-                              "ComponentManager::getComponent: Entity(%lu) is not registered"
-                              " with a component or Component(%s) was not found",
-                              e.getId(),
-                              name);
+                char buf[BUFSIZ] = { 0 };
+                std::snprintf(
+                    buf, sizeof(buf) - 1,
+                    "ComponentManager::getComponent: Entity(%lu) is not "
+                    "registered"
+                    " with a component or Component(%s) was not found",
+                    e.getId(), name);
                 throw ComponentManagerException(std::string(buf));
             }
         }
@@ -334,6 +352,7 @@ namespace vazel
      * @param cManager The ComponentManager to log
      * @return std::ostream& The output stream
      */
-    std::ostream &operator<<(std::ostream &os, const ComponentManager &cManager);
+    std::ostream &operator<<(std::ostream &os,
+                             const ComponentManager &cManager);
 
-}
+} // namespace vazel

@@ -15,20 +15,23 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include "Vazel/UUID.hpp"
 #include "Vazel/Entity/Entity.hpp"
+
+#include "Vazel/UUID.hpp"
 
 namespace vazel
 {
-    Entity::Entity(void)
-        : _uuid(makeUUID()) {}
+    Entity::Entity(void) : _uuid(makeUUID())
+    {
+    }
 
-    Entity::Entity(const Entity &uuid)
-        : _uuid(uuid) {}
+    Entity::Entity(const Entity &uuid) : _uuid(uuid)
+    {
+    }
 
     UUID Entity::getId(void) const
     {
         return _uuid;
     }
 
-}
+} // namespace vazel

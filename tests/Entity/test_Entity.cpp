@@ -15,11 +15,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include <gtest/gtest.h>
-#include <unordered_set>
-
 #include "Vazel/Entity/Entity.hpp"
 #include "Vazel/Entity/EntityManager.hpp"
+
+#include <gtest/gtest.h>
+#include <unordered_set>
 
 TEST(EntitiesGeneration, GenerateOneEntity)
 {

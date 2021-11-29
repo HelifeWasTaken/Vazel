@@ -15,12 +15,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include <gtest/gtest.h>
-
+#include "../tests_components.hpp"
 #include "Vazel/Components/ComponentsManager.hpp"
 #include "Vazel/UUID.hpp"
 
-#include "../tests_components.hpp"
+#include <gtest/gtest.h>
 
 TEST(ComponentRegistering, TestOneComponentRegister)
 {
@@ -62,7 +61,9 @@ TEST(ComponentRegistering, RaiseExceptionWhenComponentRegisteredTwice)
     }
     catch (std::exception &e)
     {
-        std::cerr << "Invalid: Exception catched was not vazel::ComponentManagerRegisterError" << std::endl;
+        std::cerr << "Invalid: Exception catched was not "
+                     "vazel::ComponentManagerRegisterError"
+                  << std::endl;
         GTEST_FAIL();
     }
     std::cerr << "Invalid: No exception was catched" << std::endl;
@@ -83,7 +84,9 @@ TEST(ComponentRegistering, RaiseExceptionWhenGettingNonExistingComponent)
     }
     catch (std::exception &e)
     {
-        std::cerr << "Invalid: Exception catched was not vazel::ComponentManagerFindComponentError" << std::endl;
+        std::cerr << "Invalid: Exception catched was not "
+                     "vazel::ComponentManagerFindComponentError"
+                  << std::endl;
         GTEST_FAIL();
     }
     std::cerr << "Invalid: No exception was catched" << std::endl;
@@ -107,7 +110,9 @@ TEST(ComponentRegistering, removeExistingSingleComponent)
     }
     catch (std::exception &e)
     {
-        std::cerr << "Invalid: Exception catched was not vazel::ComponentManagerFindComponentError" << std::endl;
+        std::cerr << "Invalid: Exception catched was not "
+                     "vazel::ComponentManagerFindComponentError"
+                  << std::endl;
         GTEST_FAIL();
     }
     std::cerr << "Invalid: No exception was catched" << std::endl;
@@ -176,7 +181,7 @@ TEST(ComponentUsage, registerPositionComponentAndChangeIt)
     cm.onEntityCreate(e);
     cm.attachComponent<placeholder_position_component>(e);
     auto &p = cm.getComponent<placeholder_position_component>(e);
-    p.x = 6;
+    p.x     = 6;
 
     GTEST_ASSERT_EQ(cm.getComponent<placeholder_position_component>(e).x, 6);
     GTEST_ASSERT_EQ(cm.getComponent<placeholder_position_component>(e).y, 0);
@@ -198,8 +203,8 @@ TEST(ComponentUsage, registerPositionMultiplesEntities)
         cm.onEntityCreate(e);
         cm.attachComponent<entity_offsetx_offsety>(e);
         auto &comp = cm.getComponent<entity_offsetx_offsety>(e);
-        comp.ofx = id + 3;
-        comp.ofy = id + 2;
+        comp.ofx   = id + 3;
+        comp.ofy   = id + 2;
         s.emplace(e, tmp);
     }
     for (auto it : s)
@@ -220,11 +225,11 @@ TEST(ComponentUsage, registerTwoDifferentComponents)
     cm.onEntityCreate(e);
     cm.attachComponent<std::string>(e);
     cm.attachComponent<entity_offsetx_offsety>(e);
-    cm.getComponent<std::string>(e) = "lol";
+    cm.getComponent<std::string>(e)                = "lol";
     cm.getComponent<entity_offsetx_offsety>(e).ofx = 4;
     cm.getComponent<entity_offsetx_offsety>(e).ofy = 3;
     GTEST_ASSERT_EQ(cm.getComponent<std::string>(e), std::string("lol"));
-    entity_offsetx_offsety off = {4, 3};
+    entity_offsetx_offsety off = { 4, 3 };
     GTEST_ASSERT_EQ(cm.getComponent<entity_offsetx_offsety>(e).ofx, off.ofx);
     GTEST_ASSERT_EQ(cm.getComponent<entity_offsetx_offsety>(e).ofy, off.ofy);
 }

@@ -29,8 +29,11 @@ namespace vazel
         return _e.c_str();
     }
 
-    EntityManagerExceptionFindEntityError::EntityManagerExceptionFindEntityError(const std::string &e)
-        : EntityManagerException::EntityManagerException(e) {}
+    EntityManagerExceptionFindEntityError::
+        EntityManagerExceptionFindEntityError(const std::string &e)
+        : EntityManagerException::EntityManagerException(e)
+    {
+    }
 
     Entity EntityManager::createEntity(void)
     {
@@ -44,15 +47,18 @@ namespace vazel
     {
         if (_entity_map.find(e) == _entity_map.end())
         {
-            char buf[BUFSIZ] = {0};
-            snprintf(buf, sizeof(buf) - 1, "EntityManager::destroyEntity: Entity %lu does not exist", e.getId());
+            char buf[BUFSIZ] = { 0 };
+            snprintf(buf, sizeof(buf) - 1,
+                     "EntityManager::destroyEntity: Entity %lu does not exist",
+                     e.getId());
             throw EntityManagerExceptionFindEntityError(buf);
         }
         _entity_map.erase(e);
         return *this;
     }
 
-    EntityManager &EntityManager::setSignature(const Entity &e, const ComponentSignature &signature)
+    EntityManager &EntityManager::setSignature(
+        const Entity &e, const ComponentSignature &signature)
     {
         try
         {
@@ -61,8 +67,10 @@ namespace vazel
         }
         catch (...)
         {
-            char buf[BUFSIZ] = {0};
-            snprintf(buf, sizeof(buf) - 1, "EntityManager::setSignature: %lu does not exist", e.getId());
+            char buf[BUFSIZ] = { 0 };
+            snprintf(buf, sizeof(buf) - 1,
+                     "EntityManager::setSignature: %lu does not exist",
+                     e.getId());
             throw EntityManagerExceptionFindEntityError(buf);
         }
     }
@@ -75,8 +83,10 @@ namespace vazel
         }
         catch (...)
         {
-            char buf[BUFSIZ] = {0};
-            snprintf(buf, sizeof(buf) - 1, "EntityManager::getSignature: %lu does not exist", e.getId());
+            char buf[BUFSIZ] = { 0 };
+            snprintf(buf, sizeof(buf) - 1,
+                     "EntityManager::getSignature: %lu does not exist",
+                     e.getId());
             throw EntityManagerExceptionFindEntityError(buf);
         }
     }
@@ -85,4 +95,4 @@ namespace vazel
     {
         return _entity_map;
     }
-}
+} // namespace vazel

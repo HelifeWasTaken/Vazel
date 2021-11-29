@@ -17,27 +17,28 @@
  */
 #pragma once
 
+#include "Vazel/Components/Component.hpp"
+#include "Vazel/Entity/Entity.hpp"
+
 #include <exception>
 #include <iostream>
 #include <string.h>
 #include <unordered_map>
 
-#include "Vazel/Entity/Entity.hpp"
-#include "Vazel/Components/Component.hpp"
-
 namespace vazel
 {
     /**
-     * @brief EntityManagerException is the base class for all exceptions thrown by EntityManager.
+     * @brief EntityManagerException is the base class for all exceptions thrown
+     * by EntityManager.
      *
      */
     class EntityManagerException : public std::exception
     {
 
-    private:
+      private:
         std::string _e = "EntityManagerError: ";
 
-    public:
+      public:
         /**
          * @brief Construct a new Entity Manager Exception object
          *
@@ -54,14 +55,16 @@ namespace vazel
     };
 
     /**
-     * @brief EntityManagerExceptionFindEntityError is thrown when an entity is not found.
+     * @brief EntityManagerExceptionFindEntityError is thrown when an entity is
+     * not found.
      *
      */
     class EntityManagerExceptionFindEntityError : public EntityManagerException
     {
-    public:
+      public:
         /**
-         * @brief Construct a new Entity Manager Exception Find Entity Error object
+         * @brief Construct a new Entity Manager Exception Find Entity Error
+         * object
          *
          * @param e The error message.
          */
@@ -76,10 +79,10 @@ namespace vazel
 
     class EntityManager
     {
-    private:
+      private:
         EntityMap _entity_map;
 
-    public:
+      public:
         /**
          * @brief Create a Entity object
          *
@@ -89,10 +92,11 @@ namespace vazel
 
         /**
          * @brief Destroy an entity.
-         * 
+         *
          * @param e The entity to destroy.
          * @return EntityManager& A reference to the class itself.
-         * @throws EntityManagerExceptionFindEntityError if the entity is not found.
+         * @throws EntityManagerExceptionFindEntityError if the entity is not
+         * found.
          * @throws EntityManagerException if the entity is already destroyed.
          */
 
@@ -105,7 +109,8 @@ namespace vazel
          * @param signature The signature.
          * @return EntityManager& A reference to the class itself.
          */
-        EntityManager &setSignature(const Entity &e, const ComponentSignature &signature);
+        EntityManager &setSignature(const Entity &e,
+                                    const ComponentSignature &signature);
 
         /**
          * @brief Get the Signature object
@@ -122,4 +127,4 @@ namespace vazel
          */
         const EntityMap &getMap(void) const;
     };
-}
+} // namespace vazel

@@ -19,15 +19,17 @@
 
 #include "Vazel/Components/ComponentsManager.hpp"
 #include "Vazel/Entity/EntityManager.hpp"
+
+#include <algorithm>
 #include <functional>
 #include <list>
-#include <algorithm>
 #include <unordered_set>
 
 /**
- * @brief VAZEL_SYSTEM_UPDATE_LAMBDA is a macro to define a lambda function to update a system
- *        The lambda functions can take paramters for [] [&] [=] etc...
- *        It provides you directly the components manager and the associated Entity
+ * @brief VAZEL_SYSTEM_UPDATE_LAMBDA is a macro to define a lambda function to
+ * update a system The lambda functions can take paramters for [] [&] [=] etc...
+ *        It provides you directly the components manager and the associated
+ * Entity
  */
 #define VAZEL_SYSTEM_UPDATE_LAMBDA(...) \
     [__VA_ARGS__](vazel::ComponentManager & cm, const vazel::Entity &e)
@@ -35,15 +37,17 @@
 namespace vazel
 {
 
-    using systemUpdate = std::function<void(ComponentManager &, const Entity &)>;
+    using systemUpdate =
+        std::function<void(ComponentManager &, const Entity &)>;
 
     /**
-     * @brief System class is a collection of entities that can be updated at the same time
+     * @brief System class is a collection of entities that can be updated at
+     * the same time
      */
     class System
     {
 
-    private:
+      private:
         ComponentSignature _signature;
         std::string _tag;
         systemUpdate _updater;
@@ -55,9 +59,10 @@ namespace vazel
          * @param entity Entity
          * @param signature ComponentSignature
          */
-        void __addEntity(const Entity &entity, const ComponentSignature &signature);
+        void __addEntity(const Entity &entity,
+                         const ComponentSignature &signature);
 
-    public:
+      public:
         /**
          * @brief Construct a new System object
          *
@@ -79,7 +84,8 @@ namespace vazel
         ~System() = default;
 
         /**
-         * @brief Add all entities from the EntityManager that match the system signature
+         * @brief Add all entities from the EntityManager that match the system
+         * signature
          *
          * @param emanager EntityManager
          * @return System& Reference to the class itself
@@ -109,16 +115,18 @@ namespace vazel
         const std::string &getTag(void) const;
 
         /**
-         * @brief Add a dependency to the system (A component required so the entity can be attached)
-         *        if one of the already attached entities has not the new required dependency required,
-         *        the entity is removed from the system
+         * @brief Add a dependency to the system (A component required so the
+         * entity can be attached) if one of the already attached entities has
+         * not the new required dependency required, the entity is removed from
+         * the system
          *
          * @tparam T Component type
          * @param cmanager ComponentManager
          * @return System& Reference to the class itself
          */
         template <typename T>
-        System &addDependency(EntityManager &emanager, const ComponentManager &cmanager)
+        System &addDependency(EntityManager &emanager,
+                              const ComponentManager &cmanager)
         {
             _signature.set(cmanager.getComponentType<T>(), true);
             updateValidEntities(emanager);
@@ -126,8 +134,10 @@ namespace vazel
         }
 
         /**
-         * @brief Remove a dependency from the system (A component required so the entity can be attached)
-         *        if one of the Entities from the EntityManager matches the new Signature, the entity is added to the system
+         * @brief Remove a dependency from the system (A component required so
+         * the entity can be attached) if one of the Entities from the
+         * EntityManager matches the new Signature, the entity is added to the
+         * system
          *
          * @tparam T Component type
          * @param emanager EntityManager to get the entities from
@@ -135,7 +145,8 @@ namespace vazel
          * @return System& Reference to the class itself
          */
         template <typename T>
-        System &removeDependency(EntityManager &emanager, const ComponentManager &cmanager)
+        System &removeDependency(EntityManager &emanager,
+                                 const ComponentManager &cmanager)
         {
             _signature.set(cmanager.getComponentType<T>(), 0);
             updateValidEntities(emanager);
@@ -150,4 +161,4 @@ namespace vazel
         void update(ComponentManager &cm);
     };
 
-}
+} // namespace vazel

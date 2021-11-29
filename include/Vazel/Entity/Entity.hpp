@@ -17,23 +17,24 @@
  */
 #pragma once
 
-#include <functional>
-
 #include "Vazel/UUID.hpp"
+
+#include <functional>
 
 namespace vazel
 {
     /**
      * @brief The Entity class
      * This class is the base class for all entities in the game.
-     * An entity is basically an ID that determines where it will stored in the EntityManager.
+     * An entity is basically an ID that determines where it will stored in the
+     * EntityManager.
      */
     class Entity
     {
-    private:
+      private:
         UUID _uuid;
 
-    public:
+      public:
         /**
          * @brief Construct a new Entity object
          */
@@ -62,7 +63,7 @@ namespace vazel
         }
     };
 
-}
+} // namespace vazel
 
 /**
  * @brief The Hash of the Entity UUID

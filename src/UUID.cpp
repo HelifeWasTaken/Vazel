@@ -27,4 +27,4 @@ namespace vazel
     {
         return s_uniformDistribution(s_rEngine);
     }
-}
+} // namespace vazel

@@ -25,7 +25,8 @@ namespace vazel
         (void)cm;
     }
 
-    void System::__addEntity(const Entity &entity, const ComponentSignature &signature)
+    void System::__addEntity(const Entity &entity,
+                             const ComponentSignature &signature)
     {
         if (isValidSignature(signature, _signature))
         {
@@ -34,10 +35,14 @@ namespace vazel
     }
 
     System::System(const std::string &tag)
-        : _tag(tag), _updater(unimplementedOnUpdateSystem) {}
+        : _tag(tag), _updater(unimplementedOnUpdateSystem)
+    {
+    }
 
     System::System(const char *tag)
-        : _tag(tag), _updater(unimplementedOnUpdateSystem) {}
+        : _tag(tag), _updater(unimplementedOnUpdateSystem)
+    {
+    }
 
     System &System::updateValidEntities(EntityManager &emanager)
     {
@@ -79,4 +84,4 @@ namespace vazel
             _updater(cm, it);
         }
     }
-};
+}; // namespace vazel

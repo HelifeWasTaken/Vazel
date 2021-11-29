@@ -28,7 +28,9 @@ namespace vazel
                 return i;
             }
         }
-        throw ComponentManagerRegisterError("ComponentManager::_getAviableComponentIndex: You registered already the maximum of Component");
+        throw ComponentManagerRegisterError(
+            "ComponentManager::_getAviableComponentIndex: You registered "
+            "already the maximum of Component");
     }
 
     const ComponentMap &ComponentManager::getComponentMap(void) const
@@ -36,7 +38,8 @@ namespace vazel
         return _components_map;
     }
 
-    const ComponentSignature &ComponentManager::getComponentSignature(void) const
+    const ComponentSignature &ComponentManager::getComponentSignature(
+        void) const
     {
         return _aviable_signatures;
     }
@@ -48,7 +51,8 @@ namespace vazel
         os << "----- Components Begin -----" << std::endl;
         for (auto &it : map)
         {
-            os << "Name: [" << it.first << "] Id: [" << it.second << "]" << std::endl;
+            os << "Name: [" << it.first << "] Id: [" << it.second << "]"
+               << std::endl;
         }
         os << "------ Components End ------" << std::endl;
         return os;
@@ -69,14 +73,17 @@ namespace vazel
         return _e.c_str();
     }
 
-    ComponentManagerRegisterError::ComponentManagerRegisterError(const std::string &e)
-        : ComponentManagerException(e) {}
+    ComponentManagerRegisterError::ComponentManagerRegisterError(
+        const std::string &e)
+        : ComponentManagerException(e)
+    {
+    }
 
     ComponentManager &ComponentManager::onEntityCreate(const Entity &e)
     {
         if (_entity_to_components.find(e) != _entity_to_components.end())
         {
-            char buf[BUFSIZ] = {0};
+            char buf[BUFSIZ] = { 0 };
             std::snprintf(buf, sizeof(buf) - 1,
                           "ComponenentManager::onEntityCreate: "
                           "Entity(%lu) is already registered"
@@ -94,7 +101,7 @@ namespace vazel
 
         if (it == _entity_to_components.end())
         {
-            char buf[BUFSIZ] = {0};
+            char buf[BUFSIZ] = { 0 };
             std::snprintf(buf, sizeof(buf) - 1,
                           "ComponenentManager::onEntityCreate: "
                           "Entity(%lu) is not registered in "
@@ -106,4 +113,4 @@ namespace vazel
         return *this;
     }
 
-};
+}; // namespace vazel
