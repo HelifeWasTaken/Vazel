@@ -52,6 +52,8 @@ namespace vazel
         const char *what() const throw() override;
     };
 
+    // TODO: Change std::list<std::pair<System, std::string>> to
+    // std::unordered_set<System> And get system tag info with System::getTag()
     /**
      * @brief The World class
      *

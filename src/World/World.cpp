@@ -50,9 +50,8 @@ namespace vazel
     {
         for (const auto &it : _systems) {
             if (it.second == tag) {
-                _systems.remove_if([&](const auto &it) {
-                    return it.second == tag;
-                });
+                _systems.remove_if(
+                    [&](const auto &it) { return it.second == tag; });
                 return *this;
             }
         }
@@ -64,10 +63,8 @@ namespace vazel
 
     World &World::addSystem(System &sys, std::string &tag)
     {
-        // TODO: Change Exception raised
         if (sys.getSignature() == 0) {
-            throw std::runtime_error(
-                "Signature must have at least one dependency component");
+            throw WorldException("World::addSystem: System signature is 0");
         }
         for (const auto &it : _systems) {
             if (it.second == tag) {
