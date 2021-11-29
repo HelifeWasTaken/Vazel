@@ -100,7 +100,7 @@ namespace vazel
          * @throws EntityManagerException if the entity is already destroyed.
          */
 
-        EntityManager &destroyEntity(Entity e);
+        EntityManager &destroyEntity(Entity &e);
 
         /**
          * @brief Set the Signature object

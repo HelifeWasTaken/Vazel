@@ -43,7 +43,7 @@ namespace vazel
         return e;
     }
 
-    EntityManager &EntityManager::destroyEntity(Entity e)
+    EntityManager &EntityManager::destroyEntity(Entity& e)
     {
         if (_entity_map.find(e) == _entity_map.end()) {
             char buf[BUFSIZ] = { 0 };

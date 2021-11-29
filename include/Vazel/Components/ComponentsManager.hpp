@@ -153,13 +153,16 @@ namespace vazel
          * @tparam T The componentType to remove
          * @return ComponentManager& The class itself
          */
+        /*
         template <typename T>
         ComponentManager &unregisterComponent(void)
         {
             const char *name = typeid(T).name();
+            ComponentType position = -1;
 
             try {
-                _aviable_signatures.set(_components_map.at(name), false);
+                position = _components_map.at(name);
+                _aviable_signatures.set(position, false);
             } catch (...) {
                 std::string err =
                     "ComponentManager::unregisterComponent<T>: You cannot "
@@ -168,8 +171,12 @@ namespace vazel
                 throw ComponentManagerRegisterError(err);
             }
             _components_map.erase(name);
+            for (auto& it : _entity_to_components) {
+                it.second[position].remove();
+            }
             return *this;
         }
+        */
 
         /**
          * @brief Get the Component Type object
