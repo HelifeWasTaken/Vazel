@@ -15,6 +15,7 @@ set(SRCS
     ./Components/Component.cpp
     ./Components/ComponentsManager.cpp
     ./System/System.cpp
+    ./World/World.cpp
 )
 
 add_library(${PROJECT_NAME} ${SRCS})

@@ -19,22 +19,22 @@
 
 #include "Vazel/Components/Component.hpp"
 #include "Vazel/Entity/Entity.hpp"
+#include "Vazel/VException.hpp"
 
-#include <exception>
 #include <iostream>
 #include <string.h>
 #include <unordered_map>
 
 namespace vazel
 {
+
     /**
      * @brief EntityManagerException is the base class for all exceptions thrown
      * by EntityManager.
      *
      */
-    class EntityManagerException : public std::exception
+    class EntityManagerException : public VException
     {
-
       private:
         std::string _e = "EntityManagerError: ";
 
@@ -84,6 +84,18 @@ namespace vazel
 
       public:
         /**
+         * @brief Construct a new Entity Manager object
+         *
+         */
+        EntityManager(void) = default;
+
+        /**
+         * @brief Destroy the Entity Manager object
+         *
+         */
+        ~EntityManager(void) = default;
+
+        /**
          * @brief Create a Entity object
          *
          * @return Entity
@@ -126,5 +138,12 @@ namespace vazel
          * @return const EntityMap& The map (unordered).
          */
         const EntityMap &getMap(void) const;
+
+        /**
+         * @brief Clears the EntityMap of the EntityManager.
+         *
+         */
+        void clear(void);
     };
+
 } // namespace vazel

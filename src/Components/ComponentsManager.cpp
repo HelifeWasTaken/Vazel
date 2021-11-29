@@ -19,6 +19,7 @@
 
 namespace vazel
 {
+
     ComponentType ComponentManager::_getAviableComponentIndex(void)
     {
         for (ComponentType i = 0; i != VAZEL_MAX_COMPONENTS; i++) {
@@ -65,7 +66,7 @@ namespace vazel
         _e += e;
     }
 
-    const char *ComponentManagerException::what(void) const noexcept
+    const char *ComponentManagerException::what(void) const throw()
     {
         return _e.c_str();
     }
@@ -106,6 +107,13 @@ namespace vazel
         }
         _entity_to_components.erase(it->first);
         return *this;
+    }
+
+    void ComponentManager::clear(void)
+    {
+        _components_map.clear();
+        _entity_to_components.clear();
+        _aviable_signatures &= 0;
     }
 
 }; // namespace vazel

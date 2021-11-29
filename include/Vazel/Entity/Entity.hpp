@@ -23,6 +23,7 @@
 
 namespace vazel
 {
+
     /**
      * @brief The Entity class
      * This class is the base class for all entities in the game.

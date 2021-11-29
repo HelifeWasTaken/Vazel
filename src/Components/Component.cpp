@@ -19,6 +19,7 @@
 
 namespace vazel
 {
+
     void Component::remove(void)
     {
         _data.reset();
@@ -34,7 +35,7 @@ namespace vazel
     {
     }
 
-    const char *ComponentExistsException::what(void) const noexcept
+    const char *ComponentExistsException::what(void) const throw()
     {
         return _e.c_str();
     }

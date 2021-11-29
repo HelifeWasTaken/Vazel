@@ -17,6 +17,8 @@
  */
 #pragma once
 
+#include "Vazel/VException.hpp"
+
 #include <any>
 #include <bitset>
 #include <stdlib.h>
@@ -29,6 +31,7 @@
 
 namespace vazel
 {
+
     /**
      * @brief Base class for all components.
      *
@@ -40,7 +43,7 @@ namespace vazel
      * added to an entity.
      *
      */
-    class ComponentExistsException : public std::exception
+    class ComponentExistsException : public VException
     {
       private:
         std::string _e;
@@ -58,7 +61,7 @@ namespace vazel
          *
          * @return const char* The error message.
          */
-        const char *what() const noexcept override;
+        const char *what() const throw() override;
     };
 
     class Component

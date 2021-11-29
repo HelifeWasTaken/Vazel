@@ -19,6 +19,7 @@
 
 #include "Vazel/Components/Component.hpp"
 #include "Vazel/Entity/Entity.hpp"
+#include "Vazel/VException.hpp"
 
 #include <cstdio>
 #include <exception>
@@ -29,11 +30,12 @@
 
 namespace vazel
 {
+
     /**
      * @brief ComponentsManagerException class
      *      Exception class for ComponentsManager
      */
-    class ComponentManagerException : public std::exception
+    class ComponentManagerException : public VException
     {
       private:
         std::string _e = "ComponentManagerException: ";
@@ -52,7 +54,7 @@ namespace vazel
          *
          * @return const char*
          */
-        const char *what() const noexcept override;
+        const char *what() const throw() override;
     };
 
     /**
@@ -128,10 +130,10 @@ namespace vazel
          * value
          *
          * @tparam T The componentType to register
-         * @return ComponentManager& The class itself
+         * @return ComponentType the current component type
          */
         template <typename T>
-        ComponentManager &registerComponent(void)
+        ComponentType registerComponent(void)
         {
             const char *name                 = typeid(T).name();
             const ComponentType aviableIndex = _getAviableComponentIndex();
@@ -144,7 +146,7 @@ namespace vazel
             }
             _aviable_signatures.set(aviableIndex, true);
             _components_map.emplace(name, aviableIndex);
-            return *this;
+            return aviableIndex;
         }
 
         /**
@@ -153,11 +155,10 @@ namespace vazel
          * @tparam T The componentType to remove
          * @return ComponentManager& The class itself
          */
-        /*
         template <typename T>
         ComponentManager &unregisterComponent(void)
         {
-            const char *name = typeid(T).name();
+            const char *name       = typeid(T).name();
             ComponentType position = -1;
 
             try {
@@ -171,12 +172,11 @@ namespace vazel
                 throw ComponentManagerRegisterError(err);
             }
             _components_map.erase(name);
-            for (auto& it : _entity_to_components) {
+            for (auto &it : _entity_to_components) {
                 it.second[position].remove();
             }
             return *this;
         }
-        */
 
         /**
          * @brief Get the Component Type object
@@ -332,6 +332,12 @@ namespace vazel
                 throw ComponentManagerException(std::string(buf));
             }
         }
+
+        /**
+         * @brief Clear the ComponentManager of all the attached Components
+         *
+         */
+        void clear(void);
     };
 
     /**

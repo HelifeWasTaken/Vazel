@@ -19,12 +19,13 @@
 
 namespace vazel
 {
+
     EntityManagerException::EntityManagerException(const std::string &e)
     {
         _e += e;
     }
 
-    const char *EntityManagerException::what(void) const noexcept
+    const char *EntityManagerException::what(void) const throw()
     {
         return _e.c_str();
     }
@@ -43,7 +44,7 @@ namespace vazel
         return e;
     }
 
-    EntityManager &EntityManager::destroyEntity(Entity& e)
+    EntityManager &EntityManager::destroyEntity(Entity &e)
     {
         if (_entity_map.find(e) == _entity_map.end()) {
             char buf[BUFSIZ] = { 0 };
@@ -88,4 +89,10 @@ namespace vazel
     {
         return _entity_map;
     }
+
+    void EntityManager::clear(void)
+    {
+        _entity_map.clear();
+    }
+
 } // namespace vazel

@@ -81,7 +81,7 @@ namespace vazel
          * @brief Destroy the System object
          *        Remove all entities from the system
          */
-        ~System() = default;
+        ~System(void) = default;
 
         /**
          * @brief Add all entities from the EntityManager that match the system

@@ -21,6 +21,7 @@
 
 namespace vazel
 {
+
     Entity::Entity(void) : _uuid(makeUUID())
     {
     }
