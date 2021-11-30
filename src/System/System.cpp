@@ -43,7 +43,7 @@ namespace vazel
     {
     }
 
-    System &System::updateValidEntities(EntityManager &emanager)
+    void System::updateValidEntities(EntityManager &emanager)
     {
         for (const auto &t : emanager.getMap()) {
             auto it = _entities.find(t.first);
@@ -53,13 +53,11 @@ namespace vazel
                 _entities.erase(it);
             }
         }
-        return *this;
     }
 
-    System &System::setOnUpdate(systemUpdate updater)
+    void System::setOnUpdate(systemUpdate updater)
     {
         _updater = updater;
-        return *this;
     }
 
     const ComponentSignature &System::getSignature(void) const

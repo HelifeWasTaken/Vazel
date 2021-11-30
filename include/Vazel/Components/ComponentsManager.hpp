@@ -60,7 +60,7 @@ namespace vazel
     /**
      * @brief ComponentManagerRegisterError class determines if a component is
      * already registered or the number of components is already at
-     * Vazel::Component::MAX
+     * vazel::Component::MAX
      */
     class ComponentManagerRegisterError : public ComponentManagerException
     {

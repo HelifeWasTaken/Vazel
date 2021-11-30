@@ -88,9 +88,8 @@ namespace vazel
          * signature
          *
          * @param emanager EntityManager
-         * @return System& Reference to the class itself
          */
-        System &updateValidEntities(EntityManager &emanager);
+        void updateValidEntities(EntityManager &emanager);
 
         /**
          * @brief Set the system update function
@@ -98,7 +97,7 @@ namespace vazel
          * @param updater System update function
          * @return System& Reference to the class itself
          */
-        System &setOnUpdate(systemUpdate updater);
+        void setOnUpdate(systemUpdate updater);
 
         /**
          * @brief Get the system signature
@@ -114,6 +113,19 @@ namespace vazel
          */
         const std::string &getTag(void) const;
 
+
+        /**
+         * @brief Add a dependency to the system (Does not update the Entities)
+         *
+         * @tparam T Component type
+         * @param cmanager ComponentManager
+         */
+        template <typename T>
+        void addDependency(const ComponentManager &cmanager)
+        {
+            _signature.set(cmanager.getComponentType<T>(), true);
+        }
+
         /**
          * @brief Add a dependency to the system (A component required so the
          * entity can be attached) if one of the already attached entities has
@@ -122,15 +134,33 @@ namespace vazel
          *
          * @tparam T Component type
          * @param cmanager ComponentManager
-         * @return System& Reference to the class itself
          */
         template <typename T>
-        System &addDependency(EntityManager &emanager,
+        void addDependency(EntityManager &emanager,
                               const ComponentManager &cmanager)
         {
-            _signature.set(cmanager.getComponentType<T>(), true);
+            addDependency<T>(cmanager);
             updateValidEntities(emanager);
-            return *this;
+        }
+
+        /**
+         * @brief Add a dependency from a ComponentType (does not update Entities)
+         * @param component Component Type to add as a Dependency
+         */
+        void addDependency(const ComponentType &type)
+        {
+            _signature.set(type, true);
+        }
+
+        /**
+         * @brief Add a dependency from a ComponentType
+         * @param component Component Type to add as a Dependency
+         */
+        void addDependency(EntityManager &emanager,
+                              const ComponentType &type)
+        {
+            addDependency(type);
+            updateValidEntities(emanager);
         }
 
         /**
@@ -142,15 +172,26 @@ namespace vazel
          * @tparam T Component type
          * @param emanager EntityManager to get the entities from
          * @param cmanager ComponentManager to get the component type from
-         * @return System& Reference to the class itself
          */
         template <typename T>
-        System &removeDependency(EntityManager &emanager,
+        void removeDependency(EntityManager &emanager,
                                  const ComponentManager &cmanager)
         {
             _signature.set(cmanager.getComponentType<T>(), 0);
             updateValidEntities(emanager);
-            return *this;
+        }
+
+        /**
+         * @brief Remove a dependency from the system (Does not update the entities)
+         *
+         * @tparam T Component type
+         * @param cmanager ComponentManager to get the component type from
+         * @return System& Reference to the class itself
+         */
+        template <typename T>
+        void removeDependency(const ComponentManager &cmanager)
+        {
+            _signature.set(cmanager.getComponentType<T>(), 0);
         }
 
         /**

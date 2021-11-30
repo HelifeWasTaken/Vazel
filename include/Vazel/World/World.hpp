@@ -61,7 +61,7 @@ namespace vazel
     class World
     {
       private:
-        std::list<std::pair<System, std::string>> _systems;
+        std::list<std::unique_ptr<System>> _systems;
         ComponentManager _componentManager;
         EntityManager _entityManager;
 
@@ -89,48 +89,95 @@ namespace vazel
          * @brief Remove an Entity from the world
          *
          * @param e The entity to remove.
-         * @return World & A reference to *this.
          */
-        World &removeEntity(Entity &e);
+        void removeEntity(Entity &e);
 
         /**
          * @brief Remove a System from the world
          *
          * @param tag The tag of the system to remove.
-         * @return World & A reference to *this.
          */
-        World &removeSystem(std::string &tag);
+        void removeSystem(std::string &tag);
+
+        /**
+         * @brief Remove a System from the world
+         *
+         * @param tag The tag of the system to remove.
+         */
+        void removeSystem(const char *tag);
 
         /**
          * @brief Add a System to the world
          *
          * @param sys The system to add. (with at least one depenedency)
-         * @param tag The tag of the system to add.
-         * @return World& A reference to *this.
          */
-        World &addSystem(System &sys, std::string &tag);
+        void registerSystem(System &sys);
 
         /**
          * @brief Add a dependency to a System
          *
          * @tparam T The type of the dependency.
-         * @param tagname The tagname of the system to add the dependency to.
+         * @param tag The tagname of the system to add the dependency to.
          * @return World& A reference to *this.
          */
         template <typename T>
-        World &addSystemDependency(std::string tagname)
+        void addSystemDependency(const char *tag)
         {
-            // TODO: Change Exception raised
             for (auto &it : _systems) {
-                if (it.second == tagname) {
-                    it.first.addDependency<T>(_entityManager,
+                if (it->getTag() == tag) {
+                    it->addDependency<T>(_entityManager,
                                               _componentManager);
-                    return *this;
+                    return;
                 }
             }
             std::string err = "World::addSystemDependency: Could not find a "
                               "system with tag: \"";
-            err += tagname + "\"";
+            err += tag;
+            err += "\"";
+            throw WorldException(err);
+        }
+
+        /**
+         * @brief Add a dependency to a System
+         *
+         * @tparam T The type of the dependency.
+         * @param tag The tagname of the system to add the dependency to.
+         * @return World& A reference to *this.
+         */
+        template <typename T>
+        void addSystemDependency(std::string &tag)
+        {
+            addSystemDependency<T>(tag.c_str());
+        }
+
+        /**
+         * @brief Remove a dependency from a System
+         *
+         * @tparam T The type of the dependency.
+         * @param tag The tagname of the system to remove the dependency
+         * from.
+         */
+        template <typename T>
+        void removeSystemDependency(const char *tag)
+        {
+            try {
+                for (auto &it : _systems) {
+                    if (it->getTag() == tag) {
+                        it->removeDependency<T>(_entityManager,
+                                                    _componentManager);
+                        _systems.remove_if([](const auto& it){
+                            return it->getSignature() == 0;
+                        });
+                        return;
+                    }
+                }
+            } catch (ComponentManagerException& e) {
+                throw WorldException(e.what());
+            }
+            std::string err = "World::removeSystemDependency: Could not find a "
+                            "system with tag: \"";
+            err += tag;
+            err += "\"";
             throw WorldException(err);
         }
 
@@ -138,27 +185,13 @@ namespace vazel
          * @brief Remove a dependency from a System
          *
          * @tparam T The type of the dependency.
-         * @param tagname The tagname of the system to remove the dependency
+         * @param tag The tagname of the system to remove the dependency
          * from.
-         * @return World& A reference to *this.
          */
         template <typename T>
-        World &removeSystemDependency(std::string tagname)
+        void removeSystemDependency(std::string &tag)
         {
-            // TODO: Change Exception raised
-            for (auto &it : _systems) {
-                if (it.second == tagname) {
-                    it.first.removeDependency<T>(_entityManager,
-                                                 _componentManager);
-                    if (it.first.getSignature() == 0)
-                        _systems.remove(it);
-                    return *this;
-                }
-            }
-            std::string err = "World::removeSystemDependency: Could not find a "
-                              "system with tag: \"";
-            err += tagname + "\"";
-            throw WorldException(err);
+            removeSystemDependency<T>(tag.c_str());
         }
 
         /**
@@ -177,31 +210,37 @@ namespace vazel
         const ComponentSignature &getComponentManagerSignature(void) const;
 
         /**
+         * @brief Get the Component Type object
+         *
+         * @tparam T Type of the component that you want to get
+         * @return const ComponentType& The ComponentType
+         */
+        template<typename T>
+        const ComponentType &getComponentType(void) const
+        {
+            return _componentManager.getComponentType<T>();
+        }
+
+        /**
          * @brief Update the systems entities containers with the current
          * entities in the EntityManager
-         *
-         * @return World& A reference to *this.
          */
-        World &updateSystemsEntities(void);
+        void updateSystemsEntities(void);
 
         /**
          * @brief Update the systems with System::update for each system
-         *
-         * @return World& A reference to *this.
          */
-        World &updateSystem(void);
+        void updateSystem(void);
 
         /**
          * @brief Register a Component to the ComponentManager
          *
          * @tparam T The type of the component.
-         * @return World& A reference to *this.
          */
         template <typename T>
-        World &registerComponent(void)
+        void registerComponent(void)
         {
             _componentManager.registerComponent<T>();
-            return *this;
         }
 
         /**
@@ -213,12 +252,12 @@ namespace vazel
          * @return World& A reference to *this.
          */
         template <typename T>
-        World &attachComponentToEntity(Entity &e, T &data)
+        void attachComponent(Entity &e, T &data)
         {
             _componentManager.attachComponent<T>(e, data);
             _entityManager.getSignature(e).set(
-                _componentManager.getComponentType<T>(e), true);
-            return updateSystemsEntities();
+                _componentManager.getComponentType<T>(), true);
+            updateSystemsEntities();
         }
 
         /**
@@ -229,10 +268,10 @@ namespace vazel
          * @return World& A reference to *this.
          */
         template <typename T>
-        World &attachComponentToEntity(Entity &e)
+        void attachComponent(Entity &e)
         {
             T data = T();
-            return attachComponentToEntity<T>(e, data);
+            attachComponent<T>(e, data);
         }
 
         /**
@@ -243,12 +282,18 @@ namespace vazel
          * @return World& A reference to *this.
          */
         template <typename T>
-        World &removeComponentFromEntity(Entity &e)
+        void detachComponent(Entity &e)
         {
             _componentManager.detachComponent<T>(e);
             _entityManager.getSignature(e).set(
-                _componentManager.getComponentType<T>(e), false);
-            return updateSystemsEntities();
+                _componentManager.getComponentType<T>(), false);
+            updateSystemsEntities();
+        }
+
+        template<typename T>
+        T &getComponent(Entity &e)
+        {
+            return _componentManager.getComponent<T>(e);
         }
 
         /**
@@ -256,6 +301,7 @@ namespace vazel
          *
          */
         void clearWorld(void);
+
     };
 
 } // namespace vazel

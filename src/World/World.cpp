@@ -37,45 +37,48 @@ namespace vazel
         return e;
     }
 
-    World &World::removeEntity(Entity &e)
+    void World::removeEntity(Entity &e)
     {
         _entityManager.setSignature(e, ComponentSignature());
         updateSystemsEntities();
         _entityManager.destroyEntity(e);
         _componentManager.onEntityDestroy(e);
-        return *this;
     }
 
-    World &World::removeSystem(std::string &tag)
+    void World::removeSystem(const char *tag)
     {
         for (const auto &it : _systems) {
-            if (it.second == tag) {
-                _systems.remove_if(
-                    [&](const auto &it) { return it.second == tag; });
-                return *this;
+            if (it->getTag() == tag) {
+                _systems.remove(it);
+                return;
             }
         }
         std::string err =
             "World::removeSystem: Cannot find system with tag: \"";
-        err += tag + "\"";
+        err += tag;
+        err += "\"";
         throw WorldException(err);
     }
 
-    World &World::addSystem(System &sys, std::string &tag)
+    void World::removeSystem(std::string &tag)
+    {
+        removeSystem(tag.c_str());
+    }
+
+    void World::registerSystem(System &sys)
     {
         if (sys.getSignature() == 0) {
             throw WorldException("World::addSystem: System signature is 0");
         }
         for (const auto &it : _systems) {
-            if (it.second == tag) {
+            if (it->getTag() == sys.getTag()) {
                 std::string err = "World::addSystem: A system with tag: \"";
-                err += tag + "\" already exists";
+                err += sys.getTag() + "\" already exists";
                 throw WorldException(err);
             }
         }
         sys.updateValidEntities(_entityManager);
-        _systems.push_front(std::make_pair(sys, tag));
-        return *this;
+        _systems.push_front(std::make_unique<System>(sys));
     }
 
     const ComponentSignature &World::getEntitySignature(Entity &e)
@@ -88,20 +91,18 @@ namespace vazel
         return _componentManager.getComponentSignature();
     }
 
-    World &World::updateSystemsEntities(void)
+    void World::updateSystemsEntities(void)
     {
         for (auto &it : _systems) {
-            it.first.updateValidEntities(_entityManager);
+            it->updateValidEntities(_entityManager);
         }
-        return *this;
     }
 
-    World &World::updateSystem(void)
+    void World::updateSystem(void)
     {
         for (auto &it : _systems) {
-            it.first.update(_componentManager);
+            it->update(_componentManager);
         }
-        return *this;
     }
 
     void World::clearWorld(void)

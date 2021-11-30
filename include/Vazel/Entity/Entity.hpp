@@ -69,7 +69,7 @@ namespace vazel
 /**
  * @brief The Hash of the Entity UUID
  *
- * @tparam Vazel::Entity
+ * @tparam vazel::Entity
  */
 template <>
 struct std::hash<vazel::Entity>

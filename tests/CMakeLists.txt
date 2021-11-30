@@ -7,6 +7,7 @@ set(SRCS
     ./Entity/test_EntityManager.cpp
     ./Components/test_ComponentsManager.cpp
     ./System/test_System.cpp
+    ./World/test_World.cpp
 )
 
 
