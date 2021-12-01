@@ -44,7 +44,7 @@ namespace vazel
         return e;
     }
 
-    EntityManager &EntityManager::destroyEntity(Entity &e)
+    void EntityManager::destroyEntity(Entity &e)
     {
         if (_entity_map.find(e) == _entity_map.end()) {
             char buf[BUFSIZ] = { 0 };
@@ -54,15 +54,15 @@ namespace vazel
             throw EntityManagerExceptionFindEntityError(buf);
         }
         _entity_map.erase(e);
-        return *this;
+        return;
     }
 
-    EntityManager &EntityManager::setSignature(
-        const Entity &e, const ComponentSignature &signature)
+    void EntityManager::setSignature(const Entity &e,
+                                     const ComponentSignature &signature)
     {
         try {
             _entity_map[e] = signature;
-            return *this;
+            return;
         } catch (...) {
             char buf[BUFSIZ] = { 0 };
             snprintf(buf, sizeof(buf) - 1,

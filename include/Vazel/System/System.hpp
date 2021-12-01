@@ -113,7 +113,6 @@ namespace vazel
          */
         const std::string &getTag(void) const;
 
-
         /**
          * @brief Add a dependency to the system (Does not update the Entities)
          *
@@ -137,31 +136,24 @@ namespace vazel
          */
         template <typename T>
         void addDependency(EntityManager &emanager,
-                              const ComponentManager &cmanager)
+                           const ComponentManager &cmanager)
         {
             addDependency<T>(cmanager);
             updateValidEntities(emanager);
         }
 
         /**
-         * @brief Add a dependency from a ComponentType (does not update Entities)
+         * @brief Add a dependency from a ComponentType (does not update
+         * Entities)
          * @param component Component Type to add as a Dependency
          */
-        void addDependency(const ComponentType &type)
-        {
-            _signature.set(type, true);
-        }
+        void addDependency(const ComponentType &type);
 
         /**
          * @brief Add a dependency from a ComponentType
          * @param component Component Type to add as a Dependency
          */
-        void addDependency(EntityManager &emanager,
-                              const ComponentType &type)
-        {
-            addDependency(type);
-            updateValidEntities(emanager);
-        }
+        void addDependency(EntityManager &emanager, const ComponentType &type);
 
         /**
          * @brief Remove a dependency from the system (A component required so
@@ -175,14 +167,15 @@ namespace vazel
          */
         template <typename T>
         void removeDependency(EntityManager &emanager,
-                                 const ComponentManager &cmanager)
+                              const ComponentManager &cmanager)
         {
             _signature.set(cmanager.getComponentType<T>(), 0);
             updateValidEntities(emanager);
         }
 
         /**
-         * @brief Remove a dependency from the system (Does not update the entities)
+         * @brief Remove a dependency from the system (Does not update the
+         * entities)
          *
          * @tparam T Component type
          * @param cmanager ComponentManager to get the component type from

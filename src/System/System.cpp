@@ -76,4 +76,17 @@ namespace vazel
             _updater(cm, it);
         }
     }
+
+    void System::addDependency(const ComponentType &type)
+    {
+        _signature.set(type, true);
+    }
+
+    void System::addDependency(EntityManager &emanager,
+                               const ComponentType &type)
+    {
+        addDependency(type);
+        updateValidEntities(emanager);
+    }
+
 }; // namespace vazel

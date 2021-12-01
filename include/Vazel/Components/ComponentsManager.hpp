@@ -133,7 +133,7 @@ namespace vazel
          * @return ComponentType the current component type
          */
         template <typename T>
-        ComponentType registerComponent(void)
+        const ComponentType registerComponent(void)
         {
             const char *name                 = typeid(T).name();
             const ComponentType aviableIndex = _getAviableComponentIndex();
@@ -153,10 +153,9 @@ namespace vazel
          * @brief unregister removes a Component from the ComponentManager
          *
          * @tparam T The componentType to remove
-         * @return ComponentManager& The class itself
          */
         template <typename T>
-        ComponentManager &unregisterComponent(void)
+        void unregisterComponent(void)
         {
             const char *name       = typeid(T).name();
             ComponentType position = -1;
@@ -175,7 +174,6 @@ namespace vazel
             for (auto &it : _entity_to_components) {
                 it.second[position].remove();
             }
-            return *this;
         }
 
         /**
@@ -206,14 +204,13 @@ namespace vazel
          * @return ComponentManager& The class itself
          *
          */
-        ComponentManager &onEntityCreate(const Entity &e);
+        void onEntityCreate(const Entity &e);
 
         /**
          * @brief Should always be called to unregister an entity
-         * @return ComponentManager& The class itself
          *
          */
-        ComponentManager &onEntityDestroy(const Entity &e);
+        void onEntityDestroy(const Entity &e);
 
         /**
          * @brief addComponent adds a Component to the ComponentManager
@@ -222,11 +219,10 @@ namespace vazel
          * @tparam T The componentType to add
          * @param const Entity &e the Entity to attach the component
          * @param T &data the data to add
-         * @return ComponentManager& The class itself
          *
          */
         template <typename T>
-        ComponentManager &attachComponent(const Entity &e, T &data)
+        void attachComponent(const Entity &e, T &data)
         {
             const char *name = typeid(T).name();
 
@@ -256,7 +252,6 @@ namespace vazel
                 err += name;
                 throw ComponentManagerRegisterError(err);
             }
-            return *this;
         }
 
         /**
@@ -266,22 +261,20 @@ namespace vazel
          *
          * @tparam T The componentType to add
          * @param const Entity &e the Entity to attach the (default) component
-         * @return ComponentManager& The class itself
          */
         template <typename T>
-        ComponentManager &attachComponent(const Entity &e)
+        void attachComponent(const Entity &e)
         {
             T data = T();
-            return attachComponent<T>(e, data);
+            attachComponent<T>(e, data);
         }
 
         /**
          * @brief removeComponent removes a Component from the ComponentManager
          *      and detach it from the Entity
-         * @return ComponentManager& The class itself
          */
         template <typename T>
-        ComponentManager &detachComponent(const Entity &e)
+        void detachComponent(const Entity &e)
         {
             const ComponentType type = getComponentType<T>();
             const auto it            = _entity_to_components.find(e);
@@ -294,7 +287,6 @@ namespace vazel
                 throw ComponentManagerRegisterError(err.c_str());
             }
             it->second[type].remove();
-            return *this;
             // maybe throw an exception if the component is not attached
             // Depends if it should work like a free
             // .remove on Component should check already if component is null

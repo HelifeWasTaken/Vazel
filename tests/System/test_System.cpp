@@ -89,9 +89,9 @@ TEST(System, addEntities)
     vazel::Entity entity  = em.createEntity();
     vazel::Entity entity2 = em.createEntity();
 
-    cm.onEntityCreate(entity)
-        .attachComponent<placeholder_component_1>(entity)
-        .onEntityCreate(entity2);
+    cm.onEntityCreate(entity);
+    cm.attachComponent<placeholder_component_1>(entity);
+    cm.onEntityCreate(entity2);
     em.getSignature(entity).set(cm.getComponentType<placeholder_component_1>(),
                                 true);
 

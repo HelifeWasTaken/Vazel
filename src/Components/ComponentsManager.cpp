@@ -77,7 +77,7 @@ namespace vazel
     {
     }
 
-    ComponentManager &ComponentManager::onEntityCreate(const Entity &e)
+    void ComponentManager::onEntityCreate(const Entity &e)
     {
         if (_entity_to_components.find(e) != _entity_to_components.end()) {
             char buf[BUFSIZ] = { 0 };
@@ -89,10 +89,9 @@ namespace vazel
             throw ComponentManagerException(std::string(buf));
         }
         _entity_to_components.emplace(e, ComponentArray());
-        return *this;
     }
 
-    ComponentManager &ComponentManager::onEntityDestroy(const Entity &e)
+    void ComponentManager::onEntityDestroy(const Entity &e)
     {
         const auto &it = _entity_to_components.find(e);
 
@@ -106,7 +105,6 @@ namespace vazel
             throw ComponentManagerException(std::string(buf));
         }
         _entity_to_components.erase(it->first);
-        return *this;
     }
 
     void ComponentManager::clear(void)

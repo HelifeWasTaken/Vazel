@@ -125,8 +125,7 @@ namespace vazel
         {
             for (auto &it : _systems) {
                 if (it->getTag() == tag) {
-                    it->addDependency<T>(_entityManager,
-                                              _componentManager);
+                    it->addDependency<T>(_entityManager, _componentManager);
                     return;
                 }
             }
@@ -164,18 +163,18 @@ namespace vazel
                 for (auto &it : _systems) {
                     if (it->getTag() == tag) {
                         it->removeDependency<T>(_entityManager,
-                                                    _componentManager);
-                        _systems.remove_if([](const auto& it){
+                                                _componentManager);
+                        _systems.remove_if([](const auto &it) {
                             return it->getSignature() == 0;
                         });
                         return;
                     }
                 }
-            } catch (ComponentManagerException& e) {
+            } catch (ComponentManagerException &e) {
                 throw WorldException(e.what());
             }
             std::string err = "World::removeSystemDependency: Could not find a "
-                            "system with tag: \"";
+                              "system with tag: \"";
             err += tag;
             err += "\"";
             throw WorldException(err);
@@ -215,7 +214,7 @@ namespace vazel
          * @tparam T Type of the component that you want to get
          * @return const ComponentType& The ComponentType
          */
-        template<typename T>
+        template <typename T>
         const ComponentType &getComponentType(void) const
         {
             return _componentManager.getComponentType<T>();
@@ -238,9 +237,9 @@ namespace vazel
          * @tparam T The type of the component.
          */
         template <typename T>
-        void registerComponent(void)
+        const ComponentType registerComponent(void)
         {
-            _componentManager.registerComponent<T>();
+            return _componentManager.registerComponent<T>();
         }
 
         /**
@@ -290,7 +289,7 @@ namespace vazel
             updateSystemsEntities();
         }
 
-        template<typename T>
+        template <typename T>
         T &getComponent(Entity &e)
         {
             return _componentManager.getComponent<T>(e);
@@ -301,7 +300,6 @@ namespace vazel
          *
          */
         void clearWorld(void);
-
     };
 
 } // namespace vazel

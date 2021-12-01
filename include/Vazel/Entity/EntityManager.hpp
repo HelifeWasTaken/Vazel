@@ -106,23 +106,20 @@ namespace vazel
          * @brief Destroy an entity.
          *
          * @param e The entity to destroy.
-         * @return EntityManager& A reference to the class itself.
          * @throws EntityManagerExceptionFindEntityError if the entity is not
          * found.
          * @throws EntityManagerException if the entity is already destroyed.
          */
 
-        EntityManager &destroyEntity(Entity &e);
+        void destroyEntity(Entity &e);
 
         /**
          * @brief Set the Signature object
          *
          * @param e The entity.
          * @param signature The signature.
-         * @return EntityManager& A reference to the class itself.
          */
-        EntityManager &setSignature(const Entity &e,
-                                    const ComponentSignature &signature);
+        void setSignature(const Entity &e, const ComponentSignature &signature);
 
         /**
          * @brief Get the Signature object
