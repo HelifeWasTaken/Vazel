@@ -52,8 +52,6 @@ namespace vazel
         const char *what() const throw() override;
     };
 
-    // TODO: Change std::list<std::pair<System, std::string>> to
-    // std::unordered_set<System> And get system tag info with System::getTag()
     /**
      * @brief The World class
      *
@@ -61,9 +59,18 @@ namespace vazel
     class World
     {
       private:
-        std::list<std::unique_ptr<System>> _systems;
+        std::vector<std::unique_ptr<System>> _systems;
         ComponentManager _componentManager;
         EntityManager _entityManager;
+
+        std::vector<std::unique_ptr<System>>::iterator
+            __getSystemIteratorFromTag(const char *tag)
+        {
+            return std::find_if(_systems.begin(), _systems.end(),
+                                [&](std::unique_ptr<System> &s) {
+                                    return s->getTag() == tag;
+                                });
+        }
 
       public:
         /**
@@ -123,14 +130,10 @@ namespace vazel
         template <typename T>
         void addSystemDependency(const char *tag)
         {
+            const auto it = __getSystemIteratorFromTag(tag);
+
             try {
-                for (auto &it : _systems) {
-                    if (it->getTag() == tag) {
-                        it->addDependency<T>(_entityManager,
-                                             _componentManager);
-                        return;
-                    }
-                }
+                (*it)->addDependency<T>(_entityManager, _componentManager);
             } catch (ComponentManagerException &e) {
                 throw WorldException(e.what());
             }
@@ -164,19 +167,18 @@ namespace vazel
         template <typename T>
         void removeSystemDependency(const char *tag)
         {
-            try {
-                for (auto &it : _systems) {
-                    if (it->getTag() == tag) {
-                        it->removeDependency<T>(_entityManager,
-                                                _componentManager);
-                        _systems.remove_if([](const auto &it) {
-                            return it->getSignature() == 0;
-                        });
-                        return;
-                    }
+            const auto it = __getSystemIteratorFromTag(tag);
+
+            if (it != _systems.end()) {
+                try {
+                    (*it)->removeDependency<T>(_entityManager,
+                                               _componentManager);
+                } catch (ComponentManagerException &e) {
+                    throw WorldException(e.what());
                 }
-            } catch (ComponentManagerException &e) {
-                throw WorldException(e.what());
+                if ((*it)->getSignature() == 0)
+                    _systems.erase(it);
+                return;
             }
             std::string err =
                 "World::removeSystemDependency: Could not find a "

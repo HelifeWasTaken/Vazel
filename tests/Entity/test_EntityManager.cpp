@@ -81,7 +81,8 @@ TEST(EntityManager, testSetSignatureByValue)
     GTEST_ASSERT_EQ(signature, manager.getSignature(entity));
 }
 
-TEST(EntityManager, createEntity_check_if_multiple_entities_are_created_crashes)
+TEST(EntityManager,
+     createEntity_check_if_multiple_entities_are_created_crashes)
 {
     std::vector<vazel::Entity> entities;
     vazel::EntityManager manager;

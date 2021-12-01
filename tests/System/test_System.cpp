@@ -99,8 +99,8 @@ TEST(System, addEntities)
     system.update(cm);
 
     cm.attachComponent<placeholder_component_1>(entity2);
-    em.getSignature(entity2).set(cm.getComponentType<placeholder_component_1>(),
-                                 true);
+    em.getSignature(entity2).set(
+        cm.getComponentType<placeholder_component_1>(), true);
     system.updateValidEntities(em);
     system.update(cm);
 

@@ -47,11 +47,11 @@ namespace vazel
 
     void World::removeSystem(const char *tag)
     {
-        for (const auto &it : _systems) {
-            if (it->getTag() == tag) {
-                _systems.remove(it);
-                return;
-            }
+        const auto it = __getSystemIteratorFromTag(tag);
+
+        if (it != _systems.end()) {
+            _systems.erase(it);
+            return;
         }
         std::string err =
             "World::removeSystem: Cannot find system with tag: \"";
@@ -70,15 +70,17 @@ namespace vazel
         if (sys.getSignature() == 0) {
             throw WorldException("World::addSystem: System signature is 0");
         }
-        for (const auto &it : _systems) {
-            if (it->getTag() == sys.getTag()) {
-                std::string err = "World::addSystem: A system with tag: \"";
-                err += sys.getTag() + "\" already exists";
-                throw WorldException(err);
-            }
+
+        const auto it = __getSystemIteratorFromTag(sys.getTag().c_str());
+
+        if (it != _systems.end()) {
+
+            std::string err = "World::addSystem: A system with tag: \"";
+            err += sys.getTag() + "\" already exists";
+            throw WorldException(err);
         }
         sys.updateValidEntities(_entityManager);
-        _systems.push_front(std::make_unique<System>(sys));
+        _systems.push_back(std::make_unique<System>(sys));
     }
 
     const ComponentSignature &World::getEntitySignature(Entity &e)

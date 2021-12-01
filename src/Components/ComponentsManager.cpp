@@ -43,7 +43,8 @@ namespace vazel
         return _aviable_signatures;
     }
 
-    std::ostream &operator<<(std::ostream &os, const ComponentManager &cManager)
+    std::ostream &operator<<(std::ostream &os,
+                             const ComponentManager &cManager)
     {
         const auto &map = cManager.getComponentMap();
 

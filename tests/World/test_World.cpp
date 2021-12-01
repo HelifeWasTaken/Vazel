@@ -241,7 +241,8 @@ TEST(World, removeASystemDependency)
     world.registerComponent<placeholder_component_1>();
     system.addDependency(world.getComponentType<placeholder_component_1>());
     world.registerSystem(system);
-    world.removeSystemDependency<placeholder_component_1>("placeholder_system");
+    world.removeSystemDependency<placeholder_component_1>(
+        "placeholder_system");
 }
 
 TEST(World, removeASystemDependencyNonAttached)
