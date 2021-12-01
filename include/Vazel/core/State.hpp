@@ -1,6 +1,6 @@
 #pragma once
 
-#include "./App.hpp"
+#include "Vazel/core/App.hpp"
 
 #include <cstdint>
 #include <functional>

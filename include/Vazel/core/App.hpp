@@ -1,10 +1,12 @@
 #pragma once
 
-#include "./State.hpp"
+#include "Vazel/core/State.hpp"
 #include "Vazel/ecs.hpp"
 
 namespace vazel
 {
+    using World = ecs::World;
+
     namespace core
     {
 

@@ -9,7 +9,7 @@ include_directories(
 set(CMAKE_BUILD_TYPE Debug)
 
 set(SRCS
-    ./ecs/UUID.cpp
+    ./UUID.cpp
     ./ecs/Entity/Entity.cpp
     ./ecs/Entity/EntityManager.cpp
     ./ecs/Components/Component.cpp

@@ -1,4 +1,4 @@
-#include "./App.hpp"
+#include "Vazel/core/App.hpp"
 
 namespace vazel
 {
