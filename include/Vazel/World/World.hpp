@@ -123,11 +123,15 @@ namespace vazel
         template <typename T>
         void addSystemDependency(const char *tag)
         {
-            for (auto &it : _systems) {
-                if (it->getTag() == tag) {
-                    it->addDependency<T>(_entityManager, _componentManager);
-                    return;
+            try {
+                for (auto &it : _systems) {
+                    if (it->getTag() == tag) {
+                        it->addDependency<T>(_entityManager, _componentManager);
+                        return;
+                    }
                 }
+            } catch (ComponentManagerException &e) {
+                throw WorldException(e.what());
             }
             std::string err = "World::addSystemDependency: Could not find a "
                               "system with tag: \"";
