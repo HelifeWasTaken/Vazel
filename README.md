@@ -11,80 +11,60 @@ A better attempt to do an real and portable and not heritage based Entity Compon
     - gtest (Tests)
 
 ```cpp
-// I could technically have just used directly std::string
-struct stringComponent
-{
-    std::string s;
+struct Vector2 {
+    int x, y;
 };
 
-struct positionComponent
-{
-    float x;
-    float y;
+struct Vector3 {
+    int x, y, z;
 };
 
-std::ostream& operator<<(std::ostream& os, const positionComponent& pos)
+std::ostream &operator<<(std::ostream &os, Vector2 &v2)
 {
-    os << "x: [" << pos.x << "] y: [" << pos.y << "]";
-    return os;
+    return os << "Vector2(x: " << v2.x << ", y: " << v2.y << ")";
 }
 
-// There is no vazel::system yet so it is still rough to use for now
-
-void modifyStuff(const vazel::Entity& e, vazel::ComponentManager& cm)
+std::ostream &operator<<(std::ostream &os, Vector3 &v3)
 {
-    // Register the differents components that the entities can use
-    cm.registerComponent<positionComponent>();
-    cm.registerComponent<stringComponent>();
-
-    // Register the current entity
-    // (it should not be done by hand but there is no vazel::system implentation
-    // that does that automatically that yet)
-    cm.onEntityCreate(e);
-
-    // Attach the differents components to the current Entity
-    cm.attachComponent<stringComponent>(e);
-    cm.attachComponent<positionComponent>(e);
-    // It is also possible to give a base value like so:
-    // cm.attachComponent<positionComponent>(e,
-    //    PositionComponent {
-    //      .x = 30,
-    //      .y = 20
-    //    }
-    // );
-
-    // Get the differents components
-    // It is a ref to a std::any value
-    auto& componentStr = cm.getComponent<stringComponent>(e);
-    auto& comPos       = cm.getComponent<positionComponent>(e)
-
-                   // Modify the values by reference
-                   componentStr.s = "lol";
-    comPos.ofx                    = 4;
-    comPos.ofy                    = 3;
+    return os << "Vector3(x: " << v3.x << ", y: " << v3.y << ", z: " << v3.z);
 }
 
 int main(void)
 {
-    vazel::ComponentManager cm;
-    vazel::Entity e;
+    vazel::World world;
+    vazel::System system("ExampleSystem");
+    vazel::Entity e = world.createEntity();
 
-    // See the current Entity Id (UUID)
-    std::cout << "EntityId: " << e.getId() << std::endl;
+    vazel::ComponentType vec2Type = world.registerComponent<Vector2>();
+    vazel::ComponentTYpe vec3Type = world.registerComponent<Vector3>();
 
-    // This may works some times implictly without needing to specify the cast
-    // It will transform itself in vazel::UUID a.k.a uint64_t
-    std::cout << "Getting EntityId works also with a cast: " << (vazel::UUID)e
-              << std::endl;
+    world.attachComponent<Vector2>(e);
+    world.attachComponent<Vector3>(e);
 
-    // Initialize stuff and change values by ref (see upper)
-    modifyStuff(e, cm);
+    system.addDependency(vec2Type);
+    system.addDependency(vec3Type);
 
-    // See te result of modifyStuff and get to see if the modification by ref
-    // works well
-    std::cout << "StrComponent: " << cm.getComponent<stringComponent>(e).s
-              << "PosComponent: " << cm.getComponent<positionComponent>(e)
-              << std::endl;
+    system.setOnUpdate(
+        VAZEL_SYSTEM_UPDATE_LAMBDA() {
+            // See te result of modifyStuff and get to see if the modification by ref
+            // works well
+            auto &v2 = cm.getComponent<Vector2>(e);
+            auto &v3 = cm.getComponent<Vector3>(e);
+
+            std::cout << "v2: " << v2 << " " <<
+                  << "v3: " << v3 << " " <<
+                  << std::endl;
+            v2.x += 1;
+            v2.y += 1;
+            v3.x += 1;
+            v3.y += 1;
+            v3.z += 1;
+        }
+    );
+
+    world.registerSystem(system);
+    while (true)
+        world.updateSystem();
 }
 ```
 
