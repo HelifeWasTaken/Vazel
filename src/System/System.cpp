@@ -34,12 +34,14 @@ namespace vazel
     }
 
     System::System(const std::string &tag)
-        : _tag(tag), _updater(unimplementedOnUpdateSystem)
+        : _tag(tag)
+        , _updater(unimplementedOnUpdateSystem)
     {
     }
 
     System::System(const char *tag)
-        : _tag(tag), _updater(unimplementedOnUpdateSystem)
+        : _tag(tag)
+        , _updater(unimplementedOnUpdateSystem)
     {
     }
 

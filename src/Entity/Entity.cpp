@@ -22,11 +22,13 @@
 namespace vazel
 {
 
-    Entity::Entity(void) : _uuid(makeUUID())
+    Entity::Entity(void)
+        : _uuid(makeUUID())
     {
     }
 
-    Entity::Entity(const Entity &uuid) : _uuid(uuid)
+    Entity::Entity(const Entity &uuid)
+        : _uuid(uuid)
     {
     }
 
