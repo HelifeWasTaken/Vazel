@@ -58,7 +58,7 @@ int main(void)
     // Ask the system to add one to each values of the vectors and print it
     system.setOnUpdate(
         VAZEL_SYSTEM_UPDATE_LAMBDA() {
-            // See te result of modifyStuff and get to see if the modification by ref
+            // Get to see at each frame if the modification by ref
             // works well
             auto &v2 = cm.getComponent<Vector2>(e);
             auto &v3 = cm.getComponent<Vector3>(e);
