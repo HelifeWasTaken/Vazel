@@ -16,39 +16,39 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "../tests_components.hpp"
-#include "Vazel/World/World.hpp"
+#include "Vazel/ecs/World/World.hpp"
 
 #include <gtest/gtest.h>
 
 TEST(World, CreateWorld)
 {
-    vazel::World world;
+    vazel::ecs::World world;
 }
 
 TEST(World, CreateEntity)
 {
-    vazel::World world;
-    vazel::Entity entity = world.createEntity();
+    vazel::ecs::World world;
+    vazel::ecs::Entity entity = world.createEntity();
 }
 
 TEST(World, RemoveEntity)
 {
-    vazel::World world;
-    vazel::Entity entity = world.createEntity();
+    vazel::ecs::World world;
+    vazel::ecs::Entity entity = world.createEntity();
     world.removeEntity(entity);
 }
 
 TEST(World, registerComponent)
 {
-    vazel::World world;
-    vazel::Entity entity = world.createEntity();
+    vazel::ecs::World world;
+    vazel::ecs::Entity entity = world.createEntity();
     world.registerComponent<placeholder_component_1>();
 }
 
 TEST(World, CreateEntityWithComponent)
 {
-    vazel::World world;
-    vazel::Entity entity = world.createEntity();
+    vazel::ecs::World world;
+    vazel::ecs::Entity entity = world.createEntity();
 
     world.registerComponent<placeholder_component_1>();
     world.registerComponent<placeholder_component_2>();
@@ -57,8 +57,8 @@ TEST(World, CreateEntityWithComponent)
 
 TEST(World, CreateEntityWithComponents)
 {
-    vazel::World world;
-    vazel::Entity entity = world.createEntity();
+    vazel::ecs::World world;
+    vazel::ecs::Entity entity = world.createEntity();
 
     world.registerComponent<placeholder_component_1>();
     world.registerComponent<placeholder_component_2>();
@@ -68,8 +68,8 @@ TEST(World, CreateEntityWithComponents)
 
 TEST(World, CreateEntityWithComponentsAndRemoveOne)
 {
-    vazel::World world;
-    vazel::Entity entity = world.createEntity();
+    vazel::ecs::World world;
+    vazel::ecs::Entity entity = world.createEntity();
 
     world.registerComponent<placeholder_component_1>();
     world.registerComponent<placeholder_component_2>();
@@ -81,29 +81,29 @@ TEST(World, CreateEntityWithComponentsAndRemoveOne)
 
 TEST(World, createTwoEntities)
 {
-    vazel::World world;
-    vazel::Entity entity  = world.createEntity();
-    vazel::Entity entity2 = world.createEntity();
+    vazel::ecs::World world;
+    vazel::ecs::Entity entity  = world.createEntity();
+    vazel::ecs::Entity entity2 = world.createEntity();
 
     EXPECT_NE(entity.getId(), entity2.getId());
 }
 
 TEST(World, createTwoEntitiesWithCompos)
 {
-    vazel::World world;
-    vazel::Entity entity = world.createEntity();
+    vazel::ecs::World world;
+    vazel::ecs::Entity entity = world.createEntity();
 
     world.registerComponent<placeholder_component_1>();
     world.registerComponent<placeholder_component_2>();
     world.attachComponent<placeholder_component_1>(entity);
-    vazel::Entity entity2 = world.createEntity();
+    vazel::ecs::Entity entity2 = world.createEntity();
     EXPECT_NE(entity.getId(), entity2.getId());
 }
 
 TEST(World, GeneralEntitiesWithComps)
 {
-    vazel::World world;
-    vazel::Entity entity = world.createEntity();
+    vazel::ecs::World world;
+    vazel::ecs::Entity entity = world.createEntity();
 
     world.registerComponent<placeholder_component_1>();
     world.registerComponent<placeholder_component_2>();
@@ -113,8 +113,8 @@ TEST(World, GeneralEntitiesWithComps)
 
 TEST(World, createEntityWithComponentsAndRemoveOne)
 {
-    vazel::World world;
-    vazel::Entity entity = world.createEntity();
+    vazel::ecs::World world;
+    vazel::ecs::Entity entity = world.createEntity();
 
     world.registerComponent<placeholder_component_1>();
     world.registerComponent<placeholder_component_2>();
@@ -125,8 +125,8 @@ TEST(World, createEntityWithComponentsAndRemoveOne)
 
 TEST(World, createEntityWithComponentsAndRemoveAll)
 {
-    vazel::World world;
-    vazel::Entity entity = world.createEntity();
+    vazel::ecs::World world;
+    vazel::ecs::Entity entity = world.createEntity();
 
     world.registerComponent<placeholder_component_1>();
     world.registerComponent<placeholder_component_2>();
@@ -138,8 +138,8 @@ TEST(World, createEntityWithComponentsAndRemoveAll)
 
 TEST(World, getComponentFromEntity)
 {
-    vazel::World world;
-    vazel::Entity entity = world.createEntity();
+    vazel::ecs::World world;
+    vazel::ecs::Entity entity = world.createEntity();
 
     world.registerComponent<placeholder_position_component>();
     world.attachComponent<placeholder_position_component>(entity);
@@ -157,8 +157,8 @@ TEST(World, getComponentFromEntity)
 
 TEST(World, registerSystem)
 {
-    vazel::World world;
-    vazel::System system("placeholder_system");
+    vazel::ecs::World world;
+    vazel::ecs::System system("placeholder_system");
 
     world.registerComponent<placeholder_component_1>();
     system.addDependency(world.getComponentType<placeholder_component_1>());
@@ -167,12 +167,12 @@ TEST(World, registerSystem)
 
 TEST(World, registerSystemWithoutDependency)
 {
-    vazel::World world;
-    vazel::System system("placeholder_system");
+    vazel::ecs::World world;
+    vazel::ecs::System system("placeholder_system");
 
     try {
         world.registerSystem(system);
-    } catch (vazel::WorldException& e) {
+    } catch (vazel::ecs::WorldException& e) {
         return;
     } catch (...) {
         std::cerr << "Unexpected exception" << std::endl;
@@ -184,9 +184,9 @@ TEST(World, registerSystemWithoutDependency)
 
 TEST(World, registerMultipleSystems)
 {
-    vazel::World world;
-    vazel::System system1("placeholder_system");
-    vazel::System system2("placeholder_system_2");
+    vazel::ecs::World world;
+    vazel::ecs::System system1("placeholder_system");
+    vazel::ecs::System system2("placeholder_system_2");
 
     world.registerComponent<placeholder_component_1>();
     world.registerComponent<placeholder_component_2>();
@@ -198,8 +198,8 @@ TEST(World, registerMultipleSystems)
 
 TEST(World, registerSystemWithSameName)
 {
-    vazel::World world;
-    vazel::System system("placeholder_system");
+    vazel::ecs::World world;
+    vazel::ecs::System system("placeholder_system");
 
     world.registerComponent<placeholder_component_1>();
     world.registerComponent<placeholder_component_2>();
@@ -208,11 +208,11 @@ TEST(World, registerSystemWithSameName)
     world.registerSystem(system);
 
     try {
-        vazel::System system2("placeholder_system");
+        vazel::ecs::System system2("placeholder_system");
         system2.addDependency(
             world.getComponentType<placeholder_component_2>());
         world.registerSystem(system2);
-    } catch (vazel::WorldException& e) {
+    } catch (vazel::ecs::WorldException& e) {
         return;
     } catch (...) {
         std::cerr << "Unexpected exception" << std::endl;
@@ -224,8 +224,8 @@ TEST(World, registerSystemWithSameName)
 
 TEST(World, removeASystem)
 {
-    vazel::World world;
-    vazel::System system("placeholder_system");
+    vazel::ecs::World world;
+    vazel::ecs::System system("placeholder_system");
 
     world.registerComponent<placeholder_component_1>();
     system.addDependency(world.getComponentType<placeholder_component_1>());
@@ -235,8 +235,8 @@ TEST(World, removeASystem)
 
 TEST(World, removeASystemDependency)
 {
-    vazel::World world;
-    vazel::System system("placeholder_system");
+    vazel::ecs::World world;
+    vazel::ecs::System system("placeholder_system");
 
     world.registerComponent<placeholder_component_1>();
     system.addDependency(world.getComponentType<placeholder_component_1>());
@@ -247,8 +247,8 @@ TEST(World, removeASystemDependency)
 
 TEST(World, removeASystemDependencyNonAttached)
 {
-    vazel::World world;
-    vazel::System system("placeholder_system");
+    vazel::ecs::World world;
+    vazel::ecs::System system("placeholder_system");
 
     world.registerComponent<placeholder_component_1>();
     system.addDependency(world.getComponentType<placeholder_component_1>());
@@ -256,7 +256,7 @@ TEST(World, removeASystemDependencyNonAttached)
     try {
         world.removeSystemDependency<placeholder_component_2>(
             "placeholder_system");
-    } catch (vazel::WorldException& e) {
+    } catch (vazel::ecs::WorldException& e) {
         return;
     } catch (...) {
         std::cerr << "Unexpected exception" << std::endl;

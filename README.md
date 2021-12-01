@@ -38,13 +38,13 @@ std::ostream &operator<<(std::ostream &os, Vector3 &v3)
 
 int main(void)
 {
-    vazel::World world;
-    vazel::System system("ExampleSystem");  // Always require a Tag
-    vazel::Entity e = world.createEntity(); // Creates an Entity in the World
+    vazel::ecs::World world;
+    vazel::ecs::System system("ExampleSystem");  // Always require a Tag
+    vazel::ecs::Entity e = world.createEntity(); // Creates an Entity in the World
 
     // Register each type of the Component to the world
-    vazel::ComponentType vec2Type = world.registerComponent<Vector2>();
-    vazel::ComponentTYpe vec3Type = world.registerComponent<Vector3>();
+    vazel::ecs::ComponentType vec2Type = world.registerComponent<Vector2>();
+    vazel::ecs::ComponentTYpe vec3Type = world.registerComponent<Vector3>();
 
     // Attach the components to the Entity (might need a ComponentType version
     // too)

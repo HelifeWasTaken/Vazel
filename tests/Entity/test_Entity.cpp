@@ -15,25 +15,26 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include "Vazel/Entity/Entity.hpp"
-#include "Vazel/Entity/EntityManager.hpp"
+#include "Vazel/ecs/Entity/Entity.hpp"
+#include "Vazel/ecs/Entity/EntityManager.hpp"
 
 #include <gtest/gtest.h>
 #include <unordered_set>
 
 TEST(EntitiesGeneration, GenerateOneEntity)
 {
-    std::cout << "EntityRandomId: " << vazel::Entity().getId() << std::endl;
+    std::cout << "EntityRandomId: " << vazel::ecs::Entity().getId()
+              << std::endl;
 }
 
 TEST(EntitiesGeneration, MakeSureThereIsNoCollisions)
 {
-    vazel::EntityMap entities;
-    vazel::Entity e;
+    vazel::ecs::EntityMap entities;
+    vazel::ecs::Entity e;
 
     for (size_t i = 0; i != 100000; i++) {
-        e = vazel::Entity();
+        e = vazel::ecs::Entity();
         GTEST_ASSERT_EQ(entities.find(e), entities.end());
-        entities.insert(std::make_pair(e, vazel::ComponentSignature()));
+        entities.insert(std::make_pair(e, vazel::ecs::ComponentSignature()));
     }
 }

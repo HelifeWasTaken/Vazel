@@ -16,33 +16,33 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "../tests_components.hpp"
-#include "Vazel/System/System.hpp"
+#include "Vazel/ecs/System/System.hpp"
 
 #include <gtest/gtest.h>
 
 TEST(System, CreateSystem)
 {
     char const *tag = "test_system";
-    vazel::System system("TagName");
+    vazel::ecs::System system("TagName");
 }
 
 TEST(System, getTag)
 {
-    vazel::System system("TagName");
+    vazel::ecs::System system("TagName");
     ASSERT_EQ(system.getTag(), "TagName");
 }
 
 TEST(System, getSignature)
 {
-    vazel::System system("TagName");
-    ASSERT_EQ(system.getSignature(), vazel::ComponentSignature());
+    vazel::ecs::System system("TagName");
+    ASSERT_EQ(system.getSignature(), vazel::ecs::ComponentSignature());
 }
 
 TEST(System, addDependencies)
 {
-    vazel::ComponentManager cm;
-    vazel::EntityManager em;
-    vazel::System system("TagName");
+    vazel::ecs::ComponentManager cm;
+    vazel::ecs::EntityManager em;
+    vazel::ecs::System system("TagName");
 
     cm.registerComponent<placeholder_component_1>();
     cm.registerComponent<placeholder_component_2>();
@@ -55,9 +55,9 @@ TEST(System, addDependencies)
 
 TEST(System, removeDependencies)
 {
-    vazel::ComponentManager cm;
-    vazel::EntityManager em;
-    vazel::System system("TagName");
+    vazel::ecs::ComponentManager cm;
+    vazel::ecs::EntityManager em;
+    vazel::ecs::System system("TagName");
 
     cm.registerComponent<placeholder_component_1>();
     cm.registerComponent<placeholder_component_2>();
@@ -67,7 +67,7 @@ TEST(System, removeDependencies)
 
     system.removeDependency<placeholder_component_1>(em, cm);
 
-    vazel::ComponentSignature signature;
+    vazel::ecs::ComponentSignature signature;
     signature.set(cm.getComponentType<placeholder_component_2>(), true);
     ASSERT_EQ(system.getSignature(), signature);
 }
@@ -76,9 +76,9 @@ TEST(System, addEntities)
 {
     testing::internal::CaptureStdout();
 
-    vazel::ComponentManager cm;
-    vazel::EntityManager em;
-    vazel::System system("TagName");
+    vazel::ecs::ComponentManager cm;
+    vazel::ecs::EntityManager em;
+    vazel::ecs::System system("TagName");
 
     cm.registerComponent<placeholder_component_1>();
     cm.registerComponent<placeholder_component_2>();
@@ -86,8 +86,8 @@ TEST(System, addEntities)
     system.setOnUpdate(
         VAZEL_SYSTEM_UPDATE_LAMBDA() { std::cout << "Here is an entity!"; });
 
-    vazel::Entity entity  = em.createEntity();
-    vazel::Entity entity2 = em.createEntity();
+    vazel::ecs::Entity entity  = em.createEntity();
+    vazel::ecs::Entity entity2 = em.createEntity();
 
     cm.onEntityCreate(entity);
     cm.attachComponent<placeholder_component_1>(entity);

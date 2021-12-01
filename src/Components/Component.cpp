@@ -15,35 +15,39 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include "Vazel/Components/Component.hpp"
+#include "Vazel/ecs/Components/Component.hpp"
 
 namespace vazel
 {
-
-    void Component::remove(void)
+    namespace ecs
     {
-        _data.reset();
-    }
 
-    Component::~Component(void)
-    {
-        remove();
-    }
+        void Component::remove(void)
+        {
+            _data.reset();
+        }
 
-    ComponentExistsException::ComponentExistsException(const std::string &e)
-        : _e(e)
-    {
-    }
+        Component::~Component(void)
+        {
+            remove();
+        }
 
-    const char *ComponentExistsException::what(void) const throw()
-    {
-        return _e.c_str();
-    }
+        ComponentExistsException::ComponentExistsException(
+            const std::string &e)
+            : _e(e)
+        {
+        }
 
-    bool isValidSignature(const ComponentSignature &signature,
-                          const ComponentSignature &to_match)
-    {
-        return (signature & to_match) == to_match;
-    }
+        const char *ComponentExistsException::what(void) const throw()
+        {
+            return _e.c_str();
+        }
 
+        bool isValidSignature(const ComponentSignature &signature,
+                              const ComponentSignature &to_match)
+        {
+            return (signature & to_match) == to_match;
+        }
+
+    } // namespace ecs
 } // namespace vazel

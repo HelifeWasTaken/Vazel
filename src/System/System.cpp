@@ -15,80 +15,84 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include "Vazel/System/System.hpp"
+#include "Vazel/ecs/System/System.hpp"
 
 namespace vazel
 {
-    void unimplementedOnUpdateSystem(ComponentManager &cm, const Entity &e)
+    namespace ecs
     {
-        (void)e;
-        (void)cm;
-    }
 
-    void System::__addEntity(const Entity &entity,
-                             const ComponentSignature &signature)
-    {
-        if (isValidSignature(signature, _signature)) {
-            _entities.emplace(entity);
+        void unimplementedOnUpdateSystem(ComponentManager &cm, const Entity &e)
+        {
+            (void)e;
+            (void)cm;
         }
-    }
 
-    System::System(const std::string &tag)
-        : _tag(tag)
-        , _updater(unimplementedOnUpdateSystem)
-    {
-    }
-
-    System::System(const char *tag)
-        : _tag(tag)
-        , _updater(unimplementedOnUpdateSystem)
-    {
-    }
-
-    void System::updateValidEntities(EntityManager &emanager)
-    {
-        for (const auto &t : emanager.getMap()) {
-            auto it = _entities.find(t.first);
-            if (it == _entities.end()) {
-                __addEntity(t.first, t.second);
-            } else if (isValidSignature(t.second, _signature) == false) {
-                _entities.erase(it);
+        void System::__addEntity(const Entity &entity,
+                                 const ComponentSignature &signature)
+        {
+            if (isValidSignature(signature, _signature)) {
+                _entities.emplace(entity);
             }
         }
-    }
 
-    void System::setOnUpdate(systemUpdate updater)
-    {
-        _updater = updater;
-    }
-
-    const ComponentSignature &System::getSignature(void) const
-    {
-        return _signature;
-    }
-
-    const std::string &System::getTag(void) const
-    {
-        return _tag;
-    }
-
-    void System::update(ComponentManager &cm)
-    {
-        for (auto it : _entities) {
-            _updater(cm, it);
+        System::System(const std::string &tag)
+            : _tag(tag)
+            , _updater(unimplementedOnUpdateSystem)
+        {
         }
-    }
 
-    void System::addDependency(const ComponentType &type)
-    {
-        _signature.set(type, true);
-    }
+        System::System(const char *tag)
+            : _tag(tag)
+            , _updater(unimplementedOnUpdateSystem)
+        {
+        }
 
-    void System::addDependency(EntityManager &emanager,
-                               const ComponentType &type)
-    {
-        addDependency(type);
-        updateValidEntities(emanager);
-    }
+        void System::updateValidEntities(EntityManager &emanager)
+        {
+            for (const auto &t : emanager.getMap()) {
+                auto it = _entities.find(t.first);
+                if (it == _entities.end()) {
+                    __addEntity(t.first, t.second);
+                } else if (isValidSignature(t.second, _signature) == false) {
+                    _entities.erase(it);
+                }
+            }
+        }
 
-}; // namespace vazel
+        void System::setOnUpdate(systemUpdate updater)
+        {
+            _updater = updater;
+        }
+
+        const ComponentSignature &System::getSignature(void) const
+        {
+            return _signature;
+        }
+
+        const std::string &System::getTag(void) const
+        {
+            return _tag;
+        }
+
+        void System::update(ComponentManager &cm)
+        {
+            for (auto it : _entities) {
+                _updater(cm, it);
+            }
+        }
+
+        void System::addDependency(const ComponentType &type)
+        {
+            _signature.set(type, true);
+        }
+
+        void System::addDependency(EntityManager &emanager,
+                                   const ComponentType &type)
+        {
+            addDependency(type);
+            updateValidEntities(emanager);
+        }
+
+    } // namespace ecs
+} // namespace vazel

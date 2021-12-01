@@ -15,84 +15,88 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include "Vazel/Entity/EntityManager.hpp"
+#include "Vazel/ecs/Entity/EntityManager.hpp"
 
 namespace vazel
 {
-
-    EntityManagerException::EntityManagerException(const std::string &e)
+    namespace ecs
     {
-        _e += e;
-    }
 
-    const char *EntityManagerException::what(void) const throw()
-    {
-        return _e.c_str();
-    }
-
-    EntityManagerExceptionFindEntityError::
-        EntityManagerExceptionFindEntityError(const std::string &e)
-        : EntityManagerException::EntityManagerException(e)
-    {
-    }
-
-    Entity EntityManager::createEntity(void)
-    {
-        Entity e = Entity();
-
-        _entity_map[e] = ComponentSignature();
-        return e;
-    }
-
-    void EntityManager::destroyEntity(Entity &e)
-    {
-        if (_entity_map.find(e) == _entity_map.end()) {
-            char buf[BUFSIZ] = { 0 };
-            snprintf(buf, sizeof(buf) - 1,
-                     "EntityManager::destroyEntity: Entity %lu does not exist",
-                     e.getId());
-            throw EntityManagerExceptionFindEntityError(buf);
+        EntityManagerException::EntityManagerException(const std::string &e)
+        {
+            _e += e;
         }
-        _entity_map.erase(e);
-        return;
-    }
 
-    void EntityManager::setSignature(const Entity &e,
-                                     const ComponentSignature &signature)
-    {
-        try {
-            _entity_map[e] = signature;
+        const char *EntityManagerException::what(void) const throw()
+        {
+            return _e.c_str();
+        }
+
+        EntityManagerExceptionFindEntityError::
+            EntityManagerExceptionFindEntityError(const std::string &e)
+            : EntityManagerException::EntityManagerException(e)
+        {
+        }
+
+        Entity EntityManager::createEntity(void)
+        {
+            Entity e = Entity();
+
+            _entity_map[e] = ComponentSignature();
+            return e;
+        }
+
+        void EntityManager::destroyEntity(Entity &e)
+        {
+            if (_entity_map.find(e) == _entity_map.end()) {
+                char buf[BUFSIZ] = { 0 };
+                snprintf(
+                    buf, sizeof(buf) - 1,
+                    "EntityManager::destroyEntity: Entity %lu does not exist",
+                    e.getId());
+                throw EntityManagerExceptionFindEntityError(buf);
+            }
+            _entity_map.erase(e);
             return;
-        } catch (...) {
-            char buf[BUFSIZ] = { 0 };
-            snprintf(buf, sizeof(buf) - 1,
-                     "EntityManager::setSignature: %lu does not exist",
-                     e.getId());
-            throw EntityManagerExceptionFindEntityError(buf);
         }
-    }
 
-    ComponentSignature &EntityManager::getSignature(const Entity &e)
-    {
-        try {
-            return _entity_map[e];
-        } catch (...) {
-            char buf[BUFSIZ] = { 0 };
-            snprintf(buf, sizeof(buf) - 1,
-                     "EntityManager::getSignature: %lu does not exist",
-                     e.getId());
-            throw EntityManagerExceptionFindEntityError(buf);
+        void EntityManager::setSignature(const Entity &e,
+                                         const ComponentSignature &signature)
+        {
+            try {
+                _entity_map[e] = signature;
+                return;
+            } catch (...) {
+                char buf[BUFSIZ] = { 0 };
+                snprintf(buf, sizeof(buf) - 1,
+                         "EntityManager::setSignature: %lu does not exist",
+                         e.getId());
+                throw EntityManagerExceptionFindEntityError(buf);
+            }
         }
-    }
 
-    const EntityMap &EntityManager::getMap(void) const
-    {
-        return _entity_map;
-    }
+        ComponentSignature &EntityManager::getSignature(const Entity &e)
+        {
+            try {
+                return _entity_map[e];
+            } catch (...) {
+                char buf[BUFSIZ] = { 0 };
+                snprintf(buf, sizeof(buf) - 1,
+                         "EntityManager::getSignature: %lu does not exist",
+                         e.getId());
+                throw EntityManagerExceptionFindEntityError(buf);
+            }
+        }
 
-    void EntityManager::clear(void)
-    {
-        _entity_map.clear();
-    }
+        const EntityMap &EntityManager::getMap(void) const
+        {
+            return _entity_map;
+        }
 
+        void EntityManager::clear(void)
+        {
+            _entity_map.clear();
+        }
+
+    } // namespace ecs
 } // namespace vazel
