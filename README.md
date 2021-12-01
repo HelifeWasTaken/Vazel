@@ -24,31 +24,38 @@ struct Vector3 {
     int x, y, z;
 };
 
+// Display a Vector2 easily
 std::ostream &operator<<(std::ostream &os, Vector2 &v2)
 {
     return os << "Vector2(x: " << v2.x << ", y: " << v2.y << ")";
 }
 
+// Display a Vector3 easily
 std::ostream &operator<<(std::ostream &os, Vector3 &v3)
 {
-    return os << "Vector3(x: " << v3.x << ", y: " << v3.y << ", z: " << v3.z);
+    return os << "Vector3(x: " << v3.x << ", y: " << v3.y << ", z: " << v3.z << ")");
 }
 
 int main(void)
 {
     vazel::World world;
-    vazel::System system("ExampleSystem");
-    vazel::Entity e = world.createEntity();
+    vazel::System system("ExampleSystem"); // Always require a Tag
+    vazel::Entity e = world.createEntity(); // Creates an Entity in the World
 
+    // Register each type of the Component to the world
     vazel::ComponentType vec2Type = world.registerComponent<Vector2>();
     vazel::ComponentTYpe vec3Type = world.registerComponent<Vector3>();
 
+    // Attach the components to the Entity (might need a ComponentType version too)
     world.attachComponent<Vector2>(e);
     world.attachComponent<Vector3>(e);
 
+    // Attach components dependencies to the System (it requires either the ComponentType)
+    // Or it needs to be templated and to pass as arg the ComponentManager
     system.addDependency(vec2Type);
     system.addDependency(vec3Type);
 
+    // Ask the system to add one to each values of the vectors and print it
     system.setOnUpdate(
         VAZEL_SYSTEM_UPDATE_LAMBDA() {
             // See te result of modifyStuff and get to see if the modification by ref
@@ -67,9 +74,10 @@ int main(void)
         }
     );
 
+    // Registers the system in world
     world.registerSystem(system);
     while (true)
-        world.updateSystem();
+        world.updateSystem(); // Update all the systems (currently one) in the world
 }
 ```
 
