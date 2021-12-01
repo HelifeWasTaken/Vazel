@@ -12,7 +12,7 @@ namespace vazel
 
         class State;
         const std::vector<std::shared_ptr<State>>::iterator getStateFromTag(
-            std::vector<std::shared_ptr<State>> states, uint32_t stateTag);
+            std::vector<std::shared_ptr<State>> &states, uint32_t stateTag);
 
         class App
         {
