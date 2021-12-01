@@ -9,13 +9,15 @@ include_directories(
 set(CMAKE_BUILD_TYPE Debug)
 
 set(SRCS
-    ./UUID.cpp
-    ./Entity/Entity.cpp
-    ./Entity/EntityManager.cpp
-    ./Components/Component.cpp
-    ./Components/ComponentsManager.cpp
-    ./System/System.cpp
-    ./World/World.cpp
+    ./ecs/UUID.cpp
+    ./ecs/Entity/Entity.cpp
+    ./ecs/Entity/EntityManager.cpp
+    ./ecs/Components/Component.cpp
+    ./ecs/Components/ComponentsManager.cpp
+    ./ecs/System/System.cpp
+    ./ecs/World/World.cpp
+    ./core/App.cpp
+    ./core/State.cpp
 )
 
 add_library(${PROJECT_NAME} ${SRCS})
