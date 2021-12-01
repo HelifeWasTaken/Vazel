@@ -139,8 +139,9 @@ namespace vazel
             const ComponentType aviableIndex = _getAviableComponentIndex();
 
             if (_components_map.find(name) != _components_map.end()) {
-                std::string err = "ComponentManager::registerComponent<T>: You "
-                                  "cannot Register the same component twice: ";
+                std::string err =
+                    "ComponentManager::registerComponent<T>: You "
+                    "cannot Register the same component twice: ";
                 err += name;
                 throw ComponentManagerRegisterError(err);
             }
@@ -280,9 +281,9 @@ namespace vazel
             const auto it            = _entity_to_components.find(e);
 
             if (it == _entity_to_components.end()) {
-                std::string err =
-                    "ComponentManager::detachComponent<T>: You cannot detach a "
-                    "component to an non attached Entity";
+                std::string err = "ComponentManager::detachComponent<T>: You "
+                                  "cannot detach a "
+                                  "component to an non attached Entity";
                 err += typeid(T).name();
                 throw ComponentManagerRegisterError(err.c_str());
             }

@@ -126,7 +126,8 @@ namespace vazel
             try {
                 for (auto &it : _systems) {
                     if (it->getTag() == tag) {
-                        it->addDependency<T>(_entityManager, _componentManager);
+                        it->addDependency<T>(_entityManager,
+                                             _componentManager);
                         return;
                     }
                 }
@@ -177,8 +178,9 @@ namespace vazel
             } catch (ComponentManagerException &e) {
                 throw WorldException(e.what());
             }
-            std::string err = "World::removeSystemDependency: Could not find a "
-                              "system with tag: \"";
+            std::string err =
+                "World::removeSystemDependency: Could not find a "
+                "system with tag: \"";
             err += tag;
             err += "\"";
             throw WorldException(err);

@@ -29,8 +29,8 @@ namespace vazel
 {
 
     /**
-     * @brief EntityManagerException is the base class for all exceptions thrown
-     * by EntityManager.
+     * @brief EntityManagerException is the base class for all exceptions
+     * thrown by EntityManager.
      *
      */
     class EntityManagerException : public VException
@@ -119,7 +119,8 @@ namespace vazel
          * @param e The entity.
          * @param signature The signature.
          */
-        void setSignature(const Entity &e, const ComponentSignature &signature);
+        void setSignature(const Entity &e,
+                          const ComponentSignature &signature);
 
         /**
          * @brief Get the Signature object

@@ -27,8 +27,8 @@
 
 /**
  * @brief VAZEL_SYSTEM_UPDATE_LAMBDA is a macro to define a lambda function to
- * update a system The lambda functions can take paramters for [] [&] [=] etc...
- *        It provides you directly the components manager and the associated
+ * update a system The lambda functions can take paramters for [] [&] [=]
+ * etc... It provides you directly the components manager and the associated
  * Entity
  */
 #define VAZEL_SYSTEM_UPDATE_LAMBDA(...) \

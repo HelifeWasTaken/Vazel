@@ -13,14 +13,14 @@ A better attempt to do an real and portable and not heritage based Entity Compon
 ## Example:
 
 Here is an example of how you can create a World that contains a System taking each Entity with a `Vector2` and `Vector3` Component and update it.
-
-
 ```cpp
-struct Vector2 {
+struct Vector2
+{
     int x, y;
 };
 
-struct Vector3 {
+struct Vector3
+{
     int x, y, z;
 };
 
@@ -39,45 +39,45 @@ std::ostream &operator<<(std::ostream &os, Vector3 &v3)
 int main(void)
 {
     vazel::World world;
-    vazel::System system("ExampleSystem"); // Always require a Tag
+    vazel::System system("ExampleSystem");  // Always require a Tag
     vazel::Entity e = world.createEntity(); // Creates an Entity in the World
 
     // Register each type of the Component to the world
     vazel::ComponentType vec2Type = world.registerComponent<Vector2>();
     vazel::ComponentTYpe vec3Type = world.registerComponent<Vector3>();
 
-    // Attach the components to the Entity (might need a ComponentType version too)
+    // Attach the components to the Entity (might need a ComponentType version
+    // too)
     world.attachComponent<Vector2>(e);
     world.attachComponent<Vector3>(e);
 
-    // Attach components dependencies to the System (it requires either the ComponentType)
-    // Or it needs to be templated and to pass as arg the ComponentManager
+    // Attach components dependencies to the System (it requires either the
+    // ComponentType) Or it needs to be templated and to pass as arg the
+    // ComponentManager
     system.addDependency(vec2Type);
     system.addDependency(vec3Type);
 
     // Ask the system to add one to each values of the vectors and print it
-    system.setOnUpdate(
-        VAZEL_SYSTEM_UPDATE_LAMBDA() {
-            // Get to see at each frame if the modification by ref
-            // works well
-            auto &v2 = cm.getComponent<Vector2>(e);
-            auto &v3 = cm.getComponent<Vector3>(e);
+    system.setOnUpdate(VAZEL_SYSTEM_UPDATE_LAMBDA() {
+        // Get to see at each frame if the modification by ref
+        // works well
+        auto &v2 = cm.getComponent<Vector2>(e);
+        auto &v3 = cm.getComponent<Vector3>(e);
 
-            std::cout << "v2: " << v2 << " " <<
-                  << "v3: " << v3 << " " <<
-                  << std::endl;
-            v2.x += 1;
-            v2.y += 1;
-            v3.x += 1;
-            v3.y += 1;
-            v3.z += 1;
-        }
-    );
+        std::cout << "v2: " << v2 << " " < < < < "v3: " << v3 << " " < < < <
+            std::endl;
+        v2.x += 1;
+        v2.y += 1;
+        v3.x += 1;
+        v3.y += 1;
+        v3.z += 1;
+    });
 
     // Registers the system in world
     world.registerSystem(system);
     while (true)
-        world.updateSystem(); // Update all the systems (currently one) in the world
+        world.updateSystem(); // Update all the systems (currently one) in the
+                              // world
 }
 ```
 

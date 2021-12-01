@@ -31,6 +31,12 @@
 *.out
 *.app
 
+# Doxygen
 latex
 html
+
+# Other
+.cache
+build/.cmake
+
 .vscode
