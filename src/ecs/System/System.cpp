@@ -1,5 +1,5 @@
 /**
- * src/System/System.cpp
+ * src/ecs/System/System.cpp
  * Copyright (c) 2021 Mattis Dalleau <mattis.dalleau@epitech.eu>
  *
  * This program is free software: you can redistribute it and/or modify

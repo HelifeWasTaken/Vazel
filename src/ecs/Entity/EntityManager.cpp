@@ -1,5 +1,5 @@
 /**
- * src/Entity/EntityManager.cpp
+ * src/ecs/Entity/EntityManager.cpp
  * Copyright (c) 2021 Mattis Dalleau <mattis.dalleau@epitech.eu>
  *
  * This program is free software: you can redistribute it and/or modify

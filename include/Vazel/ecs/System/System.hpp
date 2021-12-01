@@ -1,5 +1,5 @@
 /**
- * include/Vazel/System/System.hpp
+ * include/Vazel/ecs/System/System.hpp
  * Copyright (c) 2021 Mattis Dalleau <mattis.dalleau@epitech.eu>
  *
  * This program is free software: you can redistribute it and/or modify

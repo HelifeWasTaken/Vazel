@@ -1,5 +1,5 @@
 /**
- * include/Vazel/World/World.hpp
+ * include/Vazel/ecs/World/World.hpp
  * Copyright (c) 2021 Mattis DALLEAU <mattisdalleau@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify

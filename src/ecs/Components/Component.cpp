@@ -1,5 +1,5 @@
 /**
- * src/Components/Component.cpp
+ * src/ecs/Components/Component.cpp
  * Copyright (c) 2021 Mattis DALLEAU <mattisdalleau@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
