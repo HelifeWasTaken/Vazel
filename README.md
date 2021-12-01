@@ -64,7 +64,7 @@ int main(void)
         auto &v2 = cm.getComponent<Vector2>(e);
         auto &v3 = cm.getComponent<Vector3>(e);
 
-        std::cout << "v2: " << v2 << " " < < < < "v3: " << v3 << " " < < < <
+        std::cout << "v2: " << v2 << " " << "v3: " << v3 << " " <<
             std::endl;
         v2.x += 1;
         v2.y += 1;
