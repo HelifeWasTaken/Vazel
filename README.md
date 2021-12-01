@@ -10,6 +10,11 @@ A better attempt to do an real and portable and not heritage based Entity Compon
     - gcc
     - gtest (Tests)
 
+## Example:
+
+Here is an example of how you can create a World that contains a System taking each Entity with a `Vector2` and `Vector3` Component and update it.
+
+
 ```cpp
 struct Vector2 {
     int x, y;
