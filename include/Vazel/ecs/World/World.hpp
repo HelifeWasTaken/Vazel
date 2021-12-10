@@ -136,6 +136,7 @@ namespace vazel
 
                 try {
                     (*it)->addDependency<T>(_entityManager, _componentManager);
+                    return;
                 } catch (ComponentManagerException &e) {
                     throw WorldException(e.what());
                 }
