@@ -18,5 +18,5 @@
 
 #pragma once
 
-#include "Vazel/core/App.hpp"
-#include "Vazel/core/State.hpp"
+#include "Vazel/core/App/App.hpp"
+#include "Vazel/core/State/State.hpp"

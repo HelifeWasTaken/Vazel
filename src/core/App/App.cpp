@@ -15,12 +15,22 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include "Vazel/core/App.hpp"
+#include "Vazel/core/App/App.hpp"
 
 namespace vazel
 {
     namespace core
     {
+
+        AppException::AppException(const std::string &e)
+            : _e(e)
+        {
+        }
+
+        const char *AppException::what() const throw()
+        {
+            return _e.c_str();
+        }
 
         void App::stop(void)
         {
@@ -41,7 +51,7 @@ namespace vazel
                          "world::setCurrentState: Could not find State with "
                          "tag: \"%u\"",
                          stateTag);
-                throw std::runtime_error(buf);
+                throw AppException(buf);
             }
             _pending_state = it->get();
             if (_current_state != nullptr) {
@@ -68,7 +78,7 @@ namespace vazel
         void App::run(void)
         {
             if (_pending_state == nullptr)
-                throw std::runtime_error(
+                throw AppException(
                     "There is no pending scene right now");
             while (_pending_state != nullptr) {
                 _current_state = _pending_state;

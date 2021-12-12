@@ -15,12 +15,22 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include "Vazel/core/State.hpp"
+#include "Vazel/core/State/State.hpp"
 
 namespace vazel
 {
     namespace core
     {
+
+        StateException::StateException(const std::string &e)
+            : _e(e)
+        {
+        }
+
+        const char *StateException::what() const throw()
+        {
+            return _e.c_str();
+        }
 
         State::State(std::function<void(App &)> on_init,
                      std::function<bool(App &)> on_update,
@@ -32,12 +42,12 @@ namespace vazel
         {
         }
 
-        const bool State::isRunning(void)
+        bool State::isRunning(void) const
         {
             return _is_running;
         }
 
-        const uint32_t &State::getTag(void)
+        uint32_t State::getTag(void) const
         {
             return _tag;
         }
