@@ -85,10 +85,15 @@ namespace vazel
             sf::Event evt;
 
             while (app.window.isOpen()) {
+                app.window.clear();
                 while (app.window.pollEvent(evt)) {
-                    app.world.updateOnEventSystem(evt);
+                    if (evt.type == sf::Event::Closed)
+                        app.stop();
+                    else
+                        app.world.updateOnEventSystem(evt);
                 }
                 app.world.updateSystem();
+                app.renderer.drawList(app.window);
             }
         }
 
