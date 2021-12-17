@@ -93,7 +93,7 @@ namespace vazel
 
             void sort(void);
 
-            Drawable* addDrawable(Drawable& drawable);
+            Drawable* addDrawable(const Drawable& drawable);
 
             template <typename T>
             void draw(sf::RenderWindow& window, T& drawable)
@@ -104,6 +104,18 @@ namespace vazel
             void draw(sf::RenderWindow& window, Drawable& drawable);
 
             void drawList(sf::RenderWindow& window);
+
+            template<typename T>
+            static Drawable *addDrawable(Renderer& renderer, const T& data)
+            {
+                return renderer.addDrawable(Drawable(data));
+            }
+
+            template<typename T>
+            static Drawable *addDrawable(Renderer& renderer, const T data)
+            {
+                return renderer.addDrawable(Drawable(data));
+            }
         };
 
         class Framebuffer

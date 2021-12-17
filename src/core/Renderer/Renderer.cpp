@@ -154,7 +154,7 @@ namespace vazel
             });
         }
 
-        Drawable* Renderer::addDrawable(Drawable& drawable)
+        Drawable* Renderer::addDrawable(const Drawable& drawable)
         {
             _drawables.push_front(drawable);
             return &_drawables.front();
