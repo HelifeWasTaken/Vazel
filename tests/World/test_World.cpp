@@ -233,39 +233,6 @@ TEST(World, removeASystem)
     world.removeSystem("placeholder_system");
 }
 
-TEST(World, removeASystemDependency)
-{
-    vazel::ecs::World world;
-    vazel::ecs::System system("placeholder_system");
-
-    world.registerComponent<placeholder_component_1>();
-    system.addDependency(world.getComponentType<placeholder_component_1>());
-    world.registerSystem(system);
-    world.removeSystemDependency<placeholder_component_1>(
-        "placeholder_system");
-}
-
-TEST(World, removeASystemDependencyNonAttached)
-{
-    vazel::ecs::World world;
-    vazel::ecs::System system("placeholder_system");
-
-    world.registerComponent<placeholder_component_1>();
-    system.addDependency(world.getComponentType<placeholder_component_1>());
-    world.registerSystem(system);
-    try {
-        world.removeSystemDependency<placeholder_component_2>(
-            "placeholder_system");
-    } catch (vazel::ecs::WorldException& e) {
-        return;
-    } catch (...) {
-        std::cerr << "Unexpected exception" << std::endl;
-        GTEST_FAIL();
-    }
-    std::cerr << "No exception thrown" << std::endl;
-    GTEST_FAIL();
-}
-
 /*
 TEST(World, updateSystem)
 {

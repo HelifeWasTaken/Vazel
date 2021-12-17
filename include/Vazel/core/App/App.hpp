@@ -19,12 +19,10 @@
 
 #include "Vazel/core/Renderer/Renderer.hpp"
 #include "Vazel/core/State/State.hpp"
-#include "Vazel/ecs.hpp"
+#include "Vazel/ecs/World/World.hpp"
 
 namespace vazel
 {
-    using World = ecs::World;
-
     namespace core
     {
         /**
@@ -78,7 +76,7 @@ namespace vazel
 
           public:
             Renderer renderer;
-            World world;
+            ecs::World world;
             sf::RenderWindow window;
 
             /**
@@ -112,13 +110,6 @@ namespace vazel
              * @param state The state to register.
              */
             void registerState(State &state);
-
-            /**
-             * @brief Get the World object
-             *
-             * @return World& The world object.
-             */
-            World &getWorld(void);
 
             /**
              * @brief Init the pending state and set it as the current state.
