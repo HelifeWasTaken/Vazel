@@ -33,12 +33,13 @@ namespace vazel
         }
 
         State::State(std::function<void(App &)> on_init,
-                     std::function<bool(App &)> on_update,
+                     std::function<void(App &)> on_update,
                      std::function<void(App &)> on_exit, uint32_t tag)
             : _on_init(on_init)
             , _on_update(on_update)
             , _on_exit(on_exit)
             , _tag(tag)
+            , _is_running(false)
         {
         }
 
@@ -77,6 +78,18 @@ namespace vazel
                                 [&](std::shared_ptr<State> &state) {
                                     return state->getTag() == stateTag;
                                 });
+        }
+
+        void basicOnUpdate(App &app)
+        {
+            sf::Event evt;
+
+            while (app.window.isOpen()) {
+                while (app.window.pollEvent(evt)) {
+                    app.world.updateOnEventSystem(evt);
+                }
+                app.world.updateSystem();
+            }
         }
 
     } // namespace core

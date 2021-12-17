@@ -244,6 +244,12 @@ namespace vazel
             void updateSystem(void);
 
             /**
+             * @brief Update the systems with System::update for each system
+             * @param evt SFML Dependency Event
+             */
+            void updateOnEventSystem(const sf::Event &evt);
+
+            /**
              * @brief Register a Component to the ComponentManager
              *
              * @tparam T The type of the component.

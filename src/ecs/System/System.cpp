@@ -28,6 +28,14 @@ namespace vazel
             (void)cm;
         }
 
+        void unimplementedOnEventSystem(ComponentManager &cm, const Entity &e,
+                                        const sf::Event &event)
+        {
+            (void)e;
+            (void)cm;
+            (void)event;
+        }
+
         void System::__addEntity(const Entity &entity,
                                  const ComponentSignature &signature)
         {
@@ -38,13 +46,15 @@ namespace vazel
 
         System::System(const std::string &tag)
             : _tag(tag)
-            , _updater(unimplementedOnUpdateSystem)
+            , _on_update(unimplementedOnUpdateSystem)
+            , _on_event(unimplementedOnEventSystem)
         {
         }
 
         System::System(const char *tag)
             : _tag(tag)
-            , _updater(unimplementedOnUpdateSystem)
+            , _on_update(unimplementedOnUpdateSystem)
+            , _on_event(unimplementedOnEventSystem)
         {
         }
 
@@ -60,9 +70,14 @@ namespace vazel
             }
         }
 
-        void System::setOnUpdate(systemUpdate updater)
+        void System::setOnUpdate(systemUpdate updateF)
         {
-            _updater = updater;
+            _on_update = updateF;
+        }
+
+        void System::setOnEvent(systemOnEvent eventF)
+        {
+            _on_event = eventF;
         }
 
         const ComponentSignature &System::getSignature(void) const
@@ -75,10 +90,17 @@ namespace vazel
             return _tag;
         }
 
-        void System::update(ComponentManager &cm)
+        void System::on_update(ComponentManager &cm)
         {
             for (auto it : _entities) {
-                _updater(cm, it);
+                _on_update(cm, it);
+            }
+        }
+
+        void System::on_event(ComponentManager &cm, const sf::Event &evt)
+        {
+            for (auto it : _entities) {
+                _on_event(cm, it, evt);
             }
         }
 

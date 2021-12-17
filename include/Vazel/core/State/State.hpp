@@ -68,10 +68,10 @@ namespace vazel
         {
           private:
             std::function<void(App &)> _on_init;
-            std::function<bool(App &)> _on_update;
+            std::function<void(App &)> _on_update;
             std::function<void(App &)> _on_exit;
             uint32_t _tag;
-            bool _is_running = false;
+            bool _is_running;
 
           public:
             /**
@@ -83,7 +83,7 @@ namespace vazel
              * @param on_exit The exit function
              */
             State(std::function<void(App &)> on_init,
-                  std::function<bool(App &)> on_update,
+                  std::function<void(App &)> on_update,
                   std::function<void(App &)> on_exit, uint32_t tag);
 
             /**
@@ -139,6 +139,13 @@ namespace vazel
          */
         const std::vector<std::shared_ptr<State>>::iterator getStateFromTag(
             std::vector<std::shared_ptr<State>> &states, uint32_t stateTag);
+
+        /**
+         * @brief Basic app on update for almost every SFML programs
+         *
+         * @param app Reference to the app
+         */
+        void basicOnUpdate(App &app);
 
     } // namespace core
 } // namespace vazel

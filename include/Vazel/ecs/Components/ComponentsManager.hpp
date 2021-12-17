@@ -140,12 +140,11 @@ namespace vazel
                 const char *name                 = typeid(T).name();
                 const ComponentType aviableIndex = _getAviableComponentIndex();
 
-                if (_components_map.find(name) != _components_map.end()) {
-                    std::string err =
-                        "ComponentManager::registerComponent<T>: You "
-                        "cannot Register the same component twice: ";
-                    err += name;
-                    throw ComponentManagerRegisterError(err);
+                {
+                    const auto it = _components_map.find(name);
+                    if (it != _components_map.end()) {
+                        return it->second;
+                    }
                 }
                 _aviable_signatures.set(aviableIndex, true);
                 _components_map.emplace(name, aviableIndex);
@@ -230,18 +229,22 @@ namespace vazel
                 const char *name = typeid(T).name();
 
                 try {
-                    const ComponentType componentType =
-                        _components_map.at(name);
-                    auto it = _entity_to_components.find(e);
+                    const auto itcomponentType = _components_map.find(name);
+                    auto it                    = _entity_to_components.find(e);
+                    ComponentType componentType = -1;
 
                     if (it == _entity_to_components.end()) {
-                        std::string err =
+                        throw ComponentManagerException(
                             "ComponentManager::attachComponent<T>: You cannot "
-                            "attach a component to a non registered Entity(";
-                        err += e.getId();
-                        err += ")";
-                        throw ComponentManagerException(err);
-                    } else if (it->second[componentType].hasValue()) {
+                            "attach a component to a non registered Entity");
+                    }
+                    if (itcomponentType == _components_map.end()) {
+                        registerComponent<T>();
+                        componentType = _components_map.at(name);
+                    } else {
+                        componentType = itcomponentType->second;
+                    }
+                    if (it->second[componentType].hasValue()) {
                         throw ComponentManagerException(
                             "ComponentManager::attachComponent<T>: You cannot "
                             "attach a component that is already attached");

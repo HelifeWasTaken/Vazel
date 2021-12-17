@@ -96,16 +96,16 @@ TEST(System, addEntities)
                                 true);
 
     system.addDependency<placeholder_component_1>(em, cm);
-    system.update(cm);
+    system.on_update(cm);
 
     cm.attachComponent<placeholder_component_1>(entity2);
     em.getSignature(entity2).set(
         cm.getComponentType<placeholder_component_1>(), true);
     system.updateValidEntities(em);
-    system.update(cm);
+    system.on_update(cm);
 
     system.addDependency<placeholder_component_2>(em, cm);
-    system.update(cm);
+    system.on_update(cm);
     ASSERT_EQ(testing::internal::GetCapturedStdout(),
               "Here is an entity!Here is an entity!Here is an entity!");
 }

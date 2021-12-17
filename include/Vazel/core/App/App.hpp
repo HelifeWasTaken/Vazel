@@ -17,6 +17,7 @@
  */
 #pragma once
 
+#include "Vazel/core/Renderer/Renderer.hpp"
 #include "Vazel/core/State/State.hpp"
 #include "Vazel/ecs.hpp"
 
@@ -71,12 +72,15 @@ namespace vazel
         class App
         {
           private:
-            World _world;
             std::vector<std::shared_ptr<State>> _states;
             State *_current_state = nullptr;
             State *_pending_state = nullptr;
 
           public:
+            Renderer renderer;
+            World world;
+            sf::RenderWindow window;
+
             /**
              * @brief Construct a new App object
              *
@@ -122,6 +126,8 @@ namespace vazel
              */
             void run(void);
         };
+
+        extern App *g_app;
 
     } // namespace core
 } // namespace vazel

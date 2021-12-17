@@ -107,7 +107,14 @@ namespace vazel
         void World::updateSystem(void)
         {
             for (auto &it : _systems) {
-                it->update(_componentManager);
+                it->on_update(_componentManager);
+            }
+        }
+
+        void World::updateOnEventSystem(const sf::Event &evt)
+        {
+            for (auto &it : _systems) {
+                it->on_event(_componentManager, evt);
             }
         }
 

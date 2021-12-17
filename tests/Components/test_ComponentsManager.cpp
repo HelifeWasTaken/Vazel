@@ -46,23 +46,14 @@ TEST(ComponentRegistering, TwoComponents)
     GTEST_ASSERT_EQ(cm.getComponentType<placeholder_component_2>(), 1);
 }
 
-TEST(ComponentRegistering, RaiseExceptionWhenComponentRegisteredTwice)
+TEST(ComponentRegistering,
+     SameComponentTypeWhenRegisteringTwiceTheSameComponent)
 {
     vazel::ecs::ComponentManager cm;
 
-    cm.registerComponent<placeholder_component_1>();
-    try {
+    vazel::ecs::ComponentType t =
         cm.registerComponent<placeholder_component_1>();
-    } catch (vazel::ecs::ComponentManagerException &e) {
-        return;
-    } catch (std::exception &e) {
-        std::cerr << "Invalid: Exception catched was not "
-                     "vazel::ecs::ComponentManagerRegisterError"
-                  << std::endl;
-        GTEST_FAIL();
-    }
-    std::cerr << "Invalid: No exception was catched" << std::endl;
-    GTEST_FAIL();
+    GTEST_ASSERT_EQ(t, cm.registerComponent<placeholder_component_1>());
 }
 
 TEST(ComponentRegistering, RaiseExceptionWhenGettingNonExistingComponent)

@@ -37,7 +37,6 @@ namespace vazel
             _pending_state = nullptr;
             if (_current_state != nullptr) {
                 _current_state->exit(*this);
-                _current_state = nullptr;
             }
         }
 
@@ -70,16 +69,10 @@ namespace vazel
             registerState(baseState);
         }
 
-        World &App::getWorld(void)
-        {
-            return _world;
-        }
-
         void App::run(void)
         {
             if (_pending_state == nullptr)
-                throw AppException(
-                    "There is no pending scene right now");
+                throw AppException("There is no pending scene right now");
             while (_pending_state != nullptr) {
                 _current_state = _pending_state;
                 _current_state->init(*this);
@@ -87,9 +80,12 @@ namespace vazel
                 while (_current_state->isRunning()) {
                     _current_state->update(*this);
                 }
-                _world.clearWorld();
+                world.clearWorld();
             }
+            _current_state = nullptr;
         }
+
+        App *g_app = nullptr;
 
     } // namespace core
 } // namespace vazel
