@@ -9,22 +9,21 @@ on:
     pull_request:
 jobs:
     build:
-        runs-on: ubuntu-20.04
+        runs-on: ubuntu:latest
         steps:
         - uses: actions/checkout@v2
         - name: Build
           shell: bash
           run: |
-            sudo apt install cmake make gcc g++ libgtest-dev lolcat
+            sudo apt install cmake make gcc g++ libgtest-dev libsfml-dev
             cd build && cmake .. && make
-            ls -lh src/libVazel.a | lolcat -h 2 -v 2
     unittests:
-        runs-on: ubuntu-20.04
+        runs-on: ubuntu:latest
         steps:
         - uses: actions/checkout@v2
         - name: run_tests
           shell: bash
           run: |
-            sudo apt install cmake make gcc g++ libgtest-dev
+            sudo apt install cmake make gcc g++ libgtest-dev libsfml-dev
             cd build && cmake .. && make
             ./tests/vazel_tests --gtest_color=yes
