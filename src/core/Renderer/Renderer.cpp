@@ -181,5 +181,91 @@ namespace vazel
             }
         }
 
+        void Framebuffer::writeColorToPixelBuffer(const unsigned int rawIndex,
+                                                  const sf::Color color)
+        {
+            _pixels[rawIndex]     = color.r;
+            _pixels[rawIndex + 1] = color.g;
+            _pixels[rawIndex + 2] = color.b;
+            _pixels[rawIndex + 3] = color.a;
+        }
+
+        Framebuffer::Framebuffer(const unsigned int x, const unsigned int y)
+            : _width(x)
+            , _height(y)
+        {
+            _texture.create(_width, _height);
+            _pixels = new sf::Uint8[rawFrambufferSize()];
+        }
+
+        Framebuffer::Framebuffer(const sf::RenderWindow& window)
+        {
+            sf::Vector2u size = window.getSize();
+
+            *this = Framebuffer(size.x, size.y);
+        }
+
+        Framebuffer::~Framebuffer(void)
+        {
+            delete _pixels;
+        }
+
+        const unsigned int Framebuffer::rawFrambufferSize(void) const
+        {
+            return _width * _height * 4;
+        }
+
+        const unsigned int Framebuffer::framebufferSize(void) const
+        {
+            return _width * _height;
+        }
+
+        const unsigned int& Framebuffer::getWidth(void) const
+        {
+            return _width;
+        }
+
+        const unsigned int& Framebuffer::getHeight(void) const
+        {
+            return _height;
+        }
+
+        unsigned int Framebuffer::getIndex(const unsigned int x,
+                                           const unsigned int y) const
+        {
+            return (x + y * _width) * 4;
+        }
+
+        void Framebuffer::put(const unsigned int x, const unsigned int y,
+                              const sf::Color color)
+        {
+            if (x > _width || y > _height) {
+                throw std::runtime_error("Invalid position in framebuffer");
+            }
+            writeColorToPixelBuffer(getIndex(x, y), color);
+        }
+
+        void Framebuffer::clear(const sf::Color color)
+        {
+            const unsigned int framebuffer_size = _width * _height * 4;
+
+            for (unsigned int i = 0; i < framebuffer_size; i += 4) {
+                writeColorToPixelBuffer(i, color);
+            }
+        }
+
+        void Framebuffer::updateTexture(void)
+        {
+            _texture.update(_pixels);
+            _sprite.setTexture(_texture);
+        }
+
+        void Framebuffer::draw(sf::RenderWindow& window, bool update = true)
+        {
+            if (update)
+                updateTexture();
+            window.draw(_sprite);
+        }
+
     } // namespace core
 } // namespace vazel

@@ -23,6 +23,8 @@ set(SRCS
 
     ./core/App/App.cpp
     ./core/State/State.cpp
+
+    ./core/Renderer/Renderer.cpp
 )
 
 add_library(${PROJECT_NAME} ${SRCS})

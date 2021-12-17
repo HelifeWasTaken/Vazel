@@ -95,9 +95,55 @@ namespace vazel
 
             Drawable* addDrawable(Drawable& drawable);
 
+            template <typename T>
+            void draw(sf::RenderWindow& window, T& drawable)
+            {
+                window.draw(drawable);
+            }
+
             void draw(sf::RenderWindow& window, Drawable& drawable);
 
             void drawList(sf::RenderWindow& window);
+        };
+
+        class Framebuffer
+        {
+          private:
+            sf::Texture _texture;
+            sf::Sprite _sprite;
+            sf::Uint8* _pixels = nullptr;
+            unsigned int _width;
+            unsigned int _height;
+
+            void writeColorToPixelBuffer(const unsigned int rawIndex,
+                                         const sf::Color color);
+
+          public:
+            Framebuffer(const unsigned int x, const unsigned int y);
+
+            Framebuffer(const sf::RenderWindow& window);
+
+            ~Framebuffer(void);
+
+            const unsigned int rawFrambufferSize(void) const;
+
+            const unsigned int framebufferSize(void) const;
+
+            const unsigned int& getWidth(void) const;
+
+            const unsigned int& getHeight(void) const;
+
+            unsigned int getIndex(const unsigned int x,
+                                  const unsigned int y) const;
+
+            void put(const unsigned int x, const unsigned int y,
+                     const sf::Color color);
+
+            void clear(const sf::Color color);
+
+            void updateTexture(void);
+
+            void draw(sf::RenderWindow& window, bool update = true);
         };
 
     } // namespace core
