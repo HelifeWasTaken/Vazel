@@ -129,18 +129,6 @@ namespace vazel
         };
 
         /**
-         * @brief Get the State From Tag object (Used when forward declaration
-         * gives a warning) And you can't directly use find on the State object
-         * inside App.
-         * @param states The states list.
-         * @param stateTag The state tag to find.
-         * @return const std::vector<std::shared_ptr<State>>::iterator The
-         * state iterator.
-         */
-        const std::vector<std::shared_ptr<State>>::iterator getStateFromTag(
-            std::vector<std::shared_ptr<State>> &states, uint32_t stateTag);
-
-        /**
          * @brief Basic app on update for almost every SFML programs
          *
          * @param app Reference to the app

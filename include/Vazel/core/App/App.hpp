@@ -64,13 +64,13 @@ namespace vazel
          * @return const std::vector<std::shared_ptr<State>>::iterator The
          * state iterator.
          */
-        const std::vector<std::shared_ptr<State>>::iterator getStateFromTag(
-            std::vector<std::shared_ptr<State>> &states, uint32_t stateTag);
+        const std::vector<std::unique_ptr<State>>::iterator getStateFromTag(
+            std::vector<std::unique_ptr<State>> &states, uint32_t stateTag);
 
         class App
         {
           private:
-            std::vector<std::shared_ptr<State>> _states;
+            std::vector<std::unique_ptr<State>> _states;
             State *_current_state = nullptr;
             State *_pending_state = nullptr;
 

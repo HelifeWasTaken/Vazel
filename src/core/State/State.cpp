@@ -70,16 +70,6 @@ namespace vazel
             _on_exit(app);
         }
 
-        const std::vector<std::shared_ptr<State>>::iterator getStateFromTag(
-            std::vector<std::shared_ptr<State>> &states, uint32_t stateTag)
-
-        {
-            return std::find_if(states.begin(), states.end(),
-                                [&](std::shared_ptr<State> &state) {
-                                    return state->getTag() == stateTag;
-                                });
-        }
-
         void basicOnUpdate(App &app)
         {
             sf::Event evt;

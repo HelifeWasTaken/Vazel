@@ -143,7 +143,7 @@ namespace vazel
 
             void updateTexture(void);
 
-            void draw(sf::RenderWindow& window, bool update = true);
+            void draw(sf::RenderWindow& window, bool update);
         };
 
     } // namespace core

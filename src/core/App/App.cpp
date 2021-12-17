@@ -60,7 +60,7 @@ namespace vazel
 
         void App::registerState(State &state)
         {
-            _states.push_back(std::make_shared<State>(state));
+            _states.push_back(std::make_unique<State>(state));
             setState(state.getTag());
         }
 
@@ -83,6 +83,16 @@ namespace vazel
                 world.clearWorld();
             }
             _current_state = nullptr;
+        }
+
+        const std::vector<std::unique_ptr<State>>::iterator getStateFromTag(
+            std::vector<std::unique_ptr<State>> &states, uint32_t stateTag)
+
+        {
+            return std::find_if(states.begin(), states.end(),
+                                [&](std::unique_ptr<State> &state) {
+                                    return state->getTag() == stateTag;
+                                });
         }
 
         App *g_app = nullptr;
