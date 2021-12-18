@@ -61,12 +61,12 @@ namespace vazel
         void App::registerState(State &state)
         {
             _states.push_back(std::make_unique<State>(state));
-            setState(state.getTag());
         }
 
         App::App(State &baseState)
         {
             registerState(baseState);
+            setState(state.getTag());
         }
 
         void App::run(void)
