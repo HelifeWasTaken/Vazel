@@ -66,7 +66,7 @@ namespace vazel
         App::App(State &baseState)
         {
             registerState(baseState);
-            setState(state.getTag());
+            setState(baseState.getTag());
         }
 
         void App::run(void)

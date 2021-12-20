@@ -50,26 +50,32 @@ namespace vazel
             Drawable(sf::CircleShape& circleshape);
 
             sf::CircleShape& getCircleShape(void);
+            const sf::CircleShape& getCircleShape(void) const;
 
             Drawable(sf::ConvexShape& convexshape);
 
             sf::ConvexShape& getConvexShape(void);
+            const sf::ConvexShape& getConvexShape(void) const;
 
             Drawable(sf::Sprite& sprite);
 
             sf::Sprite& getSprite(void);
+            const sf::Sprite& getSprite(void) const;
 
             Drawable(sf::Text& text);
 
             sf::Text& getText(void);
+            const sf::Text& getText(void) const;
 
             Drawable(sf::VertexArray& vao);
 
             sf::VertexArray& getVertexArray(void);
+            const sf::VertexArray& getVertexArray(void) const;
 
             Drawable(sf::VertexBuffer& vbo);
 
             sf::VertexBuffer& getVertexBuffer(void);
+            const sf::VertexBuffer& getVertexBuffer(void) const;
 
             void setLayer(int layer);
 
@@ -96,12 +102,12 @@ namespace vazel
             Drawable* addDrawable(const Drawable& drawable);
 
             template <typename T>
-            void draw(sf::RenderWindow& window, T& drawable)
+            void draw(sf::RenderWindow& window, const T& drawable) const
             {
                 window.draw(drawable);
             }
 
-            void draw(sf::RenderWindow& window, Drawable& drawable);
+            void draw(sf::RenderWindow& window, const Drawable& drawable) const;
 
             void drawList(sf::RenderWindow& window);
 

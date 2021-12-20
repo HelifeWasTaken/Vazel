@@ -33,8 +33,13 @@ namespace vazel
             return std::get<sf::CircleShape>(_data);
         }
 
+        const sf::CircleShape& Drawable::getCircleShape(void) const
+        {
+            return std::get<sf::CircleShape>(_data);
+        }
+
         static void s_drawCircleShape(sf::RenderWindow& window,
-                                      Drawable& drawable)
+                                      const Drawable& drawable)
         {
             window.draw(drawable.getCircleShape());
         }
@@ -50,8 +55,13 @@ namespace vazel
             return std::get<sf::ConvexShape>(_data);
         }
 
+        const sf::ConvexShape& Drawable::getConvexShape(void) const
+        {
+            return std::get<sf::ConvexShape>(_data);
+        }
+
         static void s_drawConvexShape(sf::RenderWindow& window,
-                                      Drawable& drawable)
+                                      const Drawable& drawable)
         {
             window.draw(drawable.getConvexShape());
         }
@@ -67,7 +77,12 @@ namespace vazel
             return std::get<sf::Sprite>(_data);
         }
 
-        static void s_drawSprite(sf::RenderWindow& window, Drawable& drawable)
+        const sf::Sprite& Drawable::getSprite(void) const
+        {
+            return std::get<sf::Sprite>(_data);
+        }
+
+        static void s_drawSprite(sf::RenderWindow& window, const Drawable& drawable)
         {
             window.draw(drawable.getSprite());
         }
@@ -83,7 +98,12 @@ namespace vazel
             return std::get<sf::Text>(_data);
         }
 
-        static void s_drawText(sf::RenderWindow& window, Drawable& drawable)
+        const sf::Text& Drawable::getText(void) const
+        {
+            return std::get<sf::Text>(_data);
+        }
+
+        static void s_drawText(sf::RenderWindow& window, const Drawable& drawable)
         {
             window.draw(drawable.getText());
         }
@@ -99,8 +119,13 @@ namespace vazel
             return std::get<sf::VertexArray>(_data);
         }
 
+        const sf::VertexArray& Drawable::getVertexArray(void) const
+        {
+            return std::get<sf::VertexArray>(_data);
+        }
+
         static void s_drawVertexArray(sf::RenderWindow& window,
-                                      Drawable& drawable)
+                                      const Drawable& drawable)
         {
             window.draw(drawable.getVertexArray());
         }
@@ -116,8 +141,13 @@ namespace vazel
             return std::get<sf::VertexBuffer>(_data);
         }
 
+        const sf::VertexBuffer& Drawable::getVertexBuffer(void) const
+        {
+            return std::get<sf::VertexBuffer>(_data);
+        }
+
         static void s_drawVertexBuffer(sf::RenderWindow& window,
-                                       Drawable& drawable)
+                                       const Drawable& drawable)
         {
             window.draw(drawable.getVertexBuffer());
         }
@@ -160,9 +190,9 @@ namespace vazel
             return &_drawables.front();
         }
 
-        void Renderer::draw(sf::RenderWindow& window, Drawable& drawable)
+        void Renderer::draw(sf::RenderWindow& window, const Drawable& drawable) const
         {
-            static void (*fdraw[])(sf::RenderWindow&, Drawable&) = {
+            static void (*fdraw[])(sf::RenderWindow&, const Drawable&) = {
                 s_drawCircleShape, s_drawConvexShape, s_drawSprite,
                 s_drawText,        s_drawVertexArray, s_drawVertexBuffer
             };
