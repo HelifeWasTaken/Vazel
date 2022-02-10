@@ -47,45 +47,45 @@ namespace vazel
             bool _shouldDraw = true;
 
           public:
-            Drawable(sf::CircleShape& circleshape);
+            Drawable(sf::CircleShape &circleshape);
 
-            sf::CircleShape& getCircleShape(void);
-            const sf::CircleShape& getCircleShape(void) const;
+            sf::CircleShape &getCircleShape(void);
+            const sf::CircleShape &getCircleShape(void) const;
 
-            Drawable(sf::ConvexShape& convexshape);
+            Drawable(sf::ConvexShape &convexshape);
 
-            sf::ConvexShape& getConvexShape(void);
-            const sf::ConvexShape& getConvexShape(void) const;
+            sf::ConvexShape &getConvexShape(void);
+            const sf::ConvexShape &getConvexShape(void) const;
 
-            Drawable(sf::Sprite& sprite);
+            Drawable(sf::Sprite &sprite);
 
-            sf::Sprite& getSprite(void);
-            const sf::Sprite& getSprite(void) const;
+            sf::Sprite &getSprite(void);
+            const sf::Sprite &getSprite(void) const;
 
-            Drawable(sf::Text& text);
+            Drawable(sf::Text &text);
 
-            sf::Text& getText(void);
-            const sf::Text& getText(void) const;
+            sf::Text &getText(void);
+            const sf::Text &getText(void) const;
 
-            Drawable(sf::VertexArray& vao);
+            Drawable(sf::VertexArray &vao);
 
-            sf::VertexArray& getVertexArray(void);
-            const sf::VertexArray& getVertexArray(void) const;
+            sf::VertexArray &getVertexArray(void);
+            const sf::VertexArray &getVertexArray(void) const;
 
-            Drawable(sf::VertexBuffer& vbo);
+            Drawable(sf::VertexBuffer &vbo);
 
-            sf::VertexBuffer& getVertexBuffer(void);
-            const sf::VertexBuffer& getVertexBuffer(void) const;
+            sf::VertexBuffer &getVertexBuffer(void);
+            const sf::VertexBuffer &getVertexBuffer(void) const;
 
             void setLayer(int layer);
 
             void setShouldDraw(bool set);
 
-            const bool& shouldDraw(void) const;
+            const bool &shouldDraw(void) const;
 
-            const int& getLayer(void) const;
+            const int &getLayer(void) const;
 
-            const RenderType& getRenderType(void) const;
+            const RenderType &getRenderType(void) const;
         };
 
         class Renderer
@@ -99,26 +99,27 @@ namespace vazel
 
             void sort(void);
 
-            Drawable* addDrawable(const Drawable& drawable);
+            Drawable *addDrawable(const Drawable &drawable);
 
             template <typename T>
-            void draw(sf::RenderWindow& window, const T& drawable) const
+            void draw(sf::RenderWindow &window, const T &drawable) const
             {
                 window.draw(drawable);
             }
 
-            void draw(sf::RenderWindow& window, const Drawable& drawable) const;
+            void draw(sf::RenderWindow &window,
+                      const Drawable &drawable) const;
 
-            void drawList(sf::RenderWindow& window);
+            void drawList(sf::RenderWindow &window);
 
-            template<typename T>
-            static Drawable *addDrawable(Renderer& renderer, const T& data)
+            template <typename T>
+            static Drawable *addDrawable(Renderer &renderer, const T &data)
             {
                 return renderer.addDrawable(Drawable(data));
             }
 
-            template<typename T>
-            static Drawable *addDrawable(Renderer& renderer, const T data)
+            template <typename T>
+            static Drawable *addDrawable(Renderer &renderer, const T data)
             {
                 return renderer.addDrawable(Drawable(data));
             }
@@ -129,7 +130,7 @@ namespace vazel
           private:
             sf::Texture _texture;
             sf::Sprite _sprite;
-            sf::Uint8* _pixels = nullptr;
+            sf::Uint8 *_pixels = nullptr;
             unsigned int _width;
             unsigned int _height;
 
@@ -139,7 +140,7 @@ namespace vazel
           public:
             Framebuffer(const unsigned int x, const unsigned int y);
 
-            Framebuffer(const sf::RenderWindow& window);
+            Framebuffer(const sf::RenderWindow &window);
 
             ~Framebuffer(void);
 
@@ -147,9 +148,9 @@ namespace vazel
 
             const unsigned int framebufferSize(void) const;
 
-            const unsigned int& getWidth(void) const;
+            const unsigned int &getWidth(void) const;
 
-            const unsigned int& getHeight(void) const;
+            const unsigned int &getHeight(void) const;
 
             unsigned int getIndex(const unsigned int x,
                                   const unsigned int y) const;
@@ -161,7 +162,7 @@ namespace vazel
 
             void updateTexture(void);
 
-            void draw(sf::RenderWindow& window, bool update);
+            void draw(sf::RenderWindow &window, bool update);
         };
 
     } // namespace core

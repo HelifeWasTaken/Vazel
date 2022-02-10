@@ -26,7 +26,7 @@ namespace vazel
     class VException : public std::exception
     {
       public:
-        virtual const char* what() const throw()
+        virtual const char *what() const throw()
         {
             return "Vazel Default Exception";
         }

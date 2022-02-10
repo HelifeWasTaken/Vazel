@@ -143,7 +143,7 @@ TEST(World, getComponentFromEntity)
 
     world.registerComponent<placeholder_position_component>();
     world.attachComponent<placeholder_position_component>(entity);
-    placeholder_position_component& position =
+    placeholder_position_component &position =
         world.getComponent<placeholder_position_component>(entity);
 
     position.x = 59;
@@ -172,7 +172,7 @@ TEST(World, registerSystemWithoutDependency)
 
     try {
         world.registerSystem(system);
-    } catch (vazel::ecs::WorldException& e) {
+    } catch (vazel::ecs::WorldException &e) {
         return;
     } catch (...) {
         std::cerr << "Unexpected exception" << std::endl;
@@ -212,7 +212,7 @@ TEST(World, registerSystemWithSameName)
         system2.addDependency(
             world.getComponentType<placeholder_component_2>());
         world.registerSystem(system2);
-    } catch (vazel::ecs::WorldException& e) {
+    } catch (vazel::ecs::WorldException &e) {
         return;
     } catch (...) {
         std::cerr << "Unexpected exception" << std::endl;

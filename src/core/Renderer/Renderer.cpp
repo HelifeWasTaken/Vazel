@@ -22,132 +22,134 @@ namespace vazel
     namespace core
     {
 
-        Drawable::Drawable(sf::CircleShape& circleshape)
+        Drawable::Drawable(sf::CircleShape &circleshape)
             : _data(circleshape)
             , _type(CIRCLE_SHAPE)
         {
         }
 
-        sf::CircleShape& Drawable::getCircleShape(void)
+        sf::CircleShape &Drawable::getCircleShape(void)
         {
             return std::get<sf::CircleShape>(_data);
         }
 
-        const sf::CircleShape& Drawable::getCircleShape(void) const
+        const sf::CircleShape &Drawable::getCircleShape(void) const
         {
             return std::get<sf::CircleShape>(_data);
         }
 
-        static void s_drawCircleShape(sf::RenderWindow& window,
-                                      const Drawable& drawable)
+        static void s_drawCircleShape(sf::RenderWindow &window,
+                                      const Drawable &drawable)
         {
             window.draw(drawable.getCircleShape());
         }
 
-        Drawable::Drawable(sf::ConvexShape& convexshape)
+        Drawable::Drawable(sf::ConvexShape &convexshape)
             : _data(convexshape)
             , _type(CONVEX_SHAPE)
         {
         }
 
-        sf::ConvexShape& Drawable::getConvexShape(void)
+        sf::ConvexShape &Drawable::getConvexShape(void)
         {
             return std::get<sf::ConvexShape>(_data);
         }
 
-        const sf::ConvexShape& Drawable::getConvexShape(void) const
+        const sf::ConvexShape &Drawable::getConvexShape(void) const
         {
             return std::get<sf::ConvexShape>(_data);
         }
 
-        static void s_drawConvexShape(sf::RenderWindow& window,
-                                      const Drawable& drawable)
+        static void s_drawConvexShape(sf::RenderWindow &window,
+                                      const Drawable &drawable)
         {
             window.draw(drawable.getConvexShape());
         }
 
-        Drawable::Drawable(sf::Sprite& sprite)
+        Drawable::Drawable(sf::Sprite &sprite)
             : _data(sprite)
             , _type(SPRITE)
         {
         }
 
-        sf::Sprite& Drawable::getSprite(void)
+        sf::Sprite &Drawable::getSprite(void)
         {
             return std::get<sf::Sprite>(_data);
         }
 
-        const sf::Sprite& Drawable::getSprite(void) const
+        const sf::Sprite &Drawable::getSprite(void) const
         {
             return std::get<sf::Sprite>(_data);
         }
 
-        static void s_drawSprite(sf::RenderWindow& window, const Drawable& drawable)
+        static void s_drawSprite(sf::RenderWindow &window,
+                                 const Drawable &drawable)
         {
             window.draw(drawable.getSprite());
         }
 
-        Drawable::Drawable(sf::Text& text)
+        Drawable::Drawable(sf::Text &text)
             : _data(text)
             , _type(TEXT)
         {
         }
 
-        sf::Text& Drawable::getText(void)
+        sf::Text &Drawable::getText(void)
         {
             return std::get<sf::Text>(_data);
         }
 
-        const sf::Text& Drawable::getText(void) const
+        const sf::Text &Drawable::getText(void) const
         {
             return std::get<sf::Text>(_data);
         }
 
-        static void s_drawText(sf::RenderWindow& window, const Drawable& drawable)
+        static void s_drawText(sf::RenderWindow &window,
+                               const Drawable &drawable)
         {
             window.draw(drawable.getText());
         }
 
-        Drawable::Drawable(sf::VertexArray& vao)
+        Drawable::Drawable(sf::VertexArray &vao)
             : _data(vao)
             , _type(VERTEX_ARRAY)
         {
         }
 
-        sf::VertexArray& Drawable::getVertexArray(void)
+        sf::VertexArray &Drawable::getVertexArray(void)
         {
             return std::get<sf::VertexArray>(_data);
         }
 
-        const sf::VertexArray& Drawable::getVertexArray(void) const
+        const sf::VertexArray &Drawable::getVertexArray(void) const
         {
             return std::get<sf::VertexArray>(_data);
         }
 
-        static void s_drawVertexArray(sf::RenderWindow& window,
-                                      const Drawable& drawable)
+        static void s_drawVertexArray(sf::RenderWindow &window,
+                                      const Drawable &drawable)
         {
             window.draw(drawable.getVertexArray());
         }
 
-        Drawable::Drawable(sf::VertexBuffer& vbo)
+        Drawable::Drawable(sf::VertexBuffer &vbo)
             : _data(vbo)
             , _type(VERTEX_BUFFER)
         {
         }
 
-        sf::VertexBuffer& Drawable::getVertexBuffer(void)
+        sf::VertexBuffer &Drawable::getVertexBuffer(void)
         {
             return std::get<sf::VertexBuffer>(_data);
         }
 
-        const sf::VertexBuffer& Drawable::getVertexBuffer(void) const
+        const sf::VertexBuffer &Drawable::getVertexBuffer(void) const
         {
             return std::get<sf::VertexBuffer>(_data);
         }
 
-        static void s_drawVertexBuffer(sf::RenderWindow& window,
-                                       const Drawable& drawable)
+        static void s_drawVertexBuffer(sf::RenderWindow &window,
+                                       const Drawable &drawable)
         {
             window.draw(drawable.getVertexBuffer());
         }
@@ -162,37 +164,38 @@ namespace vazel
             _shouldDraw = set;
         }
 
-        const bool& Drawable::shouldDraw(void) const
+        const bool &Drawable::shouldDraw(void) const
         {
             return _shouldDraw;
         }
 
-        const int& Drawable::getLayer(void) const
+        const int &Drawable::getLayer(void) const
         {
             return _layer;
         }
 
-        const RenderType& Drawable::getRenderType(void) const
+        const RenderType &Drawable::getRenderType(void) const
         {
             return _type;
         }
 
         void Renderer::sort(void)
         {
-            _drawables.sort([](const Drawable& a, const Drawable& b) {
+            _drawables.sort([](const Drawable &a, const Drawable &b) {
                 return a.getLayer() < b.getLayer();
             });
         }
 
-        Drawable* Renderer::addDrawable(const Drawable& drawable)
+        Drawable *Renderer::addDrawable(const Drawable &drawable)
         {
             _drawables.push_front(drawable);
             return &_drawables.front();
         }
 
-        void Renderer::draw(sf::RenderWindow& window, const Drawable& drawable) const
+        void Renderer::draw(sf::RenderWindow &window,
+                            const Drawable &drawable) const
         {
-            static void (*fdraw[])(sf::RenderWindow&, const Drawable&) = {
+            static void (*fdraw[])(sf::RenderWindow &, const Drawable &) = {
                 s_drawCircleShape, s_drawConvexShape, s_drawSprite,
                 s_drawText,        s_drawVertexArray, s_drawVertexBuffer
             };
@@ -200,7 +203,7 @@ namespace vazel
             fdraw[drawable.getRenderType()](window, drawable);
         }
 
-        void Renderer::drawList(sf::RenderWindow& window)
+        void Renderer::drawList(sf::RenderWindow &window)
         {
             sort();
 
@@ -228,7 +231,7 @@ namespace vazel
             _pixels = new sf::Uint8[rawFrambufferSize()];
         }
 
-        Framebuffer::Framebuffer(const sf::RenderWindow& window)
+        Framebuffer::Framebuffer(const sf::RenderWindow &window)
         {
             sf::Vector2u size = window.getSize();
 
@@ -250,12 +253,12 @@ namespace vazel
             return _width * _height;
         }
 
-        const unsigned int& Framebuffer::getWidth(void) const
+        const unsigned int &Framebuffer::getWidth(void) const
         {
             return _width;
         }
 
-        const unsigned int& Framebuffer::getHeight(void) const
+        const unsigned int &Framebuffer::getHeight(void) const
         {
             return _height;
         }
@@ -290,7 +293,7 @@ namespace vazel
             _sprite.setTexture(_texture);
         }
 
-        void Framebuffer::draw(sf::RenderWindow& window, bool update = true)
+        void Framebuffer::draw(sf::RenderWindow &window, bool update = true)
         {
             if (update)
                 updateTexture();
