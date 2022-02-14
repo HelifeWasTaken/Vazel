@@ -126,6 +126,12 @@ namespace vazel
              * @param app The app program
              */
             void exit(App &app);
+
+            /**
+             * @brief Prepare the state to stop
+             *
+             */
+            void prepareStopState(void);
         };
 
         /**

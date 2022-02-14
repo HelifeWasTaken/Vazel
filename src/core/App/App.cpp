@@ -52,10 +52,10 @@ namespace vazel
                          stateTag);
                 throw AppException(buf);
             }
-            _pending_state = it->get();
             if (_current_state != nullptr) {
-                _current_state->exit(*this);
+                _current_state->prepareStopState();
             }
+            _pending_state = it->get();
         }
 
         void App::registerState(State &state)
@@ -80,6 +80,7 @@ namespace vazel
                 while (_current_state->isRunning()) {
                     _current_state->update(*this);
                 }
+                _current_state->exit(*this);
                 world.clearWorld();
             }
             _current_state = nullptr;
