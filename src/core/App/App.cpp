@@ -16,8 +16,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <mutex>
 #include "Vazel/core/App/App.hpp"
+
+#include <mutex>
 
 std::mutex MutexApp;
 
@@ -74,7 +75,7 @@ namespace vazel
             instance = nullptr;
         }
 
-        App& App::getInstance(void)
+        App &App::getInstance(void)
         {
             std::lock_guard<std::mutex> lock(MutexApp);
             if (instance == nullptr)

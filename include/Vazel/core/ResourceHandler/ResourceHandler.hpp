@@ -1,10 +1,10 @@
 #pragma once
 
-#include <string>
-#include <memory>
-#include <unordered_map>
-#include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
+#include <SFML/Graphics.hpp>
+#include <memory>
+#include <string>
+#include <unordered_map>
 
 namespace vazel
 {
@@ -87,5 +87,5 @@ namespace vazel
             ResourceHolder<sf::Texture> textureManager;
         };
 
-    }
-}
+    } // namespace core
+} // namespace vazel

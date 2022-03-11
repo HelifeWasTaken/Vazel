@@ -23,4 +23,4 @@ namespace vazel
     {
 
     }
-}
+} // namespace vazel

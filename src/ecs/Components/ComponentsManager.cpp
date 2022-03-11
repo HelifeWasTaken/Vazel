@@ -115,7 +115,7 @@ namespace vazel
         {
             _components_map.clear();
             _entity_to_components.clear();
-            _aviable_signatures &= 0;
+            _aviable_signatures ^= _aviable_signatures;
         }
 
     } // namespace ecs

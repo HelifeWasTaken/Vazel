@@ -99,7 +99,7 @@ namespace vazel
              * @brief Get the instance of the App
              *
              */
-            static App& getInstance(void);
+            static App &getInstance(void);
 
             /**
              * @brief Stop the current state.
