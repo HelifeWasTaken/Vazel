@@ -73,23 +73,33 @@ namespace vazel
             std::vector<std::unique_ptr<State>> _states;
             State *_current_state = nullptr;
             State *_pending_state = nullptr;
+            static App *instance;
 
           public:
             Renderer renderer;
             ecs::World world;
             sf::RenderWindow window;
+            sf::Clock clock;
 
+          protected:
             /**
-             * @brief Construct a new App object
+             * @brief Construct a new App object and creates the instance
              *
              */
-            App(State &baseState);
+            App(void) = default;
 
+          public:
             /**
-             * @brief Destroy the App object
+             * @brief Destroy the instance and the object
              *
              */
-            ~App(void) = default;
+            ~App(void);
+
+            /**
+             * @brief Get the instance of the App
+             *
+             */
+            static App& getInstance(void);
 
             /**
              * @brief Stop the current state.
@@ -117,8 +127,6 @@ namespace vazel
              */
             void run(void);
         };
-
-        extern App *g_app;
 
     } // namespace core
 } // namespace vazel

@@ -24,145 +24,83 @@ namespace vazel
     namespace core
     {
 
-        enum RenderType
+        class IDrawable : public sf::Drawable
         {
-            CIRCLE_SHAPE,
-            CONVEX_SHAPE,
-            SPRITE,
-            TEXT,
-            VERTEX_ARRAY,
-            VERTEX_BUFFER
+        public:
+            virtual int64_t getLayer(void) const = 0;
+            virtual bool shouldDraw(void) const = 0;
+
+            virtual void setLayer(int64_t layer) = 0;
+            virtual void setShouldDraw(bool shouldDraw) = 0;
+
+            virtual ~IDrawable() = default;
         };
 
-        using DrawableData =
-            std::variant<sf::CircleShape, sf::ConvexShape, sf::Sprite,
-                         sf::Text, sf::VertexArray, sf::VertexBuffer>;
-
-        class Drawable
+        class Drawable : public IDrawable
         {
-          private:
-            DrawableData _data;
-            RenderType _type;
-            int _layer       = 0;
-            bool _shouldDraw = true;
+        private:
+            int64_t _layer;
+            bool _shouldDraw;
 
-          public:
-            Drawable(sf::CircleShape &circleshape);
+        public:
+            Drawable(int64_t layer=0, bool shouldDraw=true);
 
-            sf::CircleShape &getCircleShape(void);
-            const sf::CircleShape &getCircleShape(void) const;
+            int64_t getLayer(void) const override final;
+            bool shouldDraw(void) const override final;
 
-            Drawable(sf::ConvexShape &convexshape);
+            void setLayer(int64_t layer) override final;
+            void setShouldDraw(bool shouldDraw) override final;
 
-            sf::ConvexShape &getConvexShape(void);
-            const sf::ConvexShape &getConvexShape(void) const;
-
-            Drawable(sf::Sprite &sprite);
-
-            sf::Sprite &getSprite(void);
-            const sf::Sprite &getSprite(void) const;
-
-            Drawable(sf::Text &text);
-
-            sf::Text &getText(void);
-            const sf::Text &getText(void) const;
-
-            Drawable(sf::VertexArray &vao);
-
-            sf::VertexArray &getVertexArray(void);
-            const sf::VertexArray &getVertexArray(void) const;
-
-            Drawable(sf::VertexBuffer &vbo);
-
-            sf::VertexBuffer &getVertexBuffer(void);
-            const sf::VertexBuffer &getVertexBuffer(void) const;
-
-            void setLayer(int layer);
-
-            void setShouldDraw(bool set);
-
-            const bool &shouldDraw(void) const;
-
-            const int &getLayer(void) const;
-
-            const RenderType &getRenderType(void) const;
+            ~Drawable() override = default;
         };
+
+        template<typename T>
+        class ABaseSFML : public Drawable
+        {
+        private:
+            T _impl;
+
+        public:
+            T &get(void) { return _impl; }
+            const T &get(void) const { return _impl; }
+
+            ABaseSFML(int64_t layer=0, bool shouldDraw=true) :
+                Drawable(layer, shouldDraw)
+            {}
+
+            void draw(sf::RenderTarget& target, sf::RenderStates states) const override
+            { target.draw(_impl); }
+
+            ~ABaseSFML() override = default;
+        };
+
+        using InternalSprite = sf::Sprite;
+        using InternalText = sf::Text;
+        using InternalVertex = sf::Vertex;
+        using InternalVertexBuffer = sf::VertexBuffer;
+        using InternalVertexArray = sf::VertexArray;
+
+        using Sprite = ABaseSFML<InternalSprite>;
+        using Text = ABaseSFML<InternalText>;
+        using VertexBuffer = ABaseSFML<sf::VertexBuffer>;
+        using VertexArray = ABaseSFML<sf::VertexArray>;
 
         class Renderer
         {
           private:
-            std::list<Drawable> _drawables;
+            std::vector<std::unique_ptr<IDrawable>> _drawables;
 
           public:
             Renderer(void)  = default;
             ~Renderer(void) = default;
 
             void sort(void);
+            void draw(sf::RenderWindow &window, bool sort=true);
 
             Drawable *addDrawable(const Drawable &drawable);
-
-            template <typename T>
-            void draw(sf::RenderWindow &window, const T &drawable) const
-            {
-                window.draw(drawable);
-            }
-
-            void draw(sf::RenderWindow &window,
-                      const Drawable &drawable) const;
+            void removeDrawable(const Drawable *drawable);
 
             void drawList(sf::RenderWindow &window);
-
-            template <typename T>
-            static Drawable *addDrawable(Renderer &renderer, const T &data)
-            {
-                return renderer.addDrawable(Drawable(data));
-            }
-
-            template <typename T>
-            static Drawable *addDrawable(Renderer &renderer, const T data)
-            {
-                return renderer.addDrawable(Drawable(data));
-            }
-        };
-
-        class Framebuffer
-        {
-          private:
-            sf::Texture _texture;
-            sf::Sprite _sprite;
-            sf::Uint8 *_pixels = nullptr;
-            unsigned int _width;
-            unsigned int _height;
-
-            void writeColorToPixelBuffer(const unsigned int rawIndex,
-                                         const sf::Color color);
-
-          public:
-            Framebuffer(const unsigned int x, const unsigned int y);
-
-            Framebuffer(const sf::RenderWindow &window);
-
-            ~Framebuffer(void);
-
-            const unsigned int rawFrambufferSize(void) const;
-
-            const unsigned int framebufferSize(void) const;
-
-            const unsigned int &getWidth(void) const;
-
-            const unsigned int &getHeight(void) const;
-
-            unsigned int getIndex(const unsigned int x,
-                                  const unsigned int y) const;
-
-            void put(const unsigned int x, const unsigned int y,
-                     const sf::Color color);
-
-            void clear(const sf::Color color);
-
-            void updateTexture(void);
-
-            void draw(sf::RenderWindow &window, bool update);
         };
 
     } // namespace core

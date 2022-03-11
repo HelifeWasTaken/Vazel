@@ -15,12 +15,18 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
+#include <mutex>
 #include "Vazel/core/App/App.hpp"
+
+std::mutex MutexApp;
 
 namespace vazel
 {
     namespace core
     {
+
+        static App *instance = nullptr;
 
         AppException::AppException(const std::string &e)
             : _e(e)
@@ -63,10 +69,17 @@ namespace vazel
             _states.push_back(std::make_unique<State>(state));
         }
 
-        App::App(State &baseState)
+        App::~App(void)
         {
-            registerState(baseState);
-            setState(baseState.getTag());
+            instance = nullptr;
+        }
+
+        App& App::getInstance(void)
+        {
+            std::lock_guard<std::mutex> lock(MutexApp);
+            if (instance == nullptr)
+                instance = new App;
+            return *instance;
         }
 
         void App::run(void)
@@ -95,8 +108,6 @@ namespace vazel
                                     return state->getTag() == stateTag;
                                 });
         }
-
-        App *g_app = nullptr;
 
     } // namespace core
 } // namespace vazel

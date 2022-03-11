@@ -1,5 +1,11 @@
 #pragma once
 
+#include <string>
+#include <memory>
+#include <unordered_map>
+#include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
+
 namespace vazel
 {
     namespace core
@@ -17,7 +23,7 @@ namespace vazel
             }
 
           private:
-            std::map<std::string, std::unique_ptr<R>> _resource_map;
+            std::unordered_map<std::string, std::unique_ptr<R>> _resource_map;
 
           public:
             void load(const std::string &filename)
@@ -82,5 +88,4 @@ namespace vazel
         };
 
     }
-}
 }
