@@ -25,6 +25,8 @@ set(SRCS
     ./core/State/State.cpp
 
     ./core/Renderer/Renderer.cpp
+
+    ./core/ResourceHandler/ResourceHandler.cpp
 )
 
 add_library(${PROJECT_NAME} ${SRCS})

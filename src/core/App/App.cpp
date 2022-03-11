@@ -104,7 +104,7 @@ namespace vazel
 
         {
             return std::find_if(states.begin(), states.end(),
-                                [&](std::unique_ptr<State> &state) {
+                                [&stateTag](std::unique_ptr<State> &state) {
                                     return state->getTag() == stateTag;
                                 });
         }

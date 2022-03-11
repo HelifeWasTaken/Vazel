@@ -21,7 +21,6 @@
 #include "Vazel/ecs/Components/Component.hpp"
 #include "Vazel/ecs/Entity/Entity.hpp"
 
-#include <iostream>
 #include <string.h>
 #include <unordered_map>
 

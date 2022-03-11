@@ -47,5 +47,14 @@ namespace vazel
             }
         }
 
+        void Renderer::removeDrawable(DrawableElement& drawable)
+        {
+            std::remove_if(_drawables.begin(), _drawables.end(),
+                [&drawable](const std::shared_ptr<IDrawable>& it) {
+                    return it == drawable;
+                }
+            );
+        }
+
     } // namespace core
 } // namespace vazel
