@@ -20,10 +20,11 @@
 
 #include <mutex>
 
-std::mutex MutexApp;
 
 namespace vazel
 {
+    static std::mutex __mutApp;
+
     namespace core
     {
 
@@ -72,14 +73,18 @@ namespace vazel
 
         App::~App(void)
         {
-            instance = nullptr;
+            if (instance) {
+                delete instance;
+                instance = nullptr;
+            }
         }
 
         App &App::getInstance(void)
         {
-            std::lock_guard<std::mutex> lock(MutexApp);
+            __mutApp.lock();
             if (instance == nullptr)
                 instance = new App;
+            __mutApp.unlock();
             return *instance;
         }
 
