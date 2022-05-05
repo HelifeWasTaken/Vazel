@@ -51,11 +51,6 @@ namespace vazel
         };
 
         /**
-         * @brief State forward declaration
-         */
-        class State;
-
-        /**
          * @brief Get the State From Tag object (Used when forward declaration
          * gives a warning) And you can't directly use find on the State object
          * inside App.
