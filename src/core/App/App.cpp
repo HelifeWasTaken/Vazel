@@ -61,7 +61,7 @@ namespace vazel
                 throw AppException(buf);
             }
             if (_current_state != nullptr) {
-                _current_state->prepareStopState();
+                _current_state->exit(*this);
             }
             _pending_state = it->get();
         }
@@ -99,7 +99,7 @@ namespace vazel
                 while (_current_state->isRunning()) {
                     _current_state->update(*this);
                 }
-                _current_state->exit(*this);
+                _current_state->rexit(*this);
                 world.clearWorld();
             }
             _current_state = nullptr;
