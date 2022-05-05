@@ -17,8 +17,8 @@
  */
 #pragma once
 
-#include "Vazel/core/_priv.hpp"
 #include "Vazel/core/State/State.hpp"
+#include "Vazel/core/_priv.hpp"
 #include "Vazel/ecs/World/World.hpp"
 
 namespace vazel
@@ -72,6 +72,7 @@ namespace vazel
 
           public:
             ecs::World world;
+
           protected:
             /**
              * @brief Construct a new App object and creates the instance

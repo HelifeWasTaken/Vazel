@@ -83,8 +83,9 @@ TEST(System, addEntities)
     cm.registerComponent<placeholder_component_1>();
     cm.registerComponent<placeholder_component_2>();
 
-    system.setOnUpdate(
-        VAZEL_SYSTEM_UPDATE_LAMBDA(cm, em) { std::cout << "Here is an entity!"; });
+    system.setOnUpdate(VAZEL_SYSTEM_UPDATE_LAMBDA(cm, em) {
+        std::cout << "Here is an entity!";
+    });
 
     vazel::ecs::Entity entity  = em.createEntity();
     vazel::ecs::Entity entity2 = em.createEntity();

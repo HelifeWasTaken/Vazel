@@ -17,9 +17,9 @@
  */
 #pragma once
 
-#include "Vazel/core/_priv.hpp"
 #include "Vazel/VException.hpp"
 #include "Vazel/core/App/App.hpp"
+#include "Vazel/core/_priv.hpp"
 
 #include <functional>
 #include <memory>
@@ -54,7 +54,6 @@ namespace vazel
              */
             const char *what() const throw() override;
         };
-
 
         /**
          * @brief State base class
@@ -125,8 +124,9 @@ namespace vazel
 
             /**
              * @brief Call the exit function of the state
-             * It will directly call the exit function of the state without waiting
-             * This is might be dangerous so make sure it is okay to change of state at this moment
+             * It will directly call the exit function of the state without
+             * waiting This is might be dangerous so make sure it is okay to
+             * change of state at this moment
              * @param app The app program
              */
             void rexit(App &app);

@@ -32,7 +32,7 @@
  * Entity
  */
 #define VAZEL_SYSTEM_UPDATE_LAMBDA(componentManagerName, entityName, ...) \
-    [__VA_ARGS__](vazel::ecs::ComponentManager &componentManagerName, \
+    [__VA_ARGS__](vazel::ecs::ComponentManager & componentManagerName,    \
                   const vazel::ecs::Entity &entityName)
 
 namespace vazel

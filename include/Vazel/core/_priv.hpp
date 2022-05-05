@@ -26,5 +26,5 @@ namespace vazel
         class App;
         using StateTag = uint_fast32_t;
         class State;
-    }
-}
+    } // namespace core
+} // namespace vazel

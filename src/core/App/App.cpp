@@ -20,7 +20,6 @@
 
 #include <mutex>
 
-
 namespace vazel
 {
     static std::mutex __mutApp;
@@ -73,10 +72,6 @@ namespace vazel
 
         App::~App(void)
         {
-            if (instance) {
-                delete instance;
-                instance = nullptr;
-            }
         }
 
         App &App::getInstance(void)
