@@ -232,12 +232,16 @@ namespace vazel
                     const auto itcomponentType = _components_map.find(name);
                     auto it                    = _entity_to_components.find(e);
                     ComponentType componentType = -1;
-
                     if (it == _entity_to_components.end()) {
+#ifdef UNALLOW_DYNAMIC_COMPONENT_REGISTER
                         throw ComponentManagerException(
                             "ComponentManager::attachComponent<T>: You cannot "
                             "attach a component to a non registered Entity");
+#else
+                        componentType = registerComponent<T>();
+#endif
                     }
+
                     if (itcomponentType == _components_map.end()) {
                         registerComponent<T>();
                         componentType = _components_map.at(name);

@@ -111,13 +111,6 @@ namespace vazel
             }
         }
 
-        void World::updateOnEventSystem(const sf::Event &evt)
-        {
-            for (auto &it : _systems) {
-                it->on_event(_componentManager, evt);
-            }
-        }
-
         void World::clearWorld(void)
         {
             _systems.clear();

@@ -134,12 +134,5 @@ namespace vazel
             void prepareStopState(void);
         };
 
-        /**
-         * @brief Basic app on update for almost every SFML programs
-         *
-         * @param app Reference to the app
-         */
-        void basicOnUpdate(App &app);
-
     } // namespace core
 } // namespace vazel

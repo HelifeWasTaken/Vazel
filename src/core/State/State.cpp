@@ -75,22 +75,5 @@ namespace vazel
             _on_exit(app);
         }
 
-        void basicOnUpdate(App &app)
-        {
-            sf::Event evt;
-
-            while (app.window.isOpen()) {
-                app.window.clear();
-                while (app.window.pollEvent(evt)) {
-                    if (evt.type == sf::Event::Closed)
-                        app.stop();
-                    else
-                        app.world.updateOnEventSystem(evt);
-                }
-                app.world.updateSystem();
-                app.renderer.drawList(app.window);
-            }
-        }
-
     } // namespace core
 } // namespace vazel

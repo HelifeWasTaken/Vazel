@@ -17,7 +17,6 @@
  */
 #pragma once
 
-#include "Vazel/core/Renderer/Renderer.hpp"
 #include "Vazel/core/State/State.hpp"
 #include "Vazel/ecs/World/World.hpp"
 
@@ -76,11 +75,7 @@ namespace vazel
             static App *instance;
 
           public:
-            Renderer renderer;
             ecs::World world;
-            sf::RenderWindow window;
-            sf::Clock clock;
-
           protected:
             /**
              * @brief Construct a new App object and creates the instance

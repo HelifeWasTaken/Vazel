@@ -20,7 +20,6 @@
 #include "Vazel/ecs/Components/ComponentsManager.hpp"
 #include "Vazel/ecs/Entity/EntityManager.hpp"
 
-#include <SFML/Window/Event.hpp>
 #include <algorithm>
 #include <functional>
 #include <list>
@@ -36,10 +35,6 @@
     [__VA_ARGS__](vazel::ecs::ComponentManager & cm, \
                   const vazel::ecs::Entity &e)
 
-#define VAZEL_SYSTEM_ON_EVENT_LAMBDA(...)            \
-    [__VA_ARGS__](vazel::ecs::ComponentManager & cm, \
-                  const vazel::ecs::Entity &e, const sf::Event &evt)
-
 namespace vazel
 {
     namespace ecs
@@ -47,9 +42,6 @@ namespace vazel
 
         using systemUpdate =
             std::function<void(ComponentManager &, const Entity &)>;
-
-        using systemOnEvent = std::function<void(
-            ComponentManager &, const Entity &, const sf::Event &)>;
 
         /**
          * @brief System class is a collection of entities that can be updated
@@ -62,7 +54,6 @@ namespace vazel
             ComponentSignature _signature;
             std::string _tag;
             systemUpdate _on_update;
-            systemOnEvent _on_event;
             std::unordered_set<Entity> _entities;
 
             /**
@@ -109,13 +100,6 @@ namespace vazel
              * @param updater System update function
              */
             void setOnUpdate(systemUpdate updater);
-
-            /**
-             * @brief Set the system update function
-             *
-             * @param eventF System on_event function
-             */
-            void setOnEvent(systemOnEvent eventF);
 
             /**
              * @brief Get the system signature
@@ -212,14 +196,6 @@ namespace vazel
              * @param cm ComponentManager to get the entities com from
              */
             void on_update(ComponentManager &cm);
-
-            /**
-             * @brief Updates all the entities of the system
-             *
-             * @param cm ComponentManager to get the entities com from
-             * @param event Event list (SFML Dependency)
-             */
-            void on_event(ComponentManager &cm, const sf::Event &event);
         };
 
     } // namespace ecs
