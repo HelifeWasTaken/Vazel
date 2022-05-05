@@ -64,16 +64,15 @@ namespace vazel
             _on_update(app);
         }
 
-        void State::prepareStopState(void)
-        {
-            _is_running = false;
-        }
-
-        void State::exit(App &app)
+        void State::rexit(App &app)
         {
             _is_running = false;
             _on_exit(app);
         }
 
+        void State::exit(App &app)
+        {
+            _is_running = false;
+        }
     } // namespace core
 } // namespace vazel

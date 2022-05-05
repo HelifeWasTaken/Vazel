@@ -122,16 +122,18 @@ namespace vazel
 
             /**
              * @brief Call the exit function of the state
-             *
+             * It will not exit until the next call frame for security reasons
              * @param app The app program
              */
             void exit(App &app);
 
             /**
-             * @brief Prepare the state to stop
-             *
+             * @brief Call the exit function of the state
+             * It will directly call the exit function of the state without waiting
+             * This is might be dangerous so make sure it is okay to change of state at this moment
+             * @param app The app program
              */
-            void prepareStopState(void);
+            void rexit(App &app);
         };
 
     } // namespace core
