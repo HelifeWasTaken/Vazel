@@ -34,7 +34,7 @@ namespace vazel
 
         State::State(std::function<void(App &)> on_init,
                      std::function<void(App &)> on_update,
-                     std::function<void(App &)> on_exit, uint32_t tag)
+                     std::function<void(App &)> on_exit, StateTag tag)
             : _on_init(on_init)
             , _on_update(on_update)
             , _on_exit(on_exit)
@@ -48,7 +48,7 @@ namespace vazel
             return _is_running;
         }
 
-        uint32_t State::getTag(void) const
+        StateTag State::getTag(void) const
         {
             return _tag;
         }

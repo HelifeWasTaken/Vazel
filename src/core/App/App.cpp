@@ -48,7 +48,7 @@ namespace vazel
             }
         }
 
-        void App::setState(uint32_t stateTag)
+        void App::setState(StateTag stateTag)
         {
             const auto it = getStateFromTag(_states, stateTag);
 
@@ -56,7 +56,7 @@ namespace vazel
                 char buf[BUFSIZ] = { 0 };
                 snprintf(buf, sizeof(buf) - 1,
                          "world::setCurrentState: Could not find State with "
-                         "tag: \"%u\"",
+                         "tag: \"%lu\"",
                          stateTag);
                 throw AppException(buf);
             }
@@ -106,7 +106,7 @@ namespace vazel
         }
 
         const std::vector<std::unique_ptr<State>>::iterator getStateFromTag(
-            std::vector<std::unique_ptr<State>> &states, uint32_t stateTag)
+            std::vector<std::unique_ptr<State>> &states, StateTag stateTag)
 
         {
             return std::find_if(states.begin(), states.end(),

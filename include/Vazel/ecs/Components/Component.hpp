@@ -38,7 +38,7 @@ namespace vazel
          * @brief Base class for all components.
          *
          */
-        using ComponentType = uint16_t;
+        using ComponentType = uint_fast16_t;
 
         /**
          * @brief CompoenentExistsException is thrown when a component is

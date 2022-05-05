@@ -17,10 +17,10 @@
  */
 #pragma once
 
+#include "Vazel/core/_priv.hpp"
 #include "Vazel/VException.hpp"
 #include "Vazel/core/App/App.hpp"
 
-#include <cstdint>
 #include <functional>
 #include <memory>
 
@@ -55,10 +55,6 @@ namespace vazel
             const char *what() const throw() override;
         };
 
-        /**
-         * @brief App forwared declaration
-         */
-        class App;
 
         /**
          * @brief State base class
@@ -70,7 +66,7 @@ namespace vazel
             std::function<void(App &)> _on_init;
             std::function<void(App &)> _on_update;
             std::function<void(App &)> _on_exit;
-            uint32_t _tag;
+            StateTag _tag;
             bool _is_running;
 
           public:
@@ -84,7 +80,7 @@ namespace vazel
              */
             State(std::function<void(App &)> on_init,
                   std::function<void(App &)> on_update,
-                  std::function<void(App &)> on_exit, uint32_t tag);
+                  std::function<void(App &)> on_exit, StateTag tag);
 
             /**
              * @brief Destroy the State object
@@ -102,9 +98,9 @@ namespace vazel
             /**
              * @brief Get the tag object.
              *
-             * @return uint32_t The state tag
+             * @return StateTag The state tag
              */
-            uint32_t getTag(void) const;
+            StateTag getTag(void) const;
 
             /**
              * @brief Call the init function of the state

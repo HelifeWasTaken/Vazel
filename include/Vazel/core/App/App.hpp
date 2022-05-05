@@ -17,6 +17,7 @@
  */
 #pragma once
 
+#include "Vazel/core/_priv.hpp"
 #include "Vazel/core/State/State.hpp"
 #include "Vazel/ecs/World/World.hpp"
 
@@ -64,7 +65,7 @@ namespace vazel
          * state iterator.
          */
         const std::vector<std::unique_ptr<State>>::iterator getStateFromTag(
-            std::vector<std::unique_ptr<State>> &states, uint32_t stateTag);
+            std::vector<std::unique_ptr<State>> &states, StateTag stateTag);
 
         class App
         {
@@ -107,7 +108,7 @@ namespace vazel
              *
              * @param stateTag The state tag.
              */
-            void setState(uint32_t stateTag);
+            void setState(StateTag stateTag);
 
             /**
              * @brief Register a new state.
