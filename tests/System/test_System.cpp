@@ -84,7 +84,7 @@ TEST(System, addEntities)
     cm.registerComponent<placeholder_component_2>();
 
     system.setOnUpdate(
-        VAZEL_SYSTEM_UPDATE_LAMBDA() { std::cout << "Here is an entity!"; });
+        VAZEL_SYSTEM_UPDATE_LAMBDA(cm, em) { std::cout << "Here is an entity!"; });
 
     vazel::ecs::Entity entity  = em.createEntity();
     vazel::ecs::Entity entity2 = em.createEntity();
@@ -96,16 +96,16 @@ TEST(System, addEntities)
                                 true);
 
     system.addDependency<placeholder_component_1>(em, cm);
-    system.on_update(cm);
+    system.onUpdate(cm);
 
     cm.attachComponent<placeholder_component_1>(entity2);
     em.getSignature(entity2).set(
         cm.getComponentType<placeholder_component_1>(), true);
     system.updateValidEntities(em);
-    system.on_update(cm);
+    system.onUpdate(cm);
 
     system.addDependency<placeholder_component_2>(em, cm);
-    system.on_update(cm);
+    system.onUpdate(cm);
     ASSERT_EQ(testing::internal::GetCapturedStdout(),
               "Here is an entity!Here is an entity!Here is an entity!");
 }

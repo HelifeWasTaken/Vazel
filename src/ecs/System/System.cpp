@@ -75,7 +75,7 @@ namespace vazel
             return _tag;
         }
 
-        void System::on_update(ComponentManager &cm)
+        void System::onUpdate(ComponentManager &cm)
         {
             for (auto it : _entities) {
                 _on_update(cm, it);

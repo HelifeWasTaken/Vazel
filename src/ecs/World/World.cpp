@@ -107,7 +107,7 @@ namespace vazel
         void World::updateSystem(void)
         {
             for (auto &it : _systems) {
-                it->on_update(_componentManager);
+                it->onUpdate(_componentManager);
             }
         }
 

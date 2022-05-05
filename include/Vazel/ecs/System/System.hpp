@@ -31,9 +31,9 @@
  * etc... It provides you directly the components manager and the associated
  * Entity
  */
-#define VAZEL_SYSTEM_UPDATE_LAMBDA(...)              \
-    [__VA_ARGS__](vazel::ecs::ComponentManager & cm, \
-                  const vazel::ecs::Entity &e)
+#define VAZEL_SYSTEM_UPDATE_LAMBDA(componentManagerName, entityName, ...) \
+    [__VA_ARGS__](vazel::ecs::ComponentManager &componentManagerName, \
+                  const vazel::ecs::Entity &entityName)
 
 namespace vazel
 {
@@ -195,7 +195,7 @@ namespace vazel
              *
              * @param cm ComponentManager to get the entities com from
              */
-            void on_update(ComponentManager &cm);
+            void onUpdate(ComponentManager &cm);
         };
 
     } // namespace ecs
