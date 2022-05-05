@@ -15,6 +15,7 @@ jobs:
         - name: Build
           shell: bash
           run: |
+            sudo apt update
             sudo apt install cmake make gcc g++ libgtest-dev
             cd build && cmake .. && make
     unittests:
@@ -24,6 +25,7 @@ jobs:
         - name: run_tests
           shell: bash
           run: |
+            sudo apt update
             sudo apt install cmake make gcc g++ libgtest-dev
             cd build && cmake .. && make
             ./tests/vazel_tests --gtest_color=yes
