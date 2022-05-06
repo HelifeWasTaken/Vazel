@@ -1,7 +1,6 @@
 # Vazel
 
-A better attempt to do an real and portable and not heritage based Entity Component System
-(Now it's starting to become a Game Engine using SFML!)
+An ECS in C++
 
 ## Dependencies
 
@@ -10,7 +9,6 @@ A better attempt to do an real and portable and not heritage based Entity Compon
     - g++
     - gcc
     - gtest (Tests)
-    - SFML
 
 ## Example:
 
